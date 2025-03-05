@@ -63,6 +63,7 @@ void AEnemyBase::BeginPlay()
 	Super::BeginPlay();
 
 	PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+    PatrolCenter = GetActorLocation();
 
     AAIController* AIController = Cast<AAIController>(GetController());
     if (!AIController)
@@ -107,36 +108,46 @@ void AEnemyBase::OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
         }
         else
         {
-            UE_LOG(LogTemp, Warning, TEXT("Player lost! Resuming patrol..."));
-			// Start patrolling again
-            GetWorldTimerManager().SetTimer(PatrolTimer, this, &AEnemyBase::Patrol, 5.0f, true);
+            UE_LOG(LogTemp, Warning, TEXT("Player lost!"));
+            float DistanceToPatrolCenter = FVector::Dist(GetActorLocation(), PatrolCenter);
+
+			// If the player is too far from the patrol zone, return to the patrol zone
+            if (DistanceToPatrolCenter > PatrolMaxDistance)
+            {
+                UE_LOG(LogTemp, Warning, TEXT("Returning to patrol center"));
+                AAIController* AIController = Cast<AAIController>(GetController());
+                if (AIController)
+                {
+                    AIController->MoveToLocation(PatrolCenter);
+                }
+            }
+            else
+            {
+                UE_LOG(LogTemp, Warning, TEXT("Resuming patrol..."));
+                GetWorldTimerManager().SetTimer(PatrolTimer, this, &AEnemyBase::Patrol, 3.0f, true);
+            }
         }
     }
 }
 
 void AEnemyBase::Patrol()
 {
-    UE_LOG(LogTemp, Warning, TEXT("Patrol called"));
+    UE_LOG(LogTemp, Warning, TEXT("Patrolling around patrol center"));
 
-	// If the player is in the list of perceived actors, return
     if (AIPerceptionComponent->HasActiveStimulus(*PlayerPawn, UAISense::GetSenseID<UAISense_Sight>()))
     {
-        UE_LOG(LogTemp, Warning, TEXT("Patrole stopped : player detected"));
+        UE_LOG(LogTemp, Warning, TEXT("Patrol stopped: player detected"));
         return;
     }
 
-	// If the player is not in the list of perceived actors, patrol
-    FVector Origin = GetActorLocation();
-    FVector PatrolPoint = Origin + FMath::VRand() * PatrolRadius;
+    FVector PatrolPoint = PatrolCenter + FMath::VRand() * PatrolMaxDistance / 2;
 	PatrolPoint.Z = GetActorLocation().Z;
 
-	// Move to the patrol point
     AAIController* AIController = Cast<AAIController>(GetController());
     if (AIController)
     {
-        UE_LOG(LogTemp, Warning, TEXT("Enemy moving to patrol point: %s"), *PatrolPoint.ToString());
-
-        EPathFollowingRequestResult::Type MoveResult = AIController->MoveToLocation(PatrolPoint);
+        UE_LOG(LogTemp, Warning, TEXT("Moving to patrol point: %s"), *PatrolPoint.ToString());
+        AIController->MoveToLocation(PatrolPoint);
     }
 }
 
@@ -155,28 +166,36 @@ void AEnemyBase::StopAttack()
     GetWorldTimerManager().ClearTimer(AttackTimerHandle);
 }
 
-
 void AEnemyBase::ChasePlayer()
 {
     if (PlayerPawn)
     {
-		// Make the enemy chase the player
-        float Distance = FVector::Dist(GetActorLocation(), PlayerPawn->GetActorLocation());
+		// Check if the player is within the sight radius
+        float DistanceToPlayer = FVector::Dist(GetActorLocation(), PlayerPawn->GetActorLocation());
+        float DistanceToPatrolCenter = FVector::Dist(GetActorLocation(), PatrolCenter);
 
+		// If the player is too far from the patrol zone, return to the patrol zone
         AAIController* AIController = Cast<AAIController>(GetController());
-
-		// If the player is within the attack range, stop moving and start attacking
         if (AIController)
         {
-            if (Distance > AttackRange)
+			// If the player is too far from the patrol zone, return to the patrol zone
+            if (DistanceToPatrolCenter > PatrolMaxDistance)
             {
+                UE_LOG(LogTemp, Warning, TEXT("Player too far from patrol zone, returning to patrol"));
+                AIController->MoveToLocation(PatrolCenter);
+                return;
+            }
+
+			// If the player is within the attack range, stop moving
+            if (DistanceToPlayer > AttackRange)
+            {
+                UE_LOG(LogTemp, Warning, TEXT("Chasing player..."));
                 AIController->MoveToActor(PlayerPawn, AttackRange - 10.0f);
-                StopAttack();
             }
             else
             {
+                UE_LOG(LogTemp, Warning, TEXT("Stopping movement - player within attack range"));
                 AIController->StopMovement();
-                StartAttack();
             }
         }
     }

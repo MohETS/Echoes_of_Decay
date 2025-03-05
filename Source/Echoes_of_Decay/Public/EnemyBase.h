@@ -31,6 +31,12 @@ protected:
     UPROPERTY(EditAnywhere, Category = "AI")
     float MoveSpeed = 300.0f;
 
+    UPROPERTY(EditAnywhere, Category = "AI")
+	float PatrolMaxDistance = 1000.0f;
+
+    UPROPERTY(EditAnywhere, Category = "AI")
+    FVector PatrolCenter;
+
     UPROPERTY(VisibleAnywhere, Category = "AI")
     UAIPerceptionComponent* AIPerceptionComponent;
 
