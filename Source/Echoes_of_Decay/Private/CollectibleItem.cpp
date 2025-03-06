@@ -1,6 +1,7 @@
 #include "CollectibleItem.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/Character.h"
+#include "InventoryComponent.h"
 
 
 // Sets default values
@@ -31,15 +32,14 @@ void ACollectibleItem::Tick(float DeltaTime)
 
 void ACollectibleItem::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Item collected!"));
     if (ACharacter* Player = Cast<ACharacter>(OtherActor))
     {
 		// Add the item to the player's inventory
-        //UInventoryComponent* Inventory = Player->FindComponentByClass<UInventoryComponent>();
-        //if (Inventory)
-        //{
-        //    Inventory->AddItem(ItemID);
-        //    Destroy();
-        //}
+        UInventoryComponent* Inventory = Player->FindComponentByClass<UInventoryComponent>();
+        if (Inventory)
+        {
+            Inventory->AddItem(ItemName, ItemIcon, ItemType);
+            Destroy();
+        }
     }
 }

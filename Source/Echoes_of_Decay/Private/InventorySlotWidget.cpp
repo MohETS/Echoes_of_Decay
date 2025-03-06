@@ -1,0 +1,55 @@
+#include "InventorySlotWidget.h"
+#include "Blueprint/DragDropOperation.h"
+#include "InventoryDragDropOperation.h"
+
+
+void UInventorySlotWidget::SetItem(UInventoryItemWidget* NewItem)
+{
+    if (!SlotContainer) return;
+
+    ClearSlot();
+
+    ItemWidget = NewItem;
+
+    if (!NewItem) return;
+
+    ItemWidget = NewItem;
+    ItemWidget->ParentSlot = this;
+    SlotContainer->AddChild(ItemWidget);
+}
+
+void UInventorySlotWidget::ClearSlot()
+{
+    if (SlotContainer && ItemWidget)
+    {
+        SlotContainer->RemoveChild(ItemWidget);
+        ItemWidget = nullptr;
+    }
+}
+
+bool UInventorySlotWidget::NativeOnDragOver(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation)
+{
+    UInventoryDragDropOperation* DragOp = Cast<UInventoryDragDropOperation>(InOperation);
+    if (DragOp)
+    {
+        DragOp->TargetWidget = this;
+    }
+
+    return true;
+}
+
+bool UInventorySlotWidget::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation)
+{
+    if (!InOperation || !InOperation->Payload) return false;
+
+    UInventoryItemWidget* DraggedItem = Cast<UInventoryItemWidget>(InOperation->Payload);
+    if (!DraggedItem || DraggedItem->ParentSlot == this) return false;
+
+    UInventorySlotWidget* SourceSlot = DraggedItem->ParentSlot;
+    if (!SourceSlot) return false;
+
+    SourceSlot->ClearSlot();
+    SetItem(DraggedItem);
+
+    return true;
+}

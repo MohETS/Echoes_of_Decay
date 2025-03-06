@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "InventoryItemWidget.h"
+#include "InventoryItem.h"
 #include "CollectibleItem.generated.h"
 
 UCLASS()
@@ -24,7 +26,13 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
-	FName ItemID;
+	UTexture2D* ItemIcon;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
+	FName ItemName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
+	EItemType ItemType;
 
 	UFUNCTION()
 	void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
