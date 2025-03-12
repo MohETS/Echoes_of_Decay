@@ -24,7 +24,7 @@ AProjectile::AProjectile()
     MeshComponent->SetNotifyRigidBodyCollision(true);
     MeshComponent->SetNotifyRigidBodyCollision(true);
     MeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-    MeshComponent->SetCollisionObjectType(ECC_PhysicsBody); // Assure-toi que l'objet est détectable
+    MeshComponent->SetCollisionObjectType(ECC_PhysicsBody); // Assure-toi que l'objet est dï¿½tectable
     MeshComponent->SetCollisionResponseToAllChannels(ECR_Block);
     MeshComponent->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap); // Permet d'interagir avec les personnages
    
@@ -54,13 +54,13 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 
     UE_LOG(LogTemp, Warning, TEXT("Projectile hit: %s"), *OtherActor->GetName());
 
-    // Si c'est un ennemi, on applique les dégâts
+    // Si c'est un ennemi, on applique les dï¿½gï¿½ts
     AEnemyBase* Enemy = Cast<AEnemyBase>(OtherActor);
     if (Enemy)
     {
         UGameplayStatics::ApplyDamage(OtherActor, 10.0f, GetInstigatorController(), this, UDamageType::StaticClass());
     }
 
-    // Détruire le projectile quel que soit l'impact
+    // Dï¿½truire le projectile quel que soit l'impact
     Destroy();
 }
