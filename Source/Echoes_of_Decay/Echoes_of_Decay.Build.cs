@@ -8,7 +8,18 @@ public class Echoes_of_Decay : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput" });
+		PublicDependencyModuleNames.AddRange(new string[]
+        {
+            "Core", 
+            "CoreUObject", 
+            "Engine", 
+            "InputCore", 
+            "EnhancedInput", 
+            "AIModule", 
+            "GameplayTasks",
+			"UMG",
+			"UI"
+        });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
