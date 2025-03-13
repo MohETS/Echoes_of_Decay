@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -16,54 +14,65 @@ class ECHOES_OF_DECAY_API AEnemyBase : public ACharacter
 
 public:
 	AEnemyBase();
+	void Die(AActor* Killer);
 
 protected:
-    // Behaviour and detection variable
-    UPROPERTY(EditAnywhere, Category = "AI")
-    float SightRadius = 1000.0f;
+	// Variables liées à la détection de l'IA
+	UPROPERTY(EditAnywhere, Category = "AI")
+	float SightRadius = 1000.0f;
 
-    UPROPERTY(EditAnywhere, Category = "AI")
-    float AttackRange = 150.0f;
+	UPROPERTY(EditAnywhere, Category = "AI")
+	float AttackRange = 150.0f;
 
-    UPROPERTY(EditAnywhere, Category = "AI")
-    float PatrolRadius = 500.0f;
+	UPROPERTY(EditAnywhere, Category = "AI")
+	float PatrolRadius = 500.0f;
 
-    UPROPERTY(EditAnywhere, Category = "AI")
-    float MoveSpeed = 300.0f;
+	UPROPERTY(EditAnywhere, Category = "AI")
+	float MoveSpeed = 300.0f;
 
-    UPROPERTY(EditAnywhere, Category = "AI")
+	UPROPERTY(EditAnywhere, Category = "AI")
 	float PatrolMaxDistance = 1000.0f;
 
-    UPROPERTY(EditAnywhere, Category = "AI")
-    FVector PatrolCenter;
+	UPROPERTY(EditAnywhere, Category = "AI")
+	FVector PatrolCenter;
 
-    UPROPERTY(VisibleAnywhere, Category = "AI")
-    UAIPerceptionComponent* AIPerceptionComponent;
+	UPROPERTY(VisibleAnywhere, Category = "AI")
+	UAIPerceptionComponent* AIPerceptionComponent;
 
-    UPROPERTY(VisibleAnywhere, Category = "AI")
-    UAISenseConfig_Sight* SightConfig;
+	UPROPERTY(VisibleAnywhere, Category = "AI")
+	UAISenseConfig_Sight* SightConfig;
 
-    // Patrol timer
-    FTimerHandle PatrolTimer;
+	// Variables pour la santé et les dégâts
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
+	float Health = 100.0f;  // Santé de l'ennemi
 
-    // Player
-    APawn* PlayerPawn;
+	// Timer pour la patrouille et l'attaque
+	FTimerHandle PatrolTimer;
+	FTimerHandle AttackTimerHandle;
 
-	// Attack timer
-    FTimerHandle AttackTimerHandle;
+	// Joueur
+	APawn* PlayerPawn;
 
-	// Unreal Engine functions
-    virtual void BeginPlay() override;
-    virtual void Tick(float DeltaTime) override;
-    
-	// Perception function
-    UFUNCTION()
-    void OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus);
+	// Fonction Unreal Engine
+	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaTime) override;
 
-	// Behaviour functions
-    void StartAttack();
-    void StopAttack();
-    void Patrol();
-    void ChasePlayer();
-    virtual void AttackPlayer();
+	// Fonction de perception
+	UFUNCTION()
+	void OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus);
+
+	// Fonction de comportement
+	void StartAttack();
+	void StopAttack();
+	void Patrol();
+	void ChasePlayer();
+	virtual void AttackPlayer();
+
+	// Fonction de réception des dégâts
+	virtual float TakeDamage(
+		float DamageAmount,
+		struct FDamageEvent const& DamageEvent,
+		AController* EventInstigator,
+		AActor* DamageCauser
+	) override;
 };

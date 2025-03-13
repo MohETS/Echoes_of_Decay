@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// EnemyBase.cpp
 
 #include "EnemyBase.h"
 #include "AIController.h"
@@ -12,11 +12,12 @@
 #include "Perception/AIPerceptionComponent.h"
 #include "TimerManager.h"
 
+// Sets default values
 AEnemyBase::AEnemyBase()
 {
     PrimaryActorTick.bCanEverTick = true;
 
-	// Set up the AI perception component
+    // Set up the AI perception component
     AIPerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("AIPerceptionComponent"));
 
     if (!SightConfig)
@@ -24,7 +25,7 @@ AEnemyBase::AEnemyBase()
         SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("SightConfig"));
     }
 
-	// Set up the sight configuration
+    // Set up the sight configuration
     SightConfig->SightRadius = SightRadius;
     SightConfig->LoseSightRadius = SightRadius + 500.0f;
     SightConfig->PeripheralVisionAngleDegrees = 90.0f;
@@ -32,10 +33,10 @@ AEnemyBase::AEnemyBase()
     SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
     SightConfig->DetectionByAffiliation.bDetectFriendlies = true;
 
-	// Configure the AI perception component
+    // Configure the AI perception component
     AIPerceptionComponent->ConfigureSense(*SightConfig);
 
-	// Set the dominant sense
+    // Set the dominant sense
     if (SightConfig->GetSenseImplementation())
     {
         AIPerceptionComponent->SetDominantSense(SightConfig->GetSenseImplementation());
@@ -45,24 +46,27 @@ AEnemyBase::AEnemyBase()
         UE_LOG(LogTemp, Error, TEXT("Error: SightConfig->GetSenseImplementation() is NULL!"));
     }
 
-	// Bind the perception function
+    // Bind the perception function
     AIPerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &AEnemyBase::OnPerceptionUpdated);
 
-	// Set up the movement component
+    // Set up the movement component
     GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
     GetCharacterMovement()->bUseControllerDesiredRotation = true;
     GetCharacterMovement()->bOrientRotationToMovement = true;
 
-	// Set up the AI controller
+    // Set up the AI controller
     AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+
+    // Set initial health or damage properties
+    Health = 100.0f;  // Example health value, adjust as needed
 }
 
 // Called when the game starts or when spawned
 void AEnemyBase::BeginPlay()
 {
-	Super::BeginPlay();
+    Super::BeginPlay();
 
-	PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+    PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
     PatrolCenter = GetActorLocation();
 
     AAIController* AIController = Cast<AAIController>(GetController());
@@ -71,18 +75,18 @@ void AEnemyBase::BeginPlay()
         UE_LOG(LogTemp, Error, TEXT("AIController is NULL ! Ennemi will not be able to move"));
     }
 
-	// Start patrolling
-	GetWorldTimerManager().SetTimer(PatrolTimer, this, &AEnemyBase::Patrol, 5.0f, true);
+    // Start patrolling
+    GetWorldTimerManager().SetTimer(PatrolTimer, this, &AEnemyBase::Patrol, 5.0f, true);
 }
 
 // Called every frame
 void AEnemyBase::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
+    Super::Tick(DeltaTime);
 
     if (PlayerPawn)
     {
-		// Check if the player is within the sight radius
+        // Check if the player is within the sight radius
         float Distance = FVector::Dist(GetActorLocation(), PlayerPawn->GetActorLocation());
 
         if (Distance < SightRadius)
@@ -100,7 +104,7 @@ void AEnemyBase::OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
 {
     if (Actor && Actor == PlayerPawn)
     {
-		// Check if the player was successfully sensed
+        // Check if the player was successfully sensed
         if (Stimulus.WasSuccessfullySensed())
         {
             UE_LOG(LogTemp, Warning, TEXT("Player detected!"));
@@ -111,7 +115,7 @@ void AEnemyBase::OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
             UE_LOG(LogTemp, Warning, TEXT("Player lost!"));
             float DistanceToPatrolCenter = FVector::Dist(GetActorLocation(), PatrolCenter);
 
-			// If the player is too far from the patrol zone, return to the patrol zone
+            // If the player is too far from the patrol zone, return to the patrol zone
             if (DistanceToPatrolCenter > PatrolMaxDistance)
             {
                 UE_LOG(LogTemp, Warning, TEXT("Returning to patrol center"));
@@ -141,7 +145,7 @@ void AEnemyBase::Patrol()
     }
 
     FVector PatrolPoint = PatrolCenter + FMath::VRand() * PatrolMaxDistance / 2;
-	PatrolPoint.Z = GetActorLocation().Z;
+    PatrolPoint.Z = GetActorLocation().Z;
 
     AAIController* AIController = Cast<AAIController>(GetController());
     if (AIController)
@@ -153,7 +157,7 @@ void AEnemyBase::Patrol()
 
 void AEnemyBase::StartAttack()
 {
-	// Start the attack timer
+    // Start the attack timer
     if (!GetWorldTimerManager().IsTimerActive(AttackTimerHandle))
     {
         GetWorldTimerManager().SetTimer(AttackTimerHandle, this, &AEnemyBase::AttackPlayer, 2.0f, true);
@@ -162,7 +166,7 @@ void AEnemyBase::StartAttack()
 
 void AEnemyBase::StopAttack()
 {
-	// Stop the attack timer
+    // Stop the attack timer
     GetWorldTimerManager().ClearTimer(AttackTimerHandle);
 }
 
@@ -170,15 +174,15 @@ void AEnemyBase::ChasePlayer()
 {
     if (PlayerPawn)
     {
-		// Check if the player is within the sight radius
+        // Check if the player is within the sight radius
         float DistanceToPlayer = FVector::Dist(GetActorLocation(), PlayerPawn->GetActorLocation());
         float DistanceToPatrolCenter = FVector::Dist(GetActorLocation(), PatrolCenter);
 
-		// If the player is too far from the patrol zone, return to the patrol zone
+        // If the player is too far from the patrol zone, return to the patrol zone
         AAIController* AIController = Cast<AAIController>(GetController());
         if (AIController)
         {
-			// If the player is too far from the patrol zone, return to the patrol zone
+            // If the player is too far from the patrol zone, return to the patrol zone
             if (DistanceToPatrolCenter > PatrolMaxDistance)
             {
                 UE_LOG(LogTemp, Warning, TEXT("Player too far from patrol zone, returning to patrol"));
@@ -186,7 +190,7 @@ void AEnemyBase::ChasePlayer()
                 return;
             }
 
-			// If the player is within the attack range, stop moving
+            // If the player is within the attack range, stop moving
             if (DistanceToPlayer > AttackRange)
             {
                 UE_LOG(LogTemp, Warning, TEXT("Chasing player..."));
@@ -203,5 +207,32 @@ void AEnemyBase::ChasePlayer()
 
 void AEnemyBase::AttackPlayer()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Enemy Attacking! Base class"));
+    UE_LOG(LogTemp, Warning, TEXT("Enemy Attacking! Base class"));
+}
+
+// Handle the reception of damage
+float AEnemyBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+    // Call the base class version of TakeDamage (if applicable)
+    float ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+    // Reduce health based on damage received
+    Health -= ActualDamage;
+    UE_LOG(LogTemp, Warning, TEXT("Enemy received %f damage. Health remaining: %f"), ActualDamage, Health);
+
+    // Check if the enemy's health has dropped to 0 or below
+    if (Health <= 0.0f)
+    {
+        Die(DamageCauser); // Call a method to handle the enemy's death
+    }
+
+    return ActualDamage;
+}
+
+void AEnemyBase::Die(AActor* Killer)
+{
+    UE_LOG(LogTemp, Warning, TEXT("Enemy has died!"));
+
+    // Destroy the enemy actor
+    Destroy();
 }

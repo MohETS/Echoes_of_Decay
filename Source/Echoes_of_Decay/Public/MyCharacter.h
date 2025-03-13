@@ -5,7 +5,6 @@
 #include "Projectile.h"
 #include "MyCharacter.generated.h"
 
-
 UCLASS()
 class ECHOES_OF_DECAY_API AMyCharacter : public ACharacter
 {
@@ -23,11 +22,24 @@ public:
     // Fonction pour tirer un projectile
     void FireProjectile();
 
- 
+    // Classe du projectile à tirer
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
     TSubclassOf<class AProjectile> ProjectileClass;
 
     // Emplacement du spawn du projectile
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
-    class UArrowComponent* MyArrowComponent;  
+    class UArrowComponent* MyArrowComponent;
+
+    // --- Ajout de la gestion des dégâts ---
+
+    // Santé du joueur
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
+    float Health;
+
+    // Fonction pour recevoir des dégâts
+    virtual float TakeDamage(
+        float DamageAmount,
+        struct FDamageEvent const& DamageEvent,
+        AController* EventInstigator,
+        AActor* DamageCauser) override;
 };
