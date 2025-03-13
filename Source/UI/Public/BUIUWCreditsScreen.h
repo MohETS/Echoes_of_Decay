@@ -45,7 +45,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, meta = (BindWidget))
 	TObjectPtr<UBUIUWTitleScreenButton> BackButton;
 
-
+	//Main Menu
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UBUIUWMainMenu> MainMenuClass;
 

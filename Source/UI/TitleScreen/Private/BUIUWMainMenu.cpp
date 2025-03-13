@@ -10,7 +10,7 @@ void UBUIUWMainMenu::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-
+	//Set up the different actions for each button
 	StartGameButton->MainButton->OnPressed.AddUniqueDynamic(this, &UBUIUWMainMenu::StartGame);
 	SettingsButton->MainButton->OnPressed.AddUniqueDynamic(this, &UBUIUWMainMenu::Settings);
 	CreditsButton->MainButton->OnPressed.AddUniqueDynamic(this, &UBUIUWMainMenu::Credits);
@@ -19,17 +19,22 @@ void UBUIUWMainMenu::NativeConstruct()
 
 }
 
+
 void UBUIUWMainMenu::SynchronizeProperties()
 {
 	Super::SynchronizeProperties();
 }
 
+
+//This starts the game for the player and redirects him to the main level of the game
 void UBUIUWMainMenu::StartGame()
 {
 	UE_LOG(LogTemp, Display, TEXT("Starting the game"));
 	UGameplayStatics::OpenLevel(GetWorld(), MainLevel, false);
 }
 
+
+//This directs the player to the Settings menu
 void UBUIUWMainMenu::Settings()
 {
 	UE_LOG(LogTemp, Display, TEXT("Going to settings"));
@@ -48,6 +53,8 @@ void UBUIUWMainMenu::Settings()
 	}
 }
 
+
+//This directs the player to the Credits menu
 void UBUIUWMainMenu::Credits()
 {
 	UE_LOG(LogTemp, Display, TEXT("Going to credits"));
@@ -66,6 +73,8 @@ void UBUIUWMainMenu::Credits()
 	}
 }
 
+
+//Makes the player quit the game
 void UBUIUWMainMenu::Quit()
 {
 	UE_LOG(LogTemp, Display, TEXT("Quitting"));

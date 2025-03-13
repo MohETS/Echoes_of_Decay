@@ -11,11 +11,14 @@ void UBUIUWSettingsScreen::NativeConstruct()
 	BackButton->MainButton->OnPressed.AddUniqueDynamic(this, &UBUIUWSettingsScreen::Back);
 }
 
+
 void UBUIUWSettingsScreen::SynchronizeProperties()
 {
 	Super::SynchronizeProperties();
 }
 
+
+//Closes the Settings menu and brinds the player back to the Main Menu
 void UBUIUWSettingsScreen::Back()
 {
 	UE_LOG(LogTemp, Display, TEXT("Backing from settings page"));

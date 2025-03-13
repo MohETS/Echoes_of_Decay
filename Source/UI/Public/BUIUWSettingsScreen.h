@@ -43,6 +43,7 @@ protected:
 	TObjectPtr<UBUIUWTitleScreenButton> BackButton;
 
 
+	//Main Menu
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UBUIUWMainMenu> MainMenuClass;
 

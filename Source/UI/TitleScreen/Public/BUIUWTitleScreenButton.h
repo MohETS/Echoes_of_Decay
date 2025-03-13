@@ -16,9 +16,11 @@ UCLASS()
 class UI_API UBUIUWTitleScreenButton : public UBUIUserWidget
 {
 	GENERATED_BODY()
+
 public:
 
-	UPROPERTY(EditAnywhere)
+	/* UI Components */
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	TObjectPtr<UBUIButton> MainButton;
 
 protected:
@@ -29,7 +31,7 @@ protected:
 	virtual void SynchronizeProperties() override;
 
 
-	/* UI Components*/
+	/* UI Components */
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UBUILabel> ButtonLabel;
 
