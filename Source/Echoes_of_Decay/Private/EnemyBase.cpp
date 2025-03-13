@@ -12,12 +12,11 @@
 #include "Perception/AIPerceptionComponent.h"
 #include "TimerManager.h"
 
-// Sets default values
 AEnemyBase::AEnemyBase()
 {
     PrimaryActorTick.bCanEverTick = true;
 
-    // Set up the AI perception component
+	// Set up the AI perception component
     AIPerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("AIPerceptionComponent"));
 
     if (!SightConfig)
@@ -25,7 +24,7 @@ AEnemyBase::AEnemyBase()
         SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("SightConfig"));
     }
 
-    // Set up the sight configuration
+	// Set up the sight configuration
     SightConfig->SightRadius = SightRadius;
     SightConfig->LoseSightRadius = SightRadius + 500.0f;
     SightConfig->PeripheralVisionAngleDegrees = 90.0f;
@@ -33,10 +32,10 @@ AEnemyBase::AEnemyBase()
     SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
     SightConfig->DetectionByAffiliation.bDetectFriendlies = true;
 
-    // Configure the AI perception component
+	// Configure the AI perception component
     AIPerceptionComponent->ConfigureSense(*SightConfig);
 
-    // Set the dominant sense
+	// Set the dominant sense
     if (SightConfig->GetSenseImplementation())
     {
         AIPerceptionComponent->SetDominantSense(SightConfig->GetSenseImplementation());
@@ -46,10 +45,10 @@ AEnemyBase::AEnemyBase()
         UE_LOG(LogTemp, Error, TEXT("Error: SightConfig->GetSenseImplementation() is NULL!"));
     }
 
-    // Bind the perception function
+	// Bind the perception function
     AIPerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &AEnemyBase::OnPerceptionUpdated);
 
-    // Set up the movement component
+	// Set up the movement component
     GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
     GetCharacterMovement()->bUseControllerDesiredRotation = true;
     GetCharacterMovement()->bOrientRotationToMovement = true;

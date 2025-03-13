@@ -13,7 +13,7 @@ class ECHOES_OF_DECAY_API AEnemyRanged : public AEnemyBase
 	GENERATED_BODY()
 	
 protected:
-	// Classe du projectile à tirer
+	// Classe du projectile ï¿½ tirer
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	TSubclassOf<class AProjectile> ProjectileClass;
 

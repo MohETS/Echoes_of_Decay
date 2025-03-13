@@ -17,7 +17,7 @@ public:
 	void Die(AActor* Killer);
 
 protected:
-	// Variables liées à la détection de l'IA
+	// Variables liï¿½es ï¿½ la dï¿½tection de l'IA
 	UPROPERTY(EditAnywhere, Category = "AI")
 	float SightRadius = 1000.0f;
 
@@ -42,9 +42,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "AI")
 	UAISenseConfig_Sight* SightConfig;
 
-	// Variables pour la santé et les dégâts
+	// Variables pour la santï¿½ et les dï¿½gï¿½ts
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
-	float Health = 2.0f;  // Santé de l'ennemi
+	float Health = 2.0f;  // Santï¿½ de l'ennemi
 
 	// Timer pour la patrouille et l'attaque
 	FTimerHandle PatrolTimer;
@@ -68,7 +68,7 @@ protected:
 	void ChasePlayer();
 	virtual void AttackPlayer();
 
-	// Fonction de réception des dégâts
+	// Fonction de rï¿½ception des dï¿½gï¿½ts
 	virtual float TakeDamage(
 		float DamageAmount,
 		struct FDamageEvent const& DamageEvent,
