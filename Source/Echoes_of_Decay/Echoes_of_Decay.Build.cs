@@ -16,9 +16,7 @@ public class Echoes_of_Decay : ModuleRules
             "InputCore", 
             "EnhancedInput", 
             "AIModule", 
-            "GameplayTasks",
-			"UMG",
-			"UI"
+            "GameplayTasks"
         });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
