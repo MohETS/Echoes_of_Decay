@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Projectile.h"
 #include "MyCharacter.generated.h"
 
 
@@ -24,7 +25,7 @@ public:
 
  
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
-    TSubclassOf<class AActor> ProjectileClass;
+    TSubclassOf<class AProjectile> ProjectileClass;
 
     // Emplacement du spawn du projectile
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")

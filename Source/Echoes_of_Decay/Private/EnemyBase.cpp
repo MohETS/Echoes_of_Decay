@@ -190,7 +190,7 @@ void AEnemyBase::ChasePlayer()
             if (DistanceToPlayer > AttackRange)
             {
                 UE_LOG(LogTemp, Warning, TEXT("Chasing player..."));
-                AIController->MoveToActor(PlayerPawn, AttackRange - 10.0f);
+                AIController->MoveToActor(PlayerPawn, AttackRange - 100.0f);
             }
             else
             {
