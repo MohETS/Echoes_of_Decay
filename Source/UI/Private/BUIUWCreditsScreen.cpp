@@ -11,11 +11,14 @@ void UBUIUWCreditsScreen::NativeConstruct()
 	BackButton->MainButton->OnPressed.AddUniqueDynamic(this, &UBUIUWCreditsScreen::Back);
 }
 
+
 void UBUIUWCreditsScreen::SynchronizeProperties()
 {
 	Super::SynchronizeProperties();
 }
 
+
+//Closes the Credits menu and gets the player back to the Main Menu
 void UBUIUWCreditsScreen::Back()
 {
 	UE_LOG(LogTemp, Display, TEXT("Backing from credits page"));

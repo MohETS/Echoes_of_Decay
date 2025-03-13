@@ -38,7 +38,6 @@ protected:
 
 	/* UI Components*/
 
-
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UBUIUWMainMenu> MainMenuClass;
 
