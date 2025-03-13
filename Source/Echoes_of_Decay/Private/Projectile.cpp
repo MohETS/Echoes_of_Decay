@@ -22,7 +22,11 @@ AProjectile::AProjectile()
     ProjectileMovement->bRotationFollowsVelocity = true; // Makes the projectile rotate as it moves
     ProjectileMovement->bShouldBounce = false; // Set to true if you want the projectile to bounce
     MeshComponent->SetNotifyRigidBodyCollision(true);
-
+    MeshComponent->SetNotifyRigidBodyCollision(true);
+    MeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+    MeshComponent->SetCollisionObjectType(ECC_PhysicsBody); // Assure-toi que l'objet est détectable
+    MeshComponent->SetCollisionResponseToAllChannels(ECR_Block);
+    MeshComponent->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap); // Permet d'interagir avec les personnages
    
    
 }
@@ -50,11 +54,13 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 
     UE_LOG(LogTemp, Warning, TEXT("Projectile hit: %s"), *OtherActor->GetName());
 
+    // Si c'est un ennemi, on applique les dégâts
     AEnemyBase* Enemy = Cast<AEnemyBase>(OtherActor);
     if (Enemy)
     {
         UGameplayStatics::ApplyDamage(OtherActor, 10.0f, GetInstigatorController(), this, UDamageType::StaticClass());
     }
 
-    Destroy(); // Toujours détruire le projectile après une collision
+    // Détruire le projectile quel que soit l'impact
+    Destroy();
 }

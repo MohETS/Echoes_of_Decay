@@ -57,8 +57,8 @@ AEnemyBase::AEnemyBase()
     // Set up the AI controller
     AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
-    // Set initial health or damage properties
-    Health = 100.0f;  // Example health value, adjust as needed
+    // Set initial health 
+  //  Health = 2.0f;  
 }
 
 // Called when the game starts or when spawned
@@ -213,26 +213,15 @@ void AEnemyBase::AttackPlayer()
 // Handle the reception of damage
 float AEnemyBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-    // Call the base class version of TakeDamage (if applicable)
     float ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-
-    // Reduce health based on damage received
     Health -= ActualDamage;
     UE_LOG(LogTemp, Warning, TEXT("Enemy received %f damage. Health remaining: %f"), ActualDamage, Health);
-
-    // Check if the enemy's health has dropped to 0 or below
-    if (Health <= 0.0f)
-    {
-        Die(DamageCauser); // Call a method to handle the enemy's death
-    }
-
+    if (Health <= 0.0f) Die(DamageCauser);
     return ActualDamage;
 }
 
 void AEnemyBase::Die(AActor* Killer)
 {
     UE_LOG(LogTemp, Warning, TEXT("Enemy has died!"));
-
-    // Destroy the enemy actor
     Destroy();
 }

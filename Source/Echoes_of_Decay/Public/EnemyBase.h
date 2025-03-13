@@ -44,7 +44,7 @@ protected:
 
 	// Variables pour la santé et les dégâts
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
-	float Health = 100.0f;  // Santé de l'ennemi
+	float Health = 2.0f;  // Santé de l'ennemi
 
 	// Timer pour la patrouille et l'attaque
 	FTimerHandle PatrolTimer;
