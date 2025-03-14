@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 #include "Projectile.generated.h"
 
 // The AProjectile class handles a simple projectile's behavior in the game
