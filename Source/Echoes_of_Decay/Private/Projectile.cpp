@@ -24,17 +24,18 @@ AProjectile::AProjectile()
     MeshComponent->SetNotifyRigidBodyCollision(true);
     MeshComponent->SetNotifyRigidBodyCollision(true);
     MeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-    MeshComponent->SetCollisionObjectType(ECC_PhysicsBody); // Assure-toi que l'objet est détectable
+    MeshComponent->SetCollisionObjectType(ECC_PhysicsBody);
     MeshComponent->SetCollisionResponseToAllChannels(ECR_Block);
-    MeshComponent->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap); // Permet d'interagir avec les personnages
-   
-   
+    MeshComponent->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
 }
 
 // Called when the game starts or when spawned
 void AProjectile::BeginPlay()
 {
     Super::BeginPlay();
+
+    GetWorldTimerManager().SetTimer(LifeTimerHandle, this, &AProjectile::DestroyProjectile, LifeTime, false);
+
     // Bind the OnHit function to the OnComponentHit event
     MeshComponent->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
 }
@@ -63,4 +64,9 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 
     // Détruire le projectile quel que soit l'impact
     Destroy();
+}
+
+void AProjectile::DestroyProjectile()
+{
+	Destroy();
 }
