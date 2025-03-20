@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 #include "Projectile.generated.h"
 
 // The AProjectile class handles a simple projectile's behavior in the game
@@ -24,11 +25,11 @@ public:
 
 	// Mesh component for visual representation of the projectile
 	UPROPERTY(VisibleAnywhere, Category = "Components")
-	class UStaticMeshComponent* MeshComponent;
+	UStaticMeshComponent* MeshComponent;
 
 	// Movement component to handle projectile movement (speed, rotation, etc.)
 	UPROPERTY(VisibleAnywhere, Category = "Components")
-	class UProjectileMovementComponent* ProjectileMovement;
+	UProjectileMovementComponent* ProjectileMovement;
 
 	// Damage the projectile inflicts when it hits another actor
 	UPROPERTY(EditDefaultsOnly, Category = "Damage")
