@@ -2,43 +2,71 @@
 #include "Components/StaticMeshComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "EnemyBase.h"
 #include "GameFramework/DamageType.h"
 
+// Sets default values
 AProjectile::AProjectile()
 {
+    // Enable ticking for this actor
     PrimaryActorTick.bCanEverTick = true;
 
-	// Create the mesh component
+    // Create and set up the mesh component for the projectile
     MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
     RootComponent = MeshComponent;
 
-	// Create the projectile movement component
+    // Create and set up the projectile movement component
     ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovement"));
     ProjectileMovement->InitialSpeed = 1500.0f;
     ProjectileMovement->MaxSpeed = 1500.0f;
-    ProjectileMovement->bRotationFollowsVelocity = true;
-    ProjectileMovement->bShouldBounce = false;
-
-	// Bind the OnHit function to the OnComponentHit event
-    MeshComponent->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
+    ProjectileMovement->bRotationFollowsVelocity = true; // Makes the projectile rotate as it moves
+    ProjectileMovement->bShouldBounce = false; // Set to true if you want the projectile to bounce
+    MeshComponent->SetNotifyRigidBodyCollision(true);
+    MeshComponent->SetNotifyRigidBodyCollision(true);
+    MeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+    MeshComponent->SetCollisionObjectType(ECC_PhysicsBody);
+    MeshComponent->SetCollisionResponseToAllChannels(ECR_Block);
+    MeshComponent->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
 }
 
+// Called when the game starts or when spawned
 void AProjectile::BeginPlay()
 {
     Super::BeginPlay();
+
+    GetWorldTimerManager().SetTimer(LifeTimerHandle, this, &AProjectile::DestroyProjectile, LifeTime, false);
+
+    // Bind the OnHit function to the OnComponentHit event
+    MeshComponent->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
 }
 
+// Called every frame
 void AProjectile::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
+    
 }
 
-void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+// Function that gets called when the projectile hits something
+void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
+    UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	// If the projectile hits an actor, apply damage and destroy the projectile
-    if (OtherActor && OtherActor != this)
+    if (!OtherActor || OtherActor == this) return;
+
+    UE_LOG(LogTemp, Warning, TEXT("Projectile hit: %s"), *OtherActor->GetName());
+
+    // Si c'est un ennemi, on applique les dégâts
+    AEnemyBase* Enemy = Cast<AEnemyBase>(OtherActor);
+    if (Enemy)
     {
-        UGameplayStatics::ApplyDamage(OtherActor, Damage, GetInstigatorController(), this, UDamageType::StaticClass());
-        Destroy();
+        UGameplayStatics::ApplyDamage(OtherActor, 10.0f, GetInstigatorController(), this, UDamageType::StaticClass());
     }
+
+    // Détruire le projectile quel que soit l'impact
+    Destroy();
+}
+
+void AProjectile::DestroyProjectile()
+{
+	Destroy();
 }
