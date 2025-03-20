@@ -26,7 +26,7 @@ protected:
 
 	/* Variables */
 
-	const FName MainLevel = FName("/Game/BaseEmptyLevel");
+	const FName MainLevel = FName("/Game/Levels/BaseEmptyLevel");
 
 
 	/* UserWidgets functions */

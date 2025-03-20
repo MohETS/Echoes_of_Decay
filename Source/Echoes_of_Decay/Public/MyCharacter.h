@@ -3,7 +3,15 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Projectile.h"
+#include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
+#include "TimerManager.h"
+#include "InventoryComponent.h"
 #include "MyCharacter.generated.h"
+
+class UInventoryWidget;
+class UInputMappingContext;
+class UInputAction;
 
 UCLASS()
 class ECHOES_OF_DECAY_API AMyCharacter : public ACharacter
@@ -29,6 +37,18 @@ public:
     // Emplacement du spawn du projectile
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
     class UArrowComponent* MyArrowComponent;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Input")
+    UInputMappingContext* DefaultMappingContext;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Input")
+    UInputAction* ToggleInventoryAction;
+
+    UPROPERTY(VisibleAnywhere, Category = "Inventory")
+    UInventoryComponent* Inventory;
+
+    UFUNCTION()
+    void ToggleInventory();
 
     // --- Ajout de la gestion des dégâts ---
 

@@ -12,6 +12,9 @@ AMyCharacter::AMyCharacter()
     MyArrowComponent->SetVisibility(true, true);
    // MyArrowComponent->SetAbsolute(false, true, false);
 
+    Inventory = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
+
+
     // Initialisation de la santé
     Health = 100.0f;
 }
@@ -21,8 +24,19 @@ void AMyCharacter::BeginPlay()
     Super::BeginPlay();
 
     FRotator CurrentRotation = MyArrowComponent->GetComponentRotation();
-  //  CurrentRotation.Yaw = 0.0f; // Bloque la rotation autour de l'axe Yaw (Z)
-  //  MyArrowComponent->SetWorldRotation(CurrentRotation); // Applique cette rotation bloquée
+    // CurrentRotation.Yaw = 0.0f; // Bloque la rotation autour de l'axe Yaw (Z)
+    // MyArrowComponent->SetWorldRotation(CurrentRotation); // Applique cette rotation bloquée
+
+    // Add the default mapping context to the player's input subsystem
+    if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+    {
+        UEnhancedInputLocalPlayerSubsystem* InputSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
+
+        if (InputSubsystem && DefaultMappingContext)
+        {
+            InputSubsystem->AddMappingContext(DefaultMappingContext, 0);
+        }
+    }
 }
 
 void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -31,6 +45,12 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
     // Assigner l'action de tir au clic gauche
     PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AMyCharacter::FireProjectile);
+
+    UEnhancedInputComponent* EnhancedInput = Cast<UEnhancedInputComponent>(PlayerInputComponent);
+    if (EnhancedInput && ToggleInventoryAction)
+    {
+        EnhancedInput->BindAction(ToggleInventoryAction, ETriggerEvent::Started, this, &AMyCharacter::ToggleInventory);
+    }
 }
 
 void AMyCharacter::FireProjectile()
@@ -70,4 +90,9 @@ float AMyCharacter::TakeDamage(
     }
 
     return DamageAmount;
+}
+
+void AMyCharacter::ToggleInventory()
+{
+    Inventory->ToggleInventory();
 }
