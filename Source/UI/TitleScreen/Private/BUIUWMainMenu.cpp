@@ -15,7 +15,9 @@ void UBUIUWMainMenu::NativeConstruct()
 	SettingsButton->MainButton->OnPressed.AddUniqueDynamic(this, &UBUIUWMainMenu::Settings);
 	CreditsButton->MainButton->OnPressed.AddUniqueDynamic(this, &UBUIUWMainMenu::Credits);
 	QuitButton->MainButton->OnPressed.AddUniqueDynamic(this, &UBUIUWMainMenu::Quit);
-
+	
+	
+	StartGameButton->MainButton->SetKeyboardFocus();
 
 }
 

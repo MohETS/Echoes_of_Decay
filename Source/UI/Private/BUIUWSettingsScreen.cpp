@@ -9,6 +9,8 @@ void UBUIUWSettingsScreen::NativeConstruct()
 	Super::NativeConstruct();
 
 	BackButton->MainButton->OnPressed.AddUniqueDynamic(this, &UBUIUWSettingsScreen::Back);
+	BackButton->SetKeyboardFocus();
+
 }
 
 

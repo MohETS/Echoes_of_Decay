@@ -9,6 +9,7 @@ void UBUIUWCreditsScreen::NativeConstruct()
 	Super::NativeConstruct();
 
 	BackButton->MainButton->OnPressed.AddUniqueDynamic(this, &UBUIUWCreditsScreen::Back);
+	BackButton->SetKeyboardFocus();
 }
 
 

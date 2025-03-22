@@ -6,7 +6,6 @@
 void UBUIUWTitleScreenButton::NativeConstruct()
 {
 	Super::NativeConstruct();
-
 }
 
 void UBUIUWTitleScreenButton::SynchronizeProperties()
