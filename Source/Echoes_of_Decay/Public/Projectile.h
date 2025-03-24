@@ -41,6 +41,8 @@ public:
 
 	FTimerHandle LifeTimerHandle;
 
+	AActor* Owner;
+
 	// Called when the projectile collides with something
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,

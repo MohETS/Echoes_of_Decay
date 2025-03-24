@@ -14,8 +14,9 @@ AMyCharacter::AMyCharacter()
 
     Inventory = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
 
+    EquippedWeapons.Init(nullptr, 3);
+    CurrentWeapon = nullptr;
 
-    // Initialisation de la santé
     Health = 100.0f;
 }
 
@@ -26,6 +27,7 @@ void AMyCharacter::BeginPlay()
     FRotator CurrentRotation = MyArrowComponent->GetComponentRotation();
     // CurrentRotation.Yaw = 0.0f; // Bloque la rotation autour de l'axe Yaw (Z)
     // MyArrowComponent->SetWorldRotation(CurrentRotation); // Applique cette rotation bloquée
+
 
     // Add the default mapping context to the player's input subsystem
     if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
@@ -43,13 +45,16 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 {
     Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-    // Assigner l'action de tir au clic gauche
     PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AMyCharacter::FireProjectile);
 
     UEnhancedInputComponent* EnhancedInput = Cast<UEnhancedInputComponent>(PlayerInputComponent);
-    if (EnhancedInput && ToggleInventoryAction)
+    if (EnhancedInput)
     {
         EnhancedInput->BindAction(ToggleInventoryAction, ETriggerEvent::Started, this, &AMyCharacter::ToggleInventory);
+		EnhancedInput->BindAction(AttackAction, ETriggerEvent::Started, this, &AMyCharacter::UseWeapon);
+		EnhancedInput->BindAction(WeaponSlot1Action, ETriggerEvent::Started, this, &AMyCharacter::SwitchToWeapon1);
+		EnhancedInput->BindAction(WeaponSlot2Action, ETriggerEvent::Started, this, &AMyCharacter::SwitchToWeapon2);
+		EnhancedInput->BindAction(WeaponSlot3Action, ETriggerEvent::Started, this, &AMyCharacter::SwitchToWeapon3);
     }
 }
 
@@ -95,4 +100,42 @@ float AMyCharacter::TakeDamage(
 void AMyCharacter::ToggleInventory()
 {
     Inventory->ToggleInventory();
+}
+
+void AMyCharacter::SwitchWeapon(int32 SlotIndex)
+{
+    if (EquippedWeapons.IsValidIndex(SlotIndex) && EquippedWeapons[SlotIndex])
+    {
+        CurrentWeapon = GetWorld()->SpawnActor<AWeaponBase>(EquippedWeapons[SlotIndex]);
+		CurrentWeapon->Owner = this;
+        UE_LOG(LogTemp, Warning, TEXT("Switched to weapon: %s"), *CurrentWeapon->WeaponName.ToString());
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("No weapon in this slot!"));
+    }
+}
+
+void AMyCharacter::SwitchToWeapon1()
+{
+    SwitchWeapon(0);
+}
+
+void AMyCharacter::SwitchToWeapon2()
+{
+    SwitchWeapon(1);
+}
+
+void AMyCharacter::SwitchToWeapon3()
+{
+    SwitchWeapon(2);
+}
+
+
+void AMyCharacter::UseWeapon()
+{
+	if (CurrentWeapon)
+	{
+		CurrentWeapon->Attack();
+	}
 }
