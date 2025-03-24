@@ -7,6 +7,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "TimerManager.h"
 #include "InventoryComponent.h"
+#include "Weapon/WeaponBase.h"
 #include "MyCharacter.generated.h"
 
 class UInventoryWidget;
@@ -27,22 +28,40 @@ protected:
 public:
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-    // Fonction pour tirer un projectile
+	// --- COMBAT --- //
+
+	UFUNCTION()
     void FireProjectile();
 
-    // Classe du projectile à tirer
+	// Projectile class to spawn
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
     TSubclassOf<class AProjectile> ProjectileClass;
 
-    // Emplacement du spawn du projectile
+	// Arrow component to specify the spawn location of the projectile
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
     class UArrowComponent* MyArrowComponent;
 
+	// --- INPUT --- //
     UPROPERTY(EditDefaultsOnly, Category = "Input")
     UInputMappingContext* DefaultMappingContext;
 
     UPROPERTY(EditDefaultsOnly, Category = "Input")
     UInputAction* ToggleInventoryAction;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Input")
+    UInputAction* AttackAction;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Input")
+    UInputAction* WeaponSlot1Action;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Input")
+    UInputAction* WeaponSlot2Action;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Input")
+    UInputAction* WeaponSlot3Action;
+
+
+	// --- INVENTORY --- //
 
     UPROPERTY(VisibleAnywhere, Category = "Inventory")
     UInventoryComponent* Inventory;
@@ -50,13 +69,34 @@ public:
     UFUNCTION()
     void ToggleInventory();
 
-    // --- Ajout de la gestion des dégâts ---
+	// --- WEAPON --- //
 
-    // Santé du joueur
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+    TArray<TSubclassOf<AWeaponBase>> EquippedWeapons;
+
+    UPROPERTY(EditAnywhere, Instanced, BlueprintReadWrite, Category = "Weapon")
+    AWeaponBase* CurrentWeapon;
+
+    UFUNCTION(BlueprintCallable, Category = "Weapon")
+    void SwitchWeapon(int32 SlotIndex);
+
+    UFUNCTION(BlueprintCallable, Category = "Weapon")
+    void UseWeapon();
+
+    UFUNCTION()
+    void SwitchToWeapon1();
+
+    UFUNCTION()
+    void SwitchToWeapon2();
+
+    UFUNCTION()
+    void SwitchToWeapon3();
+
+    // --- Health ---
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
     float Health;
 
-    // Fonction pour recevoir des dégâts
     virtual float TakeDamage(
         float DamageAmount,
         struct FDamageEvent const& DamageEvent,

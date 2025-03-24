@@ -3,6 +3,7 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "EnemyBase.h"
+#include "Weapon/RangedWeapon.h"
 #include "GameFramework/DamageType.h"
 
 // Sets default values
@@ -60,6 +61,11 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
     if (Enemy)
     {
         UGameplayStatics::ApplyDamage(OtherActor, 10.0f, GetInstigatorController(), this, UDamageType::StaticClass());
+        ARangedWeapon* weapon = Cast<ARangedWeapon>(Owner);
+		if (weapon && weapon->WeaponEffect)
+		{
+			weapon->WeaponEffect->ApplyEffect(OtherActor, Owner);
+		}
     }
 
     // Détruire le projectile quel que soit l'impact
