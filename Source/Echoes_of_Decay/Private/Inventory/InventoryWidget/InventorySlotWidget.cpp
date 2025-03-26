@@ -18,6 +18,11 @@ void UInventorySlotWidget::SetItem(UInventoryItemWidget* NewItem)
     SlotContainer->AddChild(ItemWidget);
 }
 
+UInventoryItem* UInventorySlotWidget::GetItem() const
+{
+    return ItemWidget->ItemData;
+}
+
 void UInventorySlotWidget::ClearSlot()
 {
     if (SlotContainer && ItemWidget)
@@ -44,6 +49,9 @@ bool UInventorySlotWidget::NativeOnDrop(const FGeometry& InGeometry, const FDrag
 
     UInventoryItemWidget* DraggedItem = Cast<UInventoryItemWidget>(InOperation->Payload);
     if (!DraggedItem || DraggedItem->ParentSlot == this) return false;
+    
+	// Check if the slot only accepts weapons
+    if (bIsWeaponSlotOnly && DraggedItem->ItemData->ItemType == EItemType::Object) return false;
 
     UInventorySlotWidget* SourceSlot = DraggedItem->ParentSlot;
     if (!SourceSlot) return false;

@@ -12,13 +12,10 @@ void UInventoryWidget::NativeConstruct()
 {
     Super::NativeConstruct();
 
-    if (CloseButton)
-    {
-        CloseButton->OnClicked.AddDynamic(this, &UInventoryWidget::CloseInventory);
-    }
+    if (!CloseButton) return;
+    CloseButton->OnClicked.AddDynamic(this, &UInventoryWidget::CloseInventory);
 
-    if (!SlotGrid) return;
-    if (!InventorySlotWidgetClass) return;
+    if (!InventorySlotWidgetClass || !SlotGrid) return;
 
     for (int32 i = 0; i < NumSlots; i++)
     {
@@ -27,6 +24,12 @@ void UInventoryWidget::NativeConstruct()
         Slots.Add(NewSlot);
         SlotGrid->AddChildToUniformGrid(NewSlot, i / 5, i % 5);
     }
+
+    if (!ResultSlot || !Weapon1 || !Weapon2 || !Weapon3) return;
+	ResultSlot->bIsWeaponSlotOnly = true;
+	Weapon1->bIsWeaponSlotOnly = true;
+	Weapon2->bIsWeaponSlotOnly = true;
+    Weapon3->bIsWeaponSlotOnly = true;
 }
 
 void UInventoryWidget::CloseInventory()
@@ -66,6 +69,24 @@ void UInventoryWidget::UpdateInventoryUI()
     }
 }
 
+void UInventoryWidget::OnCraftingSlotsUpdated()
+{
+    if (!SlotA || !SlotB || !ResultSlot) return;
+
+    UInventoryItem* ItemA = SlotA->GetItem();
+    UInventoryItem* ItemB = SlotB->GetItem();
+
+    if (ItemA && ItemB)
+    {
+        UInventoryItem* Crafted = TryCraft(ItemA, ItemB);
+        ResultSlot->SetItem(Crafted->ItemWidget);
+    }
+    else
+    {
+        ResultSlot->ClearSlot();
+    }
+}
+
 bool UInventoryWidget::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation)
 {
     if (!InOperation || !InOperation->Payload) return false;
@@ -78,7 +99,7 @@ bool UInventoryWidget::NativeOnDrop(const FGeometry& InGeometry, const FDragDrop
 
     UInventorySlotWidget* SourceSlot = DraggedItem->ParentSlot;
     UInventorySlotWidget* TargetSlot = Cast<UInventorySlotWidget>(DragOp->TargetWidget);
-    if (!TargetSlot)
+    if (!TargetSlot || !TargetSlot->bIsWeaponSlotOnly)
     {
         SourceSlot->SetItem(DraggedItem);
         return false;
@@ -86,6 +107,16 @@ bool UInventoryWidget::NativeOnDrop(const FGeometry& InGeometry, const FDragDrop
 
     SourceSlot->ClearSlot();
     TargetSlot->SetItem(DraggedItem);
+	OnCraftingSlotsUpdated();
 
     return true;
+}
+
+UInventoryItem* UInventoryWidget::TryCraft(UInventoryItem* ItemA, UInventoryItem* ItemB)
+{
+    if (!ItemA || !ItemB) return nullptr;
+
+	// Crafting logic here
+
+    return nullptr;
 }

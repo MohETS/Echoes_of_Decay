@@ -18,11 +18,17 @@ public:
     UPROPERTY(BlueprintReadOnly, Category = "Slot")
     UInventoryItemWidget* ItemWidget;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
+    bool bIsWeaponSlotOnly = false;
+
     UFUNCTION(BlueprintCallable, Category = "Slot")
     bool IsEmpty() const { return ItemWidget == nullptr; }
 
     UFUNCTION(BlueprintCallable, Category = "Slot")
     void SetItem(UInventoryItemWidget* NewItem);
+
+    UFUNCTION(BlueprintCallable, Category = "Slot")
+    UInventoryItem* GetItem() const;
 
     UFUNCTION(BlueprintCallable, Category = "Slot")
     void ClearSlot();
