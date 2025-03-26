@@ -1,12 +1,12 @@
-#include "InventoryWidget.h"
+#include "Inventory/InventoryWidget/InventoryWidget.h"
+#include "Blueprint/WidgetBlueprintLibrary.h"
 #include "Components/Button.h"
-#include "GameFramework/PlayerController.h"
 #include "Components/UniformGridPanel.h"
 #include "Components/TextBlock.h"
-#include "InventoryItemWidget.h"
-#include "InventorySlotWidget.h"
-#include "Blueprint/WidgetBlueprintLibrary.h"
-#include "InventoryDragDropOperation.h"
+#include "GameFramework/PlayerController.h"
+#include "Inventory/InventoryWidget/InventoryItemWidget.h"
+#include "Inventory/InventoryWidget/InventorySlotWidget.h"
+#include "Inventory/InventoryDragDropOperation.h"
 
 void UInventoryWidget::NativeConstruct()
 {

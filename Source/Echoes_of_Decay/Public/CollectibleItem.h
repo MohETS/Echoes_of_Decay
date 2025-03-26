@@ -1,11 +1,9 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "InventoryItemWidget.h"
-#include "InventoryItem.h"
+#include "Inventory/InventoryWidget/InventoryItemWidget.h"
+#include "Inventory/InventoryItem.h"
 #include "CollectibleItem.generated.h"
 
 UCLASS()

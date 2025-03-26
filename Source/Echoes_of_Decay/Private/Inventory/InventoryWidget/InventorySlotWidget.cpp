@@ -1,6 +1,6 @@
-#include "InventorySlotWidget.h"
+#include "Inventory/InventoryWidget/InventorySlotWidget.h"
+#include "Inventory/InventoryDragDropOperation.h"
 #include "Blueprint/DragDropOperation.h"
-#include "InventoryDragDropOperation.h"
 
 
 void UInventorySlotWidget::SetItem(UInventoryItemWidget* NewItem)
@@ -48,7 +48,16 @@ bool UInventorySlotWidget::NativeOnDrop(const FGeometry& InGeometry, const FDrag
     UInventorySlotWidget* SourceSlot = DraggedItem->ParentSlot;
     if (!SourceSlot) return false;
 
-    SourceSlot->ClearSlot();
+	// Swap items
+    if (ItemWidget)
+    {
+        SourceSlot->SetItem(ItemWidget);
+    }
+    else
+    {
+        SourceSlot->ClearSlot();
+    }
+
     SetItem(DraggedItem);
 
     return true;

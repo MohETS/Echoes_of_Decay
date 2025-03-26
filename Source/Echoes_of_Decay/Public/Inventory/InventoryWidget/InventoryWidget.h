@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "InventoryItem.h"
+#include "Inventory/InventoryItem.h"
 #include "InventorySlotWidget.h"
 #include "InventoryWidget.generated.h"
 

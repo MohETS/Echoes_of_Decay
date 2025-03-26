@@ -5,7 +5,7 @@
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
 #include "Components/Border.h"
-#include "InventoryItem.h"
+#include "Inventory/InventoryItem.h"
 #include "InventoryItemWidget.generated.h"
 
 class UInventorySlotWidget;
@@ -36,6 +36,12 @@ public:
 
     UFUNCTION()
     void ConstrainDrag(UDragDropOperation* Operation);
+
+    UFUNCTION()
+    UInventorySlotWidget* GetParentSlot() const { return ParentSlot; }
+
+    UFUNCTION()
+	void SetParentItemSlot(UInventorySlotWidget* S) { ParentSlot = S; }
 
 protected:
     virtual void NativeConstruct() override;

@@ -1,7 +1,7 @@
-#include "InventoryItemWidget.h"
+#include "Inventory/InventoryWidget/InventoryItemWidget.h"
+#include "Inventory/InventoryWidget/InventorySlotWidget.h"
+#include "Inventory/InventoryDragDropOperation.h"
 #include "Blueprint/WidgetBlueprintLibrary.h"
-#include "InventorySlotWidget.h"
-#include "InventoryDragDropOperation.h"
 
 
 void UInventoryItemWidget::SetItemData(UInventoryItem* Item)

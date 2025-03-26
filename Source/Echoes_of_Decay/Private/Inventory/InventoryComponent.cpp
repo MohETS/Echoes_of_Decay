@@ -1,6 +1,6 @@
-#include "InventoryComponent.h"
-#include "InventoryItem.h"
-#include "InventoryItemWidget.h"
+#include "Inventory/InventoryComponent.h"
+#include "Inventory/InventoryItem.h"
+#include "Inventory/InventoryWidget/InventoryItemWidget.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties

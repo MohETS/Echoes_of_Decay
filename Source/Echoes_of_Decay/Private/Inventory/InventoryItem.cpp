@@ -1,4 +1,4 @@
-#include "InventoryItem.h"
+#include "Inventory/InventoryItem.h"
 
 void UInventoryItem::SetItemWidget(UInventoryItemWidget* NewWidget)
 {
