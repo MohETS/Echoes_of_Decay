@@ -6,6 +6,10 @@
 #include "Components/Overlay.h"
 #include "InventorySlotWidget.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnSlotItemChanged);
+
+class UInventoryWidget;
+
 UCLASS()
 class ECHOES_OF_DECAY_API UInventorySlotWidget : public UUserWidget
 {
@@ -18,8 +22,22 @@ public:
     UPROPERTY(BlueprintReadOnly, Category = "Slot")
     UInventoryItemWidget* ItemWidget;
 
+    UPROPERTY(BlueprintReadOnly, Category = "Slot")
+    UInventoryWidget* OwningInventoryWidget;
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
     bool bIsWeaponSlotOnly = false;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Slot")
+    EInventorySlotType SlotType;
+
+    UPROPERTY(BlueprintAssignable, Category = "Events")
+    FOnSlotItemChanged OnItemChanged;
+
+    void NotifyItemChanged()
+    {
+        OnItemChanged.Broadcast();
+    }
 
     UFUNCTION(BlueprintCallable, Category = "Slot")
     bool IsEmpty() const { return ItemWidget == nullptr; }

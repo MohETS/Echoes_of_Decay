@@ -7,6 +7,7 @@
 #include "Inventory/InventoryWidget/InventoryItemWidget.h"
 #include "Inventory/InventoryWidget/InventorySlotWidget.h"
 #include "Inventory/InventoryDragDropOperation.h"
+#include "CraftingRecipe.h"
 
 void UInventoryWidget::NativeConstruct()
 {
@@ -25,11 +26,14 @@ void UInventoryWidget::NativeConstruct()
         SlotGrid->AddChildToUniformGrid(NewSlot, i / 5, i % 5);
     }
 
-    if (!ResultSlot || !Weapon1 || !Weapon2 || !Weapon3) return;
+    if (!ResultSlot || !Weapon1 || !Weapon2 || !Weapon3 || !SlotA || !SlotB) return;
 	ResultSlot->bIsWeaponSlotOnly = true;
 	Weapon1->bIsWeaponSlotOnly = true;
 	Weapon2->bIsWeaponSlotOnly = true;
     Weapon3->bIsWeaponSlotOnly = true;
+
+    SlotA->OnItemChanged.AddDynamic(this, &UInventoryWidget::OnCraftingSlotsUpdated);
+    SlotB->OnItemChanged.AddDynamic(this, &UInventoryWidget::OnCraftingSlotsUpdated);
 }
 
 void UInventoryWidget::CloseInventory()
@@ -79,12 +83,23 @@ void UInventoryWidget::OnCraftingSlotsUpdated()
     if (ItemA && ItemB)
     {
         UInventoryItem* Crafted = TryCraft(ItemA, ItemB);
-        ResultSlot->SetItem(Crafted->ItemWidget);
+        if (Crafted)
+        {
+            ResultSlot->SetItem(Crafted->ItemWidget);
+        }
     }
     else
     {
         ResultSlot->ClearSlot();
     }
+}
+
+void UInventoryWidget::ClearCraftingSlotsAfterCraft()
+{
+	if (!SlotA || !SlotB || !ResultSlot) return;
+	SlotA->ClearSlot();
+	SlotB->ClearSlot();
+	ResultSlot->ClearSlot();
 }
 
 bool UInventoryWidget::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation)
@@ -99,7 +114,9 @@ bool UInventoryWidget::NativeOnDrop(const FGeometry& InGeometry, const FDragDrop
 
     UInventorySlotWidget* SourceSlot = DraggedItem->ParentSlot;
     UInventorySlotWidget* TargetSlot = Cast<UInventorySlotWidget>(DragOp->TargetWidget);
-    if (!TargetSlot || !TargetSlot->bIsWeaponSlotOnly)
+    if (!TargetSlot
+        || (TargetSlot->bIsWeaponSlotOnly && DraggedItem->GetItemType() == EItemType::Object) 
+        || (!TargetSlot->bIsWeaponSlotOnly && DraggedItem->GetItemType() == EItemType::Weapon))
     {
         SourceSlot->SetItem(DraggedItem);
         return false;
@@ -107,16 +124,44 @@ bool UInventoryWidget::NativeOnDrop(const FGeometry& InGeometry, const FDragDrop
 
     SourceSlot->ClearSlot();
     TargetSlot->SetItem(DraggedItem);
-	OnCraftingSlotsUpdated();
-
     return true;
 }
 
 UInventoryItem* UInventoryWidget::TryCraft(UInventoryItem* ItemA, UInventoryItem* ItemB)
 {
-    if (!ItemA || !ItemB) return nullptr;
+    if (!ItemA || !ItemB || !CraftingDataTable) return nullptr;
 
-	// Crafting logic here
+    UE_LOG(LogTemp, Warning, TEXT("TryCraft"));
+
+    FName NameA = ItemA->ItemName;
+    FName NameB = ItemB->ItemName;
+
+    TArray<FCraftingRecipe*> Recipes;
+    CraftingDataTable->GetAllRows<FCraftingRecipe>(TEXT("TryCraft"), Recipes);
+
+    for (FCraftingRecipe* Recipe : Recipes)
+    {
+        if (!Recipe || !Recipe->ItemA || !Recipe->ItemB) continue;
+
+        FName RecipeNameA = Recipe->ItemA->GetDefaultObject<ACollectibleItem>()->ItemName;
+        FName RecipeNameB = Recipe->ItemB->GetDefaultObject<ACollectibleItem>()->ItemName;
+
+        UE_LOG(LogTemp, Warning, TEXT("Checking recipe: %s + %s"), *RecipeNameA.ToString(), *RecipeNameB.ToString());
+
+        const bool bMatch =
+            (NameA == RecipeNameA && NameB == RecipeNameB) ||
+            (NameA == RecipeNameB && NameB == RecipeNameA);
+
+        if (bMatch && Recipe->ResultItem)
+        {
+            UInventoryItem* NewItem = NewObject<UInventoryItem>(this);
+			NewItem->SetWeaponClass(Recipe->ResultItem);
+            NewItem->ItemWidget = CreateWidget<UInventoryItemWidget>(this, InventoryItemWidgetClass);
+            NewItem->ItemWidget->SetItemData(NewItem);
+			NewItem->ItemWidget->OwningInventoryWidget = this;
+            return NewItem;
+        }
+    }
 
     return nullptr;
 }

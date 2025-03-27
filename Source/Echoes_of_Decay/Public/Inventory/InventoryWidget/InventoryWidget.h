@@ -49,6 +49,12 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
     TSubclassOf<UInventorySlotWidget> InventorySlotWidgetClass;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
+    TSubclassOf<UInventoryItemWidget> InventoryItemWidgetClass;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Crafting")
+    UDataTable* CraftingDataTable;
+
     UFUNCTION(BlueprintCallable, Category = "Inventory")
     bool AddItemToSlot(UInventoryItemWidget* ItemWidget);
 
@@ -60,6 +66,9 @@ public:
 
     UFUNCTION()
     void OnCraftingSlotsUpdated();
+
+    UFUNCTION()
+    void ClearCraftingSlotsAfterCraft();
 
     UFUNCTION()
     UInventoryItem* TryCraft(UInventoryItem* ItemA, UInventoryItem* ItemB);

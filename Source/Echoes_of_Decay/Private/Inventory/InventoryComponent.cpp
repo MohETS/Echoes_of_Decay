@@ -50,8 +50,6 @@ UInventoryItem* UInventoryComponent::AddItem(FName ItemName, UTexture2D* ItemIco
     NewItem->ItemType = ItemType;
     Items.Add(NewItem);
 
-    UE_LOG(LogTemp, Warning, TEXT("Item Created: %s"), *ItemName.ToString());
-
     UInventoryItemWidget* ItemWidget = CreateWidget<UInventoryItemWidget>(InventoryWidget, InventoryItemWidgetClass);
     if (!ItemWidget)
     {

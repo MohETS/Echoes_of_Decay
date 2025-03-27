@@ -6,7 +6,7 @@
 #include "Inventory/InventoryItem.h"
 #include "CollectibleItem.generated.h"
 
-UCLASS()
+UCLASS(Blueprintable, BlueprintType)
 class ECHOES_OF_DECAY_API ACollectibleItem : public AActor
 {
 	GENERATED_BODY()

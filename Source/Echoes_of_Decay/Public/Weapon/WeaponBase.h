@@ -3,15 +3,10 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "WeaponEffect/WeaponEffect.h"
+#include "WeaponType.h"
+#include "Inventory/ItemType.h"
 #include "WeaponBase.generated.h"
 
-UENUM(BlueprintType)
-enum class EWeaponType : uint8
-{
-	Melee UMETA(DisplayName = "Melee"),
-	Ranged UMETA(DisplayName = "Ranged"),
-	Buff UMETA(DisplayName = "Buff")
-};
 
 UCLASS(Blueprintable, BlueprintType)
 class ECHOES_OF_DECAY_API AWeaponBase : public AActor
@@ -31,9 +26,6 @@ public:
     EWeaponType WeaponType;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-    FName WeaponName;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
     int32 Level;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
@@ -44,6 +36,15 @@ public:
 
     UPROPERTY(EditAnywhere, Instanced, BlueprintReadWrite, Category = "Weapon")
     UWeaponEffect* WeaponEffect;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "InventoryUI")
+    FName WeaponName;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "InventoryUI")
+    UTexture2D* WeaponIcon;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "InventoryUI")
+    EItemType ItemType = EItemType::Weapon;
 
 	ACharacter* Owner;
 
