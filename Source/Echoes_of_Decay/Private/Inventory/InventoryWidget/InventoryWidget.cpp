@@ -34,6 +34,8 @@ void UInventoryWidget::NativeConstruct()
 
     SlotA->OnItemChanged.AddDynamic(this, &UInventoryWidget::OnCraftingSlotsUpdated);
     SlotB->OnItemChanged.AddDynamic(this, &UInventoryWidget::OnCraftingSlotsUpdated);
+
+	ResultSlot->OnItemChanged.AddDynamic(this, &UInventoryWidget::ClearCraftingSlotsAfterCraft);
 }
 
 void UInventoryWidget::CloseInventory()
@@ -88,18 +90,17 @@ void UInventoryWidget::OnCraftingSlotsUpdated()
             ResultSlot->SetItem(Crafted->ItemWidget);
         }
     }
-    else
-    {
-        ResultSlot->ClearSlot();
-    }
 }
 
 void UInventoryWidget::ClearCraftingSlotsAfterCraft()
 {
-	if (!SlotA || !SlotB || !ResultSlot) return;
-	SlotA->ClearSlot();
-	SlotB->ClearSlot();
-	ResultSlot->ClearSlot();
+    if (!SlotA || !SlotB || !ResultSlot) return;
+
+    SlotA->ClearSlotAfterCraft();
+    SlotB->ClearSlotAfterCraft();
+
+    UE_LOG(LogTemp, Warning, TEXT("Crafting slots cleared !"));
+
 }
 
 bool UInventoryWidget::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation)
@@ -116,7 +117,8 @@ bool UInventoryWidget::NativeOnDrop(const FGeometry& InGeometry, const FDragDrop
     UInventorySlotWidget* TargetSlot = Cast<UInventorySlotWidget>(DragOp->TargetWidget);
     if (!TargetSlot
         || (TargetSlot->bIsWeaponSlotOnly && DraggedItem->GetItemType() == EItemType::Object) 
-        || (!TargetSlot->bIsWeaponSlotOnly && DraggedItem->GetItemType() == EItemType::Weapon))
+        || (!TargetSlot->bIsWeaponSlotOnly && DraggedItem->GetItemType() == EItemType::Weapon)
+        || (TargetSlot->SlotType == EInventorySlotType::Result && DraggedItem->GetItemType() == EItemType::Weapon))
     {
         SourceSlot->SetItem(DraggedItem);
         return false;
@@ -157,8 +159,7 @@ UInventoryItem* UInventoryWidget::TryCraft(UInventoryItem* ItemA, UInventoryItem
             UInventoryItem* NewItem = NewObject<UInventoryItem>(this);
 			NewItem->SetWeaponClass(Recipe->ResultItem);
             NewItem->ItemWidget = CreateWidget<UInventoryItemWidget>(this, InventoryItemWidgetClass);
-            NewItem->ItemWidget->SetItemData(NewItem);
-			NewItem->ItemWidget->OwningInventoryWidget = this;
+            NewItem->ItemWidget->SetItemData(NewItem, this);
             return NewItem;
         }
     }

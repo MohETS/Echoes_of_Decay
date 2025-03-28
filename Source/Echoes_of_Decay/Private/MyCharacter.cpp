@@ -39,6 +39,17 @@ void AMyCharacter::BeginPlay()
             InputSubsystem->AddMappingContext(DefaultMappingContext, 0);
         }
     }
+
+    if (Inventory && Inventory->InventoryWidget && Inventory->InventoryWidget->Weapon1)
+    {
+        Inventory->InventoryWidget->Weapon1->OnItemChanged.AddDynamic(this, &AMyCharacter::RefreshEquippedWeapons);
+        Inventory->InventoryWidget->Weapon2->OnItemChanged.AddDynamic(this, &AMyCharacter::RefreshEquippedWeapons);
+        Inventory->InventoryWidget->Weapon3->OnItemChanged.AddDynamic(this, &AMyCharacter::RefreshEquippedWeapons);
+    }
+    else
+    {
+        UE_LOG(LogTemp, Error, TEXT("Widget or slots are not ready in BeginPlay"));
+    }
 }
 
 void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -131,6 +142,33 @@ void AMyCharacter::SwitchToWeapon3()
     SwitchWeapon(2);
 }
 
+void AMyCharacter::RefreshEquippedWeapons()
+{
+    if (!Inventory || !Inventory->InventoryWidget) return;
+
+    TArray<UInventorySlotWidget*> WeaponSlots = {
+        Inventory->InventoryWidget->Weapon1,
+        Inventory->InventoryWidget->Weapon2,
+        Inventory->InventoryWidget->Weapon3
+    };
+
+    EquippedWeapons.Init(nullptr, 3);
+
+    for (int32 i = 0; i < WeaponSlots.Num(); i++)
+    {
+        UInventorySlotWidget* Slot = WeaponSlots[i];
+
+        if (Slot && Slot->ItemWidget && Slot->ItemWidget->ItemData && Slot->ItemWidget->ItemData->WeaponClass)
+        {
+            EquippedWeapons[i] = Slot->ItemWidget->ItemData->WeaponClass;
+            UE_LOG(LogTemp, Warning, TEXT("Slot %d -> %s"), i + 1, *EquippedWeapons[i]->GetName());
+        }
+        else
+        {
+            UE_LOG(LogTemp, Warning, TEXT("Slot %d is empty"), i + 1);
+        }
+    }
+}
 
 void AMyCharacter::UseWeapon()
 {

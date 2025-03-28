@@ -51,6 +51,9 @@ public:
     UFUNCTION(BlueprintCallable, Category = "Slot")
     void ClearSlot();
 
+    UFUNCTION(BlueprintCallable, Category = "Slot")
+	void ClearSlotAfterCraft();
+
     virtual bool NativeOnDragOver(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation) override;
     virtual bool NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation) override;
 };

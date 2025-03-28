@@ -92,6 +92,9 @@ public:
     UFUNCTION()
     void SwitchToWeapon3();
 
+    UFUNCTION()
+    void RefreshEquippedWeapons();
+
     // --- Health ---
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")

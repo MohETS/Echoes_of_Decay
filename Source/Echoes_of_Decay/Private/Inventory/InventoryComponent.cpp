@@ -59,7 +59,7 @@ UInventoryItem* UInventoryComponent::AddItem(FName ItemName, UTexture2D* ItemIco
     
     if (ItemWidget)
     {
-        ItemWidget->SetItemData(NewItem);
+        ItemWidget->SetItemData(NewItem, InventoryWidget);
         NewItem->SetItemWidget(ItemWidget);
 
         if (!InventoryWidget->AddItemToSlot(ItemWidget))

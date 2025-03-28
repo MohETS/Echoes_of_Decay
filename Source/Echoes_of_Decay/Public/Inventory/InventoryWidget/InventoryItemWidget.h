@@ -36,7 +36,7 @@ public:
     UInventoryWidget* OwningInventoryWidget = nullptr;
 
     UFUNCTION(BlueprintCallable, Category = "Item")
-    void SetItemData(UInventoryItem* Item);
+    void SetItemData(UInventoryItem* Item, UInventoryWidget* InInventory);
 
     UFUNCTION()
     void ConstrainDrag(UDragDropOperation* Operation);

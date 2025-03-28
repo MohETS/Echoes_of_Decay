@@ -1,9 +1,8 @@
-#include "Inventory/InventoryWidget/InventorySlotWidget.h"
+﻿#include "Inventory/InventoryWidget/InventorySlotWidget.h"
 #include "Inventory/InventoryDragDropOperation.h"
 #include "Blueprint/DragDropOperation.h"
 #include "Inventory/InventoryWidget/InventoryItemWidget.h"
 #include "Inventory/InventoryWidget/InventoryWidget.h"
-
 
 void UInventorySlotWidget::SetItem(UInventoryItemWidget* NewItem)
 {
@@ -17,11 +16,7 @@ void UInventorySlotWidget::SetItem(UInventoryItemWidget* NewItem)
 
     ItemWidget = NewItem;
     ItemWidget->ParentSlot = this;
-
-    if (OwningInventoryWidget == nullptr && NewItem->OwningInventoryWidget)
-    {
-        OwningInventoryWidget = NewItem->OwningInventoryWidget;
-    }
+	OwningInventoryWidget = ItemWidget->OwningInventoryWidget;
 
     SlotContainer->AddChild(ItemWidget);
 
@@ -37,10 +32,19 @@ void UInventorySlotWidget::ClearSlot()
 {
     if (SlotContainer && ItemWidget)
     {
-        SlotContainer->RemoveChild(ItemWidget);
         ItemWidget = nullptr;
         NotifyItemChanged();
     }
+}
+
+void UInventorySlotWidget::ClearSlotAfterCraft()
+{
+	if (SlotContainer && ItemWidget)
+	{
+		ItemWidget->RemoveFromParent();
+		ItemWidget = nullptr;
+		NotifyItemChanged();
+	}
 }
 
 bool UInventorySlotWidget::NativeOnDragOver(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation)
@@ -61,7 +65,9 @@ bool UInventorySlotWidget::NativeOnDrop(const FGeometry& InGeometry, const FDrag
     UInventoryItemWidget* DraggedItem = Cast<UInventoryItemWidget>(InOperation->Payload);
     if (!DraggedItem || DraggedItem->ParentSlot == this) return false;
 
-    if (bIsWeaponSlotOnly && DraggedItem->ItemData->ItemType == EItemType::Object)
+	if ((bIsWeaponSlotOnly && DraggedItem->GetItemType() == EItemType::Object) 
+        || (!bIsWeaponSlotOnly && DraggedItem->GetItemType() == EItemType::Weapon)
+        || (SlotType == EInventorySlotType::Result && DraggedItem->GetItemType() == EItemType::Weapon))
         return false;
 
     UInventorySlotWidget* SourceSlot = DraggedItem->ParentSlot;
@@ -69,8 +75,7 @@ bool UInventorySlotWidget::NativeOnDrop(const FGeometry& InGeometry, const FDrag
 
     if (bIsWeaponSlotOnly && SourceSlot->SlotType == EInventorySlotType::Result && OwningInventoryWidget)
     {
-        UE_LOG(LogTemp, Warning, TEXT("Weapon dropped from ResultSlot clear crafting slots"));
-
+		UE_LOG(LogTemp, Warning, TEXT("Crafting !"));
         OwningInventoryWidget->ClearCraftingSlotsAfterCraft();
     }
 
