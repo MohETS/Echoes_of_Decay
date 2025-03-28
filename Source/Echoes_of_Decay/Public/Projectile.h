@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Components/SphereComponent.h"
 #include "Projectile.generated.h"
 
 // The AProjectile class handles a simple projectile's behavior in the game
@@ -31,22 +32,18 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UProjectileMovementComponent* ProjectileMovement;
 
-	// Damage the projectile inflicts when it hits another actor
-	UPROPERTY(EditDefaultsOnly, Category = "Damage")
-	float Damage = 20.0f;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	USphereComponent* CollisionComponent;
 
-	// Time the projectile will live before being destroyed
-	UPROPERTY(EditDefaultsOnly, Category = "Components")
-	float LifeTime = 5.0f;
+	UPROPERTY(EditDefaultsOnly, Category = "Settings")
+	float LifeSpan = 5.0f;
 
-	FTimerHandle LifeTimerHandle;
+	UPROPERTY(BlueprintReadWrite, Category = "Settings")
+	AActor* ProjectileOwner;
 
-	AActor* Owner;
-
-	// Called when the projectile collides with something
-	UFUNCTION()
-	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
-		UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+	// Damage dealt by the projectile
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Settings")
+	float Damage = 10.0f;
 
 	UFUNCTION()
 	void DestroyProjectile();
