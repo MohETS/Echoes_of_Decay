@@ -56,8 +56,6 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 {
     Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-    PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AMyCharacter::FireProjectile);
-
     UEnhancedInputComponent* EnhancedInput = Cast<UEnhancedInputComponent>(PlayerInputComponent);
     if (EnhancedInput)
     {
@@ -66,18 +64,6 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 		EnhancedInput->BindAction(WeaponSlot1Action, ETriggerEvent::Started, this, &AMyCharacter::SwitchToWeapon1);
 		EnhancedInput->BindAction(WeaponSlot2Action, ETriggerEvent::Started, this, &AMyCharacter::SwitchToWeapon2);
 		EnhancedInput->BindAction(WeaponSlot3Action, ETriggerEvent::Started, this, &AMyCharacter::SwitchToWeapon3);
-    }
-}
-
-void AMyCharacter::FireProjectile()
-{
-    if (ProjectileClass && MyArrowComponent)
-    {
-        // Obtenir la transformation de l'ArrowComponent (position et rotation)
-        FTransform SpawnTransform = MyArrowComponent->GetComponentTransform();
-
-        // Spawner le projectile
-        GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTransform);
     }
 }
 

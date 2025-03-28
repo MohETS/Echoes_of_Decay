@@ -30,9 +30,6 @@ public:
 
 	// --- COMBAT --- //
 
-	UFUNCTION()
-    void FireProjectile();
-
 	// Projectile class to spawn
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
     TSubclassOf<class AProjectile> ProjectileClass;

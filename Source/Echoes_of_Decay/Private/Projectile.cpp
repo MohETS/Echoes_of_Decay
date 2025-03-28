@@ -6,71 +6,49 @@
 #include "Weapon/RangedWeapon.h"
 #include "GameFramework/DamageType.h"
 
-// Sets default values
 AProjectile::AProjectile()
 {
-    // Enable ticking for this actor
     PrimaryActorTick.bCanEverTick = true;
 
-    // Create and set up the mesh component for the projectile
-    MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
-    RootComponent = MeshComponent;
+    // Collision Component (Root)
+    CollisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("CollisionComponent"));
+    SetRootComponent(CollisionComponent);
+    CollisionComponent->InitSphereRadius(15.0f);
+    CollisionComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+    CollisionComponent->SetCollisionObjectType(ECC_WorldDynamic);
+    CollisionComponent->SetCollisionResponseToAllChannels(ECR_Block);
+    CollisionComponent->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+    CollisionComponent->SetGenerateOverlapEvents(true);
 
-    // Create and set up the projectile movement component
+    // Mesh (visual only)
+    MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
+    MeshComponent->SetupAttachment(CollisionComponent);
+    MeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+    // Movement
     ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovement"));
-    ProjectileMovement->InitialSpeed = 1500.0f;
-    ProjectileMovement->MaxSpeed = 1500.0f;
-    ProjectileMovement->bRotationFollowsVelocity = true; // Makes the projectile rotate as it moves
-    ProjectileMovement->bShouldBounce = false; // Set to true if you want the projectile to bounce
-    MeshComponent->SetNotifyRigidBodyCollision(true);
-    MeshComponent->SetNotifyRigidBodyCollision(true);
-    MeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-    MeshComponent->SetCollisionObjectType(ECC_PhysicsBody);
-    MeshComponent->SetCollisionResponseToAllChannels(ECR_Block);
-    MeshComponent->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+    ProjectileMovement->UpdatedComponent = CollisionComponent;
+    ProjectileMovement->InitialSpeed = 2000.f;
+    ProjectileMovement->MaxSpeed = 2000.f;
+    ProjectileMovement->bRotationFollowsVelocity = true;
+    ProjectileMovement->bShouldBounce = false;
+
+    InitialLifeSpan = LifeSpan;
+    SetLifeSpan(LifeSpan);
 }
 
 // Called when the game starts or when spawned
 void AProjectile::BeginPlay()
 {
     Super::BeginPlay();
-
-    GetWorldTimerManager().SetTimer(LifeTimerHandle, this, &AProjectile::DestroyProjectile, LifeTime, false);
-
-    // Bind the OnHit function to the OnComponentHit event
-    MeshComponent->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
-}
+} 
 
 // Called every frame
 void AProjectile::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-    
 }
 
-// Function that gets called when the projectile hits something
-void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
-    UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
-{
-    if (!OtherActor || OtherActor == this) return;
-
-    UE_LOG(LogTemp, Warning, TEXT("Projectile hit: %s"), *OtherActor->GetName());
-
-    // Si c'est un ennemi, on applique les dégâts
-    AEnemyBase* Enemy = Cast<AEnemyBase>(OtherActor);
-    if (Enemy)
-    {
-        UGameplayStatics::ApplyDamage(OtherActor, 10.0f, GetInstigatorController(), this, UDamageType::StaticClass());
-        ARangedWeapon* weapon = Cast<ARangedWeapon>(Owner);
-		if (weapon && weapon->WeaponEffect)
-		{
-			weapon->WeaponEffect->ApplyEffect(OtherActor, Owner);
-		}
-    }
-
-    // Détruire le projectile quel que soit l'impact
-    Destroy();
-}
 
 void AProjectile::DestroyProjectile()
 {

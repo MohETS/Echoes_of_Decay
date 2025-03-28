@@ -19,7 +19,7 @@ void ARangedWeapon::Attack()
         AProjectile* SpawnedProjectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, MuzzleLocation, MuzzleRotation);
         if (SpawnedProjectile)
         {
-			SpawnedProjectile->Owner = this;
+			SpawnedProjectile->ProjectileOwner = this;
             UE_LOG(LogTemp, Warning, TEXT("Projectile spawned successfully!"));
         }
     }
