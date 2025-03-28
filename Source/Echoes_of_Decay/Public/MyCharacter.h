@@ -6,7 +6,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "TimerManager.h"
-#include "InventoryComponent.h"
+#include "Inventory/InventoryComponent.h"
 #include "Weapon/WeaponBase.h"
 #include "MyCharacter.generated.h"
 
@@ -91,6 +91,9 @@ public:
 
     UFUNCTION()
     void SwitchToWeapon3();
+
+    UFUNCTION()
+    void RefreshEquippedWeapons();
 
     // --- Health ---
 

@@ -1,6 +1,6 @@
-#include "InventoryComponent.h"
-#include "InventoryItem.h"
-#include "InventoryItemWidget.h"
+#include "Inventory/InventoryComponent.h"
+#include "Inventory/InventoryItem.h"
+#include "Inventory/InventoryWidget/InventoryItemWidget.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties
@@ -50,8 +50,6 @@ UInventoryItem* UInventoryComponent::AddItem(FName ItemName, UTexture2D* ItemIco
     NewItem->ItemType = ItemType;
     Items.Add(NewItem);
 
-    UE_LOG(LogTemp, Warning, TEXT("Item Created: %s"), *ItemName.ToString());
-
     UInventoryItemWidget* ItemWidget = CreateWidget<UInventoryItemWidget>(InventoryWidget, InventoryItemWidgetClass);
     if (!ItemWidget)
     {
@@ -61,7 +59,7 @@ UInventoryItem* UInventoryComponent::AddItem(FName ItemName, UTexture2D* ItemIco
     
     if (ItemWidget)
     {
-        ItemWidget->SetItemData(NewItem);
+        ItemWidget->SetItemData(NewItem, InventoryWidget);
         NewItem->SetItemWidget(ItemWidget);
 
         if (!InventoryWidget->AddItemToSlot(ItemWidget))

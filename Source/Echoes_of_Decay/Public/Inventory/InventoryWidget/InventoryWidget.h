@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "InventoryItem.h"
+#include "Inventory/InventoryItem.h"
 #include "InventorySlotWidget.h"
 #include "InventoryWidget.generated.h"
 
@@ -25,13 +25,35 @@ public:
     UPROPERTY(meta = (BindWidget))
     UUniformGridPanel* SlotGrid;
 
+    UPROPERTY(meta = (BindWidget))
+    UInventorySlotWidget* SlotA;
+
+    UPROPERTY(meta = (BindWidget))
+    UInventorySlotWidget* SlotB;
+
+    UPROPERTY(meta = (BindWidget))
+    UInventorySlotWidget* ResultSlot;
+
+    UPROPERTY(meta = (BindWidget))
+    UInventorySlotWidget* Weapon1;
+
+    UPROPERTY(meta = (BindWidget))
+    UInventorySlotWidget* Weapon2;
+    
+    UPROPERTY(meta = (BindWidget))
+    UInventorySlotWidget* Weapon3;
+
     UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
     UButton* CloseButton;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
     TSubclassOf<UInventorySlotWidget> InventorySlotWidgetClass;
 
-    virtual void NativeConstruct() override;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
+    TSubclassOf<UInventoryItemWidget> InventoryItemWidgetClass;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Crafting")
+    UDataTable* CraftingDataTable;
 
     UFUNCTION(BlueprintCallable, Category = "Inventory")
     bool AddItemToSlot(UInventoryItemWidget* ItemWidget);
@@ -42,5 +64,15 @@ public:
     UFUNCTION(BlueprintCallable, Category = "Inventory")
     void UpdateInventoryUI();
 
+    UFUNCTION()
+    void OnCraftingSlotsUpdated();
+
+    UFUNCTION()
+    void ClearCraftingSlotsAfterCraft();
+
+    UFUNCTION()
+    UInventoryItem* TryCraft(UInventoryItem* ItemA, UInventoryItem* ItemB);
+
+    virtual void NativeConstruct() override;
     virtual bool NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation) override;
 };
