@@ -1,37 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WwiseDocument Type="WorkUnit" ID="{2EC35B1E-940F-4757-95BC-D38CFD054EFF}" SchemaVersion="123">
 	<SoundBanks>
-		<WorkUnit Name="Default Work Unit" ID="{2EC35B1E-940F-4757-95BC-D38CFD054EFF}" PersistMode="Standalone">
-			<ChildrenList>
-				<SoundBank Name="UI" ID="{2DF52F4B-7419-489D-9011-550A82359288}">
-					<ObjectInclusionList>
-						<ObjectRef Name="UI_Button_Selection_Sound" ID="{7481B98F-81D2-401D-92A8-3E7EF14D0D84}" WorkUnitID="{3D526BF6-4382-4DAD-A35A-9F3A9AC1176A}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="UI_Background_Music" ID="{3E700B40-9989-4561-9C17-C2F14F7C8E5A}" WorkUnitID="{3D526BF6-4382-4DAD-A35A-9F3A9AC1176A}" Origin="Manual" Filter="7"/>
-					</ObjectInclusionList>
-					<ObjectExclusionList/>
-					<GameSyncExclusionList/>
-				</SoundBank>
-				<SoundBank Name="Player" ID="{D00D319C-5E2E-4F1E-B1DC-4671ED8684A3}">
-					<ObjectInclusionList>
-						<ObjectRef Name="Death" ID="{7E636591-F492-4D4B-AC0C-25C04F9815CD}" WorkUnitID="{3D526BF6-4382-4DAD-A35A-9F3A9AC1176A}" Origin="Manual" Filter="7"/>
-					</ObjectInclusionList>
-					<ObjectExclusionList/>
-					<GameSyncExclusionList/>
-				</SoundBank>
-				<SoundBank Name="Game" ID="{A5FE9D89-713A-431A-B7C1-5B6CF8BA5625}">
-					<ObjectInclusionList>
-						<ObjectRef Name="Background_Ambient_Music" ID="{D09D8617-3AFB-455F-8695-BD1CCA16DDEA}" WorkUnitID="{3D526BF6-4382-4DAD-A35A-9F3A9AC1176A}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="Object_Pickup" ID="{24B6013A-E9A7-49DF-9AA0-A8D8A8C98649}" WorkUnitID="{3D526BF6-4382-4DAD-A35A-9F3A9AC1176A}" Origin="Manual" Filter="7"/>
-					</ObjectInclusionList>
-					<ObjectExclusionList/>
-					<GameSyncExclusionList/>
-				</SoundBank>
-				<SoundBank Name="Ennemy" ID="{756BEDBB-C4E1-4E33-A079-653FE054C2E6}">
-					<ObjectInclusionList/>
-					<ObjectExclusionList/>
-					<GameSyncExclusionList/>
-				</SoundBank>
-			</ChildrenList>
-		</WorkUnit>
+		<WorkUnit Name="Default Work Unit" ID="{2EC35B1E-940F-4757-95BC-D38CFD054EFF}" PersistMode="Standalone"/>
 	</SoundBanks>
 </WwiseDocument>
