@@ -116,8 +116,6 @@ float AMyCharacter::TakeDamage(
     struct FDamageEvent const& DamageEvent,
     AController* EventInstigator,
     AActor* DamageCauser)
-
-
 {
     float ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser); //  cette ligne est cruciale
 
