@@ -67,19 +67,6 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
     }
 }
 
-void AMyCharacter::FireProjectile()
-{
-    if (ProjectileClass && MyArrowComponent)
-    {
-        // Obtenir la transformation de l'ArrowComponent (position et rotation)
-        FTransform SpawnTransform = MyArrowComponent->GetComponentTransform();
-
-        // Spawner le projectile
-        GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTransform);
-
-        //TODO Play sound of the projectile
-    }
-}
 
 // Implémentation de la réception de dégâts
 float AMyCharacter::TakeDamage(
