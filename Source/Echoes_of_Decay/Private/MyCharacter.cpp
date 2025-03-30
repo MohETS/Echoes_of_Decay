@@ -62,6 +62,8 @@ void AMyCharacter::FireProjectile()
 
         // Spawner le projectile
         GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTransform);
+
+        //TODO Play sound of the projectile
     }
 }
 
@@ -86,6 +88,7 @@ float AMyCharacter::TakeDamage(
     {
         UE_LOG(LogTemp, Warning, TEXT("Player Died!"));
         // Ici, tu peux déclencher une animation de mort, un respawn, etc.
+        //TODO Play player death sound
         Destroy(); // Supprime le personnage de la scène
     }
 

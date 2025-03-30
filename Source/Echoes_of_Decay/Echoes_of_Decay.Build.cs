@@ -1,5 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
+using System.IO;
 using UnrealBuildTool;
 
 public class Echoes_of_Decay : ModuleRules
@@ -19,8 +20,10 @@ public class Echoes_of_Decay : ModuleRules
             "GameplayTasks",
             "UMG",
             "UI",
-            "AkAudio"
+            "AkAudio",
+            "WwiseSoundEngine"
         });
+
 
         PrivateDependencyModuleNames.AddRange(new string[] { });
 
