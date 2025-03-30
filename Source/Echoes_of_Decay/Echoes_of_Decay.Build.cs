@@ -24,7 +24,6 @@ public class Echoes_of_Decay : ModuleRules
             "WwiseSoundEngine"
         });
 
-
         PrivateDependencyModuleNames.AddRange(new string[] { });
 
         // Uncomment if you are using Slate UI

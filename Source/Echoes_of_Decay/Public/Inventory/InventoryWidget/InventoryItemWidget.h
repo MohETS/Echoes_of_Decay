@@ -5,10 +5,11 @@
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
 #include "Components/Border.h"
-#include "InventoryItem.h"
+#include "Inventory/InventoryItem.h"
 #include "InventoryItemWidget.generated.h"
 
 class UInventorySlotWidget;
+class UInventoryWidget;
 
 UCLASS()
 class ECHOES_OF_DECAY_API UInventoryItemWidget : public UUserWidget
@@ -31,11 +32,23 @@ public:
     UPROPERTY(BlueprintReadOnly, Category = "Item")
     UInventorySlotWidget* ParentSlot;
 
+    UPROPERTY(BlueprintReadOnly, Category = "Inventory")
+    UInventoryWidget* OwningInventoryWidget = nullptr;
+
     UFUNCTION(BlueprintCallable, Category = "Item")
-    void SetItemData(UInventoryItem* Item);
+    void SetItemData(UInventoryItem* Item, UInventoryWidget* InInventory);
 
     UFUNCTION()
     void ConstrainDrag(UDragDropOperation* Operation);
+
+    UFUNCTION()
+    UInventorySlotWidget* GetParentSlot() const { return ParentSlot; }
+
+    UFUNCTION()
+	EItemType GetItemType() const { return ItemData->ItemType; }
+
+    UFUNCTION()
+	void SetParentItemSlot(UInventorySlotWidget* S) { ParentSlot = S; }
 
 protected:
     virtual void NativeConstruct() override;

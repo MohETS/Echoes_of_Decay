@@ -1,7 +1,7 @@
 #include "CollectibleItem.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/Character.h"
-#include "InventoryComponent.h"
+#include "Inventory/InventoryComponent.h"
 
 
 // Sets default values
