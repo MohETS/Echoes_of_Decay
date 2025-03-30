@@ -7,6 +7,7 @@
 #include "BUIButton.h"
 #include "BUILabel.h"
 #include <Components/Image.h>
+#include "../Plugins/Wwise/Source/AkAudio/Classes/AkAudioEvent.h"
 #include "BUIUWTitleScreenButton.generated.h"
 
 /**
@@ -23,12 +24,18 @@ public:
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	TObjectPtr<UBUIButton> MainButton;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sound")
+	TObjectPtr<UAkAudioEvent> ButtonSelectedSound;
+
 protected:
 
 	/* UserWidget Functions */
 	virtual void NativeConstruct() override;
 
 	virtual void SynchronizeProperties() override;
+
+	UFUNCTION()
+	void test();
 
 
 	/* UI Components */

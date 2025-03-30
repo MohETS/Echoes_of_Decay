@@ -40,6 +40,7 @@ void ACollectibleItem::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActo
         {
             Inventory->AddItem(ItemName, ItemIcon, ItemType);
             Destroy();
+            //TODO Play the sound when object collected
         }
     }
 }
