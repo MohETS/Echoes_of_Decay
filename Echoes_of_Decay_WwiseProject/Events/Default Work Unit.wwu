@@ -1,6 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WwiseDocument Type="WorkUnit" ID="{3D526BF6-4382-4DAD-A35A-9F3A9AC1176A}" SchemaVersion="123">
 	<Events>
-		<WorkUnit Name="Default Work Unit" ID="{3D526BF6-4382-4DAD-A35A-9F3A9AC1176A}" PersistMode="Standalone"/>
+		<WorkUnit Name="Default Work Unit" ID="{3D526BF6-4382-4DAD-A35A-9F3A9AC1176A}" PersistMode="Standalone">
+			<ChildrenList>
+				<Folder Name="UI" ID="{8047C2D0-9C90-466E-8515-ABAB7B651BA6}" ShortID="73100561">
+					<PropertyList>
+						<Property Name="Color" Type="int16" Value="13"/>
+						<Property Name="OverrideColor" Type="bool" Value="True"/>
+					</PropertyList>
+					<ChildrenList>
+						<Event Name="UI_Background_Music" ID="{3E700B40-9989-4561-9C17-C2F14F7C8E5A}">
+							<ChildrenList>
+								<Action Name="" ID="{0701D00B-9281-4224-8202-E7BDAF553DFD}" ShortID="533257109">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="UI_Music" ID="{EB373A11-9B8A-4996-9834-8BE2B39E2BA0}" WorkUnitID="{BDA80500-07A3-4DC1-8868-56FA82DF416D}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="UI_Button_Selection_Sound" ID="{7481B98F-81D2-401D-92A8-3E7EF14D0D84}">
+							<ChildrenList>
+								<Action Name="" ID="{7980EF1B-5A2E-4EF7-A933-5A4A525BD533}" ShortID="655522527">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Button_Selection" ID="{DDEC464F-B014-45C7-8A8B-7D8AD8C8407C}" WorkUnitID="{E9F583B3-F7FA-40AF-A381-69469DF2E70D}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="Player" ID="{CAA4D181-0831-48DA-898C-113E41085710}" ShortID="1037711238">
+					<PropertyList>
+						<Property Name="Color" Type="int16" Value="10"/>
+						<Property Name="OverrideColor" Type="bool" Value="True"/>
+					</PropertyList>
+					<ChildrenList>
+						<Folder Name="Weapon" ID="{213344DB-4E03-49B3-BB42-20C2223EFD73}" ShortID="861347167">
+							<PropertyList>
+								<Property Name="Color" Type="int16" Value="10"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
+							</PropertyList>
+							<ChildrenList>
+								<Event Name="Sword" ID="{9A72FA9F-87E5-439F-BAD7-B954ED5033BE}">
+									<ChildrenList>
+										<Action Name="" ID="{8BCC77BC-2A4E-48C8-AB65-C27BCFA3847F}" ShortID="954987773"/>
+									</ChildrenList>
+								</Event>
+								<Event Name="Bow" ID="{026F2C5C-14DE-47D1-BC3F-D56DEAD7C01B}">
+									<ChildrenList>
+										<Action Name="" ID="{F84AD61F-2406-4E0D-AB3D-23DF14BB5CD9}" ShortID="761622769"/>
+									</ChildrenList>
+								</Event>
+								<Event Name="Wand" ID="{0AD64B24-AE2F-4145-93F3-96FFCE27C5AE}">
+									<ChildrenList>
+										<Action Name="" ID="{440E5032-BDC3-475B-AAD4-89324F70C565}" ShortID="303025791"/>
+									</ChildrenList>
+								</Event>
+							</ChildrenList>
+						</Folder>
+						<Event Name="Walk" ID="{BB4FF3E8-59D5-4CE7-AA72-D190A47F2950}"/>
+						<Event Name="Run" ID="{68572960-CD10-4C7A-BEB2-0803EA520EAB}"/>
+						<Folder Name="Crafting" ID="{ECEFF691-D31B-4E53-90D4-A1F64A2F293E}" ShortID="775135213">
+							<ChildrenList>
+								<Event Name="ItemCrafted" ID="{8C6F1528-27F1-423C-AA6C-5A9E3D085520}"/>
+							</ChildrenList>
+						</Folder>
+						<Event Name="Death" ID="{7E636591-F492-4D4B-AC0C-25C04F9815CD}">
+							<ChildrenList>
+								<Action Name="" ID="{BC9B5D1D-46F4-4212-8702-618CD5AC696B}" ShortID="525141404">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Player_Death" ID="{14BB6440-8459-44CB-A9B1-29B4FAF0C0BA}" WorkUnitID="{E9F583B3-F7FA-40AF-A381-69469DF2E70D}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="Game" ID="{81369EE5-4DFE-4904-9A36-77519CC8A4D8}" ShortID="55080388">
+					<PropertyList>
+						<Property Name="Color" Type="int16" Value="19"/>
+						<Property Name="OverrideColor" Type="bool" Value="True"/>
+					</PropertyList>
+					<ChildrenList>
+						<Event Name="Object_Pickup" ID="{24B6013A-E9A7-49DF-9AA0-A8D8A8C98649}"/>
+						<Event Name="Background_Ambient_Music" ID="{D09D8617-3AFB-455F-8695-BD1CCA16DDEA}">
+							<ChildrenList>
+								<Action Name="" ID="{DB8A3479-F94F-4F89-ADF2-7A6E47158C9B}" ShortID="928249315">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Player_Background_Music" ID="{DC149DAA-B881-4177-A862-545B3AC521A1}" WorkUnitID="{DC778A57-9890-4759-AC78-5C269D9A64F6}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="BossFight_Music" ID="{07DB6969-4D34-402A-A0E3-6BA807E95EFF}"/>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="Ennemy" ID="{71AEB1B8-1E3E-4F9D-9111-39D91AE5A090}" ShortID="857791108">
+					<ChildrenList>
+						<Event Name="Growls" ID="{82A41270-213E-4DE8-A08D-8757044752F9}"/>
+					</ChildrenList>
+				</Folder>
+			</ChildrenList>
+		</WorkUnit>
 	</Events>
 </WwiseDocument>

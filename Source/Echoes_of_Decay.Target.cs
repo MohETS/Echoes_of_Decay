@@ -11,5 +11,6 @@ public class Echoes_of_DecayTarget : TargetRules
 		DefaultBuildSettings = BuildSettingsVersion.V5;
 		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_5;
 		ExtraModuleNames.Add("Echoes_of_Decay");
-	}
+        ExtraModuleNames.Add("UI");
+    }
 }

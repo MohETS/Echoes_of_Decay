@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "TitleScreenCameraPawn.h"
+#include <Echoes_of_Decay/TitleScreen/Public/TitleScreenCameraPawn.h>
 #include <UI/TitleScreen/Public/BUIUWTitleScreen.h>
 #include "BUIUserWidget.h"
 
@@ -26,13 +26,11 @@ void ATitleScreenCameraPawn::BeginPlay()
 		check(TitleScreen);
 		TitleScreen->AddToViewport();
 	}
-	
+
 }
 
 void ATitleScreenCameraPawn::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
-	
-
 	if (TitleScreen) {
 		TitleScreen->RemoveFromViewport();
 		TitleScreen = nullptr;
@@ -54,4 +52,3 @@ void ATitleScreenCameraPawn::SetupPlayerInputComponent(UInputComponent* PlayerIn
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 }
-
