@@ -35,7 +35,7 @@ protected:
 	virtual void SynchronizeProperties() override;
 
 	UFUNCTION()
-	void PlayHoveredSound();
+	void test();
 
 
 	/* UI Components */

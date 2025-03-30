@@ -51,6 +51,7 @@ void ACollectibleItem::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActo
                 UE_LOG(LogTemp, Error, TEXT("Wwise Player_Background_Music Event is invalid"));
             }
             Destroy();
+            //TODO Play the sound when object collected
         }
     }
 }
