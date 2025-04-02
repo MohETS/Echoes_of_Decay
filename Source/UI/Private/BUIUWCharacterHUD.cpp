@@ -9,19 +9,7 @@ void UBUIUWCharacterHUD::NativeConstruct()
 	WeaponAbilityContainer1->OnPressedDelegate.AddUniqueDynamic(this, &UBUIUWCharacterHUD::WeaponSelected);
 	WeaponAbilityContainer2->OnPressedDelegate.AddUniqueDynamic(this, &UBUIUWCharacterHUD::WeaponSelected);
 	WeaponAbilityContainer3->OnPressedDelegate.AddUniqueDynamic(this, &UBUIUWCharacterHUD::WeaponSelected);
-
-	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
-	if (PlayerController)
-	{
-		PlayerController->bShowMouseCursor = false;
-		FInputModeGameOnly InputMode;
-		PlayerController->SetInputMode(InputMode);
-	}
-	else {
-		UE_LOG(LogTemp, Error, TEXT("Error getting player controler"));
-	}
 }
-
 
 void UBUIUWCharacterHUD::SynchronizeProperties()
 {

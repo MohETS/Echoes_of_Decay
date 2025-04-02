@@ -3,10 +3,15 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "WeaponEffect/WeaponEffect.h"
-#include "WeaponType.h"
-#include "Inventory/ItemType.h"
 #include "WeaponBase.generated.h"
 
+UENUM(BlueprintType)
+enum class EWeaponType : uint8
+{
+	Melee UMETA(DisplayName = "Melee"),
+	Ranged UMETA(DisplayName = "Ranged"),
+	Buff UMETA(DisplayName = "Buff")
+};
 
 UCLASS(Blueprintable, BlueprintType)
 class ECHOES_OF_DECAY_API AWeaponBase : public AActor

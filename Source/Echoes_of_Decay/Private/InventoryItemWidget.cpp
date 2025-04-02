@@ -1,9 +1,10 @@
-#include "Inventory/InventoryWidget/InventoryItemWidget.h"
-#include "Inventory/InventoryWidget/InventorySlotWidget.h"
-#include "Inventory/InventoryDragDropOperation.h"
+#include "InventoryItemWidget.h"
 #include "Blueprint/WidgetBlueprintLibrary.h"
+#include "InventorySlotWidget.h"
+#include "InventoryDragDropOperation.h"
 
-void UInventoryItemWidget::SetItemData(UInventoryItem* Item, UInventoryWidget* InInventory)
+
+void UInventoryItemWidget::SetItemData(UInventoryItem* Item)
 {
     if (!Item) return;
 
@@ -27,8 +28,6 @@ void UInventoryItemWidget::SetItemData(UInventoryItem* Item, UInventoryWidget* I
     {
         ItemBorder->SetBrushColor(FLinearColor::Blue);
     }
-
-	OwningInventoryWidget = InInventory;
 }
 
 void UInventoryItemWidget::NativeConstruct()

@@ -17,9 +17,23 @@ AMyCharacter::AMyCharacter()
     Inventory = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
 
     EquippedWeapons.Init(nullptr, 3);
+
+    // Assigner les classes d'arme
+
+
     CurrentWeapon = nullptr;
 
     Health = 100.0f;
+
+    if (GetMesh())
+    {
+        // Crï¿½e le ChildActorComponent pour l'arme
+        WeaponChildActor = CreateDefaultSubobject<UChildActorComponent>(TEXT("WeaponChildActor"));
+
+        // Attache l'arme au Skeletal Mesh du personnage
+        WeaponChildActor->SetupAttachment(GetMesh(), TEXT("items"));
+    }
+
 }
 
 void AMyCharacter::BeginPlay()
@@ -29,7 +43,7 @@ void AMyCharacter::BeginPlay()
     Health = MaxHealth;
     FRotator CurrentRotation = MyArrowComponent->GetComponentRotation();
     // CurrentRotation.Yaw = 0.0f; // Bloque la rotation autour de l'axe Yaw (Z)
-    // MyArrowComponent->SetWorldRotation(CurrentRotation); // Applique cette rotation bloquée
+    // MyArrowComponent->SetWorldRotation(CurrentRotation); // Applique cette rotation bloquï¿½e
 
 
     // Add the default mapping context to the player's input subsystem
@@ -85,6 +99,8 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 {
     Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+    PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AMyCharacter::FireProjectile);
+
     UEnhancedInputComponent* EnhancedInput = Cast<UEnhancedInputComponent>(PlayerInputComponent);
     if (EnhancedInput)
     {
@@ -96,7 +112,19 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
     }
 }
 
-// Implémentation de la réception de dégâts
+void AMyCharacter::FireProjectile()
+{
+    if (ProjectileClass && MyArrowComponent)
+    {
+        // Obtenir la transformation de l'ArrowComponent (position et rotation)
+        FTransform SpawnTransform = MyArrowComponent->GetComponentTransform();
+
+        // Spawner le projectile
+        GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTransform);
+    }
+}
+
+// Implï¿½mentation de la rï¿½ception de dï¿½gï¿½ts
 float AMyCharacter::TakeDamage(
     float DamageAmount,
     struct FDamageEvent const& DamageEvent,
@@ -108,7 +136,7 @@ float AMyCharacter::TakeDamage(
         return 0.0f;
     }
 
-    // Réduction de la santé du joueur
+    // Rï¿½duction de la santï¿½ du joueur
     Health -= DamageAmount;
     UE_LOG(LogTemp, Warning, TEXT("Player took damage! Current Health: %f"), Health);
 
@@ -117,12 +145,12 @@ float AMyCharacter::TakeDamage(
 
     GetWorldTimerManager().SetTimer(RegenStartTimer, this, &AMyCharacter::StartHealthRegen, TimeBeforeRegenStarts, false);
 
-    // Vérification si la santé est à zéro
+    // Vï¿½rification si la santï¿½ est ï¿½ zï¿½ro
     if (Health <= 0.0f)
     {
         UE_LOG(LogTemp, Warning, TEXT("Player Died!"));
-        // Ici, tu peux déclencher une animation de mort, un respawn, etc.
-        Destroy(); // Supprime le personnage de la scène
+        // Ici, tu peux dï¿½clencher une animation de mort, un respawn, etc.
+        Destroy(); // Supprime le personnage de la scï¿½ne
     }
 
     HUDWidgetInstance->BindHpToHUD(this);
@@ -137,21 +165,32 @@ void AMyCharacter::ToggleInventory()
 
 void AMyCharacter::SwitchWeapon(int32 SlotIndex)
 {
+    // Vï¿½rifie si l'index est valide et si la classe d'arme existe
     if (EquippedWeapons.IsValidIndex(SlotIndex) && EquippedWeapons[SlotIndex])
     {
-        CurrentWeapon = GetWorld()->SpawnActor<AWeaponBase>(EquippedWeapons[SlotIndex]);
-		CurrentWeapon->Owner = this;
-        UE_LOG(LogTemp, Warning, TEXT("Switched to weapon: %s"), *CurrentWeapon->WeaponName.ToString());
+        if (WeaponChildActor)
+        {
+            // Change directement la classe du ChildActor
+            WeaponChildActor->SetChildActorClass(EquippedWeapons[SlotIndex]);
+
+            // Crï¿½e une nouvelle instance du ChildActor pour appliquer la nouvelle classe d'arme
+            WeaponChildActor->CreateChildActor();
+
+            UE_LOG(LogTemp, Warning, TEXT("Weapon class changed to: %s"), *EquippedWeapons[SlotIndex]->GetName());
+        }
     }
     else
     {
-        UE_LOG(LogTemp, Warning, TEXT("No weapon in this slot!"));
+        UE_LOG(LogTemp, Warning, TEXT("Invalid weapon slot or class!"));
     }
 }
+
 
 void AMyCharacter::SwitchToWeapon1()
 {
     SwitchWeapon(0);
+    UE_LOG(LogTemp, Warning, TEXT("Devendra oh yeah"));
+    
 }
 
 void AMyCharacter::SwitchToWeapon2()
