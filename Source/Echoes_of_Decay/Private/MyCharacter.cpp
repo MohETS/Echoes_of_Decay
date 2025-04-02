@@ -7,6 +7,10 @@
 #include "Animation/AnimMontage.h"
 #include "Engine/OverlapResult.h"  
 
+#include "AkGameplayStatics.h"
+#include "../Plugins/WwiseSoundEngine/ThirdParty/include/AK/SoundEngine/Common/AkSoundEngine.h"
+
+
 AMyCharacter::AMyCharacter()
 {
     MyArrowComponent = CreateDefaultSubobject<UArrowComponent>(TEXT("TIRE"));
@@ -31,6 +35,7 @@ AMyCharacter::AMyCharacter()
         // Attache l'arme au Skeletal Mesh du personnage
         WeaponChildActor->SetupAttachment(GetMesh(), TEXT("items"));
     }
+    PlayerDeathSoundPlayingID = AK_INVALID_PLAYING_ID;
 }
 
 void AMyCharacter::BeginPlay()
@@ -136,12 +141,13 @@ float AMyCharacter::TakeDamage(
 
     if (Health <= 0.0f)
     {
-        UE_LOG(LogTemp, Warning, TEXT("Player Died!"));
-        // Ici, tu peux d�clencher une animation de mort, un respawn, etc.
-        // 
-        // GetMesh()->GetAnimInstance()->Montage_Play(DeathMontage);
-        //GetCharacterMovement()->DisableMovement();
-        // Destroy(); // Supprime le personnage de la sc�ne
+        if (PlayerDeathSound) {
+            FOnAkPostEventCallback nullCallback;
+            PlayerDeathSoundPlayingID = UAkGameplayStatics::PostEvent(PlayerDeathSound, this, int32(0), nullCallback, false);
+        }
+        else {
+            UE_LOG(LogTemp, Error, TEXT("Wwise Player_Background_Music Event is invalid"));
+        }
     }
 
     HUDWidgetInstance->BindHpToHUD(this);

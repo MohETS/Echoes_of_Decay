@@ -52,7 +52,16 @@
 								</Event>
 								<Event Name="Bow" ID="{026F2C5C-14DE-47D1-BC3F-D56DEAD7C01B}">
 									<ChildrenList>
-										<Action Name="" ID="{F84AD61F-2406-4E0D-AB3D-23DF14BB5CD9}" ShortID="761622769"/>
+										<Action Name="" ID="{F84AD61F-2406-4E0D-AB3D-23DF14BB5CD9}" ShortID="761622769">
+											<PropertyList>
+												<Property Name="FadeTime" Type="Real64" Value="0.5"/>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="Projectile" ID="{E8CC7F42-C2EC-4D84-A023-4A9851980892}" WorkUnitID="{E9F583B3-F7FA-40AF-A381-69469DF2E70D}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
 									</ChildrenList>
 								</Event>
 								<Event Name="Wand" ID="{0AD64B24-AE2F-4145-93F3-96FFCE27C5AE}">
@@ -62,19 +71,23 @@
 								</Event>
 							</ChildrenList>
 						</Folder>
-						<Event Name="Walk" ID="{BB4FF3E8-59D5-4CE7-AA72-D190A47F2950}"/>
-						<Event Name="Run" ID="{68572960-CD10-4C7A-BEB2-0803EA520EAB}"/>
-						<Folder Name="Crafting" ID="{ECEFF691-D31B-4E53-90D4-A1F64A2F293E}" ShortID="775135213">
-							<ChildrenList>
-								<Event Name="ItemCrafted" ID="{8C6F1528-27F1-423C-AA6C-5A9E3D085520}"/>
-							</ChildrenList>
-						</Folder>
 						<Event Name="Death" ID="{7E636591-F492-4D4B-AC0C-25C04F9815CD}">
 							<ChildrenList>
 								<Action Name="" ID="{BC9B5D1D-46F4-4212-8702-618CD5AC696B}" ShortID="525141404">
 									<ReferenceList>
 										<Reference Name="Target">
 											<ObjectRef Name="Player_Death" ID="{14BB6440-8459-44CB-A9B1-29B4FAF0C0BA}" WorkUnitID="{E9F583B3-F7FA-40AF-A381-69469DF2E70D}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+								<Action Name="" ID="{9BA21168-DD12-417F-8C87-84B78265E4B8}" ShortID="552338843">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="2"/>
+										<Property Name="Scope" Type="int16" Value="1"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Player_Background_Music" ID="{DC149DAA-B881-4177-A862-545B3AC521A1}" WorkUnitID="{DC778A57-9890-4759-AC78-5C269D9A64F6}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -88,7 +101,17 @@
 						<Property Name="OverrideColor" Type="bool" Value="True"/>
 					</PropertyList>
 					<ChildrenList>
-						<Event Name="Object_Pickup" ID="{24B6013A-E9A7-49DF-9AA0-A8D8A8C98649}"/>
+						<Event Name="Object_Pickup" ID="{24B6013A-E9A7-49DF-9AA0-A8D8A8C98649}">
+							<ChildrenList>
+								<Action Name="" ID="{523976D4-D778-401F-BC58-EA41F5B9494A}" ShortID="858226676">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="ItemPickedUp" ID="{29BB3B91-06CB-4331-BF2A-73845E63E255}" WorkUnitID="{E9F583B3-F7FA-40AF-A381-69469DF2E70D}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
 						<Event Name="Background_Ambient_Music" ID="{D09D8617-3AFB-455F-8695-BD1CCA16DDEA}">
 							<ChildrenList>
 								<Action Name="" ID="{DB8A3479-F94F-4F89-ADF2-7A6E47158C9B}" ShortID="928249315">
