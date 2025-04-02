@@ -4,7 +4,7 @@
 #include "Inventory/InventoryDragDropOperation.h"
 #include "Blueprint/WidgetBlueprintLibrary.h"
 
-void UInventoryItemWidget::SetItemData(UInventoryItem* Item, UInventoryWidget* InInventory)
+void UInventoryItemWidget::SetItemData(UInventoryItem* Item)
 {
     if (!Item) return;
 
@@ -28,8 +28,6 @@ void UInventoryItemWidget::SetItemData(UInventoryItem* Item, UInventoryWidget* I
     {
         ItemBorder->SetBrushColor(FLinearColor::Blue);
     }
-
-	OwningInventoryWidget = InInventory;
 }
 
 void UInventoryItemWidget::NativeConstruct()

@@ -17,9 +17,23 @@ AMyCharacter::AMyCharacter()
     Inventory = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
 
     EquippedWeapons.Init(nullptr, 3);
+
+    // Assigner les classes d'arme
+
+
     CurrentWeapon = nullptr;
 
     Health = 100.0f;
+
+    if (GetMesh())
+    {
+        // Crï¿½e le ChildActorComponent pour l'arme
+        WeaponChildActor = CreateDefaultSubobject<UChildActorComponent>(TEXT("WeaponChildActor"));
+
+        // Attache l'arme au Skeletal Mesh du personnage
+        WeaponChildActor->SetupAttachment(GetMesh(), TEXT("items"));
+    }
+
 }
 
 void AMyCharacter::BeginPlay()
@@ -29,7 +43,7 @@ void AMyCharacter::BeginPlay()
     Health = MaxHealth;
     FRotator CurrentRotation = MyArrowComponent->GetComponentRotation();
     // CurrentRotation.Yaw = 0.0f; // Bloque la rotation autour de l'axe Yaw (Z)
-    // MyArrowComponent->SetWorldRotation(CurrentRotation); // Applique cette rotation bloquée
+    // MyArrowComponent->SetWorldRotation(CurrentRotation); // Applique cette rotation bloquï¿½e
 
 
     // Add the default mapping context to the player's input subsystem
@@ -91,6 +105,8 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 {
     Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+    PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AMyCharacter::FireProjectile);
+
     UEnhancedInputComponent* EnhancedInput = Cast<UEnhancedInputComponent>(PlayerInputComponent);
     if (EnhancedInput)
     {
@@ -151,16 +167,18 @@ void AMyCharacter::SwitchWeapon(int32 SlotIndex)
         CurrentWeapon->SetActorHiddenInGame(false);
         CurrentWeapon->SetActorEnableCollision(true);
         UE_LOG(LogTemp, Warning, TEXT("Switched to weapon: %s"), *CurrentWeapon->WeaponName.ToString());
-    }
-    else
-    {
-        UE_LOG(LogTemp, Warning, TEXT("No weapon in this slot!"));
+        if (!WeaponChildActor) return;
+        WeaponChildActor->SetChildActorClass(EquippedWeapons[SlotIndex]->GetClass());
+        WeaponChildActor->CreateChildActor();
     }
 }
+
 
 void AMyCharacter::SwitchToWeapon1()
 {
     SwitchWeapon(0);
+    UE_LOG(LogTemp, Warning, TEXT("Devendra oh yeah"));
+    
 }
 
 void AMyCharacter::SwitchToWeapon2()

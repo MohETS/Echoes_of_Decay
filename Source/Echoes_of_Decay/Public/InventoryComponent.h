@@ -2,9 +2,9 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "InventoryWidget.h"
 #include "InventoryItem.h"
-#include "InventoryWidget/InventoryWidget.h"
-#include "InventoryWidget/InventoryItemWidget.h"
+#include "InventoryItemWidget.h"
 #include "InventoryComponent.generated.h"
 
 
