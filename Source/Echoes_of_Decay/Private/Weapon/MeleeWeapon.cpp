@@ -28,7 +28,7 @@ void AMeleeWeapon::Attack()
     AActor* HitActor = HitResult.GetActor();  
     if (!HitActor) return;
 
-    UGameplayStatics::ApplyDamage(HitActor, AttackDamage, Owner->GetInstigatorController(), this, nullptr);  
+    UGameplayStatics::ApplyDamage(HitActor, AttackDamage, Owner->GetInstigatorController(), Owner, nullptr);  
     GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AMeleeWeapon::ResetAttackCooldown, AttackCooldown, false);
 
     if (!WeaponEffect) return;

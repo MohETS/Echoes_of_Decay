@@ -201,7 +201,10 @@ void AEnemyBase::Die(AActor* Killer)
 {
     UE_LOG(LogTemp, Warning, TEXT("Enemy has died!"));
     EnemyState = EEnemyState::Dying;
-    Cast<AMyCharacter>(Killer)->GainWeaponXP(XpAtDeath);
+    if (Cast<AMyCharacter>(Killer))
+    {
+        Cast<AMyCharacter>(Killer)->GainWeaponXP(XpAtDeath);
+    }
 }
 
 void AEnemyBase::ResetAttackCooldown()
