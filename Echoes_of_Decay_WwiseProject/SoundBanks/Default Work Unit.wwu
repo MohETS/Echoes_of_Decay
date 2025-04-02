@@ -12,13 +12,16 @@
 					<GameSyncExclusionList/>
 				</SoundBank>
 				<SoundBank Name="Player" ID="{D00D319C-5E2E-4F1E-B1DC-4671ED8684A3}">
-					<ObjectInclusionList/>
+					<ObjectInclusionList>
+						<ObjectRef Name="Death" ID="{7E636591-F492-4D4B-AC0C-25C04F9815CD}" WorkUnitID="{3D526BF6-4382-4DAD-A35A-9F3A9AC1176A}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
 					<ObjectExclusionList/>
 					<GameSyncExclusionList/>
 				</SoundBank>
 				<SoundBank Name="Game" ID="{A5FE9D89-713A-431A-B7C1-5B6CF8BA5625}">
 					<ObjectInclusionList>
 						<ObjectRef Name="Background_Ambient_Music" ID="{D09D8617-3AFB-455F-8695-BD1CCA16DDEA}" WorkUnitID="{3D526BF6-4382-4DAD-A35A-9F3A9AC1176A}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="Object_Pickup" ID="{24B6013A-E9A7-49DF-9AA0-A8D8A8C98649}" WorkUnitID="{3D526BF6-4382-4DAD-A35A-9F3A9AC1176A}" Origin="Manual" Filter="7"/>
 					</ObjectInclusionList>
 					<ObjectExclusionList/>
 					<GameSyncExclusionList/>
