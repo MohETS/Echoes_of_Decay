@@ -8,6 +8,7 @@
 #include "TimerManager.h"
 #include "Inventory/InventoryComponent.h"
 #include "Weapon/WeaponBase.h"
+#include "AkAudioEvent.h"
 #include "MyCharacter.generated.h"
 
 class UInventoryWidget;
@@ -21,6 +22,11 @@ class ECHOES_OF_DECAY_API AMyCharacter : public ACharacter
 
 public:
     AMyCharacter();
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "SoundFX")
+    TObjectPtr<UAkAudioEvent> PlayerDeathSound;
+
+    int32 PlayerDeathSoundPlayingID;
 
 protected:
     virtual void BeginPlay() override;

@@ -4,6 +4,10 @@
 #include "Engine/World.h"
 #include "Components/ArrowComponent.h"
 
+#include "AkGameplayStatics.h"
+#include "../Plugins/WwiseSoundEngine/ThirdParty/include/AK/SoundEngine/Common/AkSoundEngine.h"
+
+
 AMyCharacter::AMyCharacter()
 {
     MyArrowComponent = CreateDefaultSubobject<UArrowComponent>(TEXT("TIRE"));
@@ -18,6 +22,8 @@ AMyCharacter::AMyCharacter()
     CurrentWeapon = nullptr;
 
     Health = 100.0f;
+
+    PlayerDeathSoundPlayingID = AK_INVALID_PLAYING_ID;
 }
 
 void AMyCharacter::BeginPlay()
@@ -88,8 +94,15 @@ float AMyCharacter::TakeDamage(
     if (Health <= 0.0f)
     {
         UE_LOG(LogTemp, Warning, TEXT("Player Died!"));
-        // Ici, tu peux déclencher une animation de mort, un respawn, etc.
+        // Ici, tu peux déclencher une animation de mort, un respawn, etc. 
         //TODO Play player death sound
+        if (PlayerDeathSound) {
+            FOnAkPostEventCallback nullCallback;
+            PlayerDeathSoundPlayingID = UAkGameplayStatics::PostEvent(PlayerDeathSound, this, int32(0), nullCallback, false);
+        }
+        else {
+            UE_LOG(LogTemp, Error, TEXT("Wwise Player_Background_Music Event is invalid"));
+        }
         Destroy(); // Supprime le personnage de la scène
     }
 

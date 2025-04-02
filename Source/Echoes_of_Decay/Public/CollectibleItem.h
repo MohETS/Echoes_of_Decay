@@ -4,6 +4,7 @@
 #include "GameFramework/Actor.h"
 #include "Inventory/InventoryWidget/InventoryItemWidget.h"
 #include "Inventory/InventoryItem.h"
+#include "AkAudioEvent.h"
 #include "CollectibleItem.generated.h"
 
 UCLASS(Blueprintable, BlueprintType)
@@ -34,4 +35,9 @@ public:
 
 	UFUNCTION()
 	void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "SoundFX")
+	TObjectPtr<UAkAudioEvent> ItemPickUpSound;
+
+	int32 ItemPickUpSoundPlayingID;
 };

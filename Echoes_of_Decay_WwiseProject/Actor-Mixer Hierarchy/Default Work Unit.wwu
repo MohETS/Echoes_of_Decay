@@ -56,6 +56,13 @@
 							</ReferenceList>
 							<ChildrenList>
 								<AudioFileSource Name="Player_Death" ID="{02D71833-CA70-4593-A8A7-F198011D3A35}">
+									<PropertyList>
+										<Property Name="VolumeOffset" Type="Real64">
+											<ValueList>
+												<Value>-7</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
 									<Language>SFX</Language>
 									<AudioFile>Player\Player_Death.wav</AudioFile>
 									<MediaIDList>
@@ -69,6 +76,48 @@
 						</Sound>
 					</ChildrenList>
 				</Folder>
+				<Folder Name="Weapon" ID="{1301178A-DEBF-4D9D-902E-BB4367A68A20}" ShortID="319352510"/>
+				<Sound Name="ItemPickedUp" ID="{29BB3B91-06CB-4331-BF2A-73845E63E255}" ShortID="246732497">
+					<PropertyList>
+						<Property Name="Pitch" Type="int32">
+							<ModifierList>
+								<ModifierInfo>
+									<Modifier Name="" ID="{73577C8B-7056-4762-94E2-606FCE153D5B}">
+										<PropertyList>
+											<Property Name="Enabled" Type="bool" Value="True"/>
+											<Property Name="Max" Type="Real64" Value="50"/>
+										</PropertyList>
+									</Modifier>
+								</ModifierInfo>
+							</ModifierList>
+						</Property>
+						<Property Name="Volume" Type="Real64">
+							<ValueList>
+								<Value>-6</Value>
+							</ValueList>
+						</Property>
+					</PropertyList>
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{8FE859B4-BD58-4437-8A6D-7397A677CECC}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{380EAECA-45D4-4060-8746-8C96517E7E34}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<AudioFileSource Name="ItemPickUp" ID="{C92FD4A7-E748-414F-85FB-9C5EDE68A4C4}">
+							<Language>SFX</Language>
+							<AudioFile>ItemPickUp.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="594514367"/>
+							</MediaIDList>
+						</AudioFileSource>
+					</ChildrenList>
+					<ActiveSourceList>
+						<ActiveSource Name="ItemPickUp" ID="{C92FD4A7-E748-414F-85FB-9C5EDE68A4C4}" Platform="Linked"/>
+					</ActiveSourceList>
+				</Sound>
 			</ChildrenList>
 		</WorkUnit>
 	</AudioObjects>

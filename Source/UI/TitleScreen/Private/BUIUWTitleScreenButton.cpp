@@ -7,7 +7,7 @@
 void UBUIUWTitleScreenButton::NativeConstruct()
 {
 	Super::NativeConstruct();
-	MainButton->OnHovered.AddUniqueDynamic(this, &UBUIUWTitleScreenButton::test);
+	MainButton->OnHovered.AddUniqueDynamic(this, &UBUIUWTitleScreenButton::PlayHoveredSound);
 }
 
 void UBUIUWTitleScreenButton::SynchronizeProperties()
@@ -20,7 +20,7 @@ void UBUIUWTitleScreenButton::SynchronizeProperties()
 
 }
 
-void UBUIUWTitleScreenButton::test() {
+void UBUIUWTitleScreenButton::PlayHoveredSound() {
 	int32 PlayingID = AK_INVALID_PLAYING_ID;
 	if (ButtonSelectedSound) {
 		FOnAkPostEventCallback nullCallback;
