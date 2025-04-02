@@ -11,6 +11,18 @@ void UBUIUWTitleScreen::NativeConstruct()
 	MainMenu = CreateWidget<UBUIUWMainMenu>(GetWorld(), MainMenuClass);
 	if (MainMenu) {
 		MainMenu->AddToViewport();
+		APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+		if (PlayerController)
+		{
+			PlayerController->bShowMouseCursor = true;
+			FInputModeUIOnly InputMode;
+			InputMode.SetWidgetToFocus(MainMenu->TakeWidget());
+			InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+			PlayerController->SetInputMode(InputMode);
+		}
+		else {
+			UE_LOG(LogTemp, Error, TEXT("Error getting player controler"));
+		}
 	}
 	else {
 		UE_LOG(LogTemp, Error, TEXT("The MainMenu is not initialized"));
