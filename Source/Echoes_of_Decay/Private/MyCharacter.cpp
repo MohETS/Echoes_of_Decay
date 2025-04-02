@@ -99,6 +99,8 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 {
     Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+    PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AMyCharacter::FireProjectile);
+
     UEnhancedInputComponent* EnhancedInput = Cast<UEnhancedInputComponent>(PlayerInputComponent);
     if (EnhancedInput)
     {
@@ -169,6 +171,8 @@ void AMyCharacter::SwitchWeapon(int32 SlotIndex)
 void AMyCharacter::SwitchToWeapon1()
 {
     SwitchWeapon(0);
+    UE_LOG(LogTemp, Warning, TEXT("Devendra oh yeah"));
+    
 }
 
 void AMyCharacter::SwitchToWeapon2()
