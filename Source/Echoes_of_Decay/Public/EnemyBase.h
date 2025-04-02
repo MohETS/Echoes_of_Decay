@@ -26,6 +26,8 @@ public:
 	AEnemyBase();
 	void Die(AActor* Killer);
 
+	float GetDamage() const { return Damage; }
+
 protected:
 	// Variables liées à la détection de l'IA
 	UPROPERTY(EditAnywhere, Category = "AI")
@@ -72,6 +74,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Attack")
 	EEnemyState EnemyState = EEnemyState::Idle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Level")
+	int32 XpAtDeath = 10;
 
 	// Timer pour la patrouille et l'attaque
 	FTimerHandle PatrolTimer;

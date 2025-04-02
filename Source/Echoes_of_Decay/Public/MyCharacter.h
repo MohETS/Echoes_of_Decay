@@ -25,6 +25,7 @@ public:
 
 protected:
     virtual void BeginPlay() override;
+    virtual void Tick(float DeltaTime) override;
 
 public:
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -38,6 +39,15 @@ public:
 	// Arrow component to specify the spawn location of the projectile
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
     class UArrowComponent* MyArrowComponent;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+    float EnemyProximityRadius = 1000.0f;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+    bool bIsEnemyNearby = false;
+
+    UFUNCTION()
+    void CheckForNearbyEnemies();
 
 	// --- INPUT --- //
     UPROPERTY(EditDefaultsOnly, Category = "Input")
@@ -57,7 +67,6 @@ public:
 
     UPROPERTY(EditDefaultsOnly, Category = "Input")
     UInputAction* WeaponSlot3Action;
-
 
 	// --- INVENTORY --- //
 
@@ -93,6 +102,9 @@ public:
     UFUNCTION()
     void RefreshEquippedWeapons();
 
+    UFUNCTION()
+    void GainWeaponXP(int32 Xp);
+
     // --- Health --- //
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
@@ -101,11 +113,29 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
     float Health = 100.0f;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Regen")
+    float TimeBeforeRegenStarts = 10.0f;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Regen")
+    float RegenAmount = 5.0f;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Regen")
+    float RegenInterval = 0.5f;
+
+    FTimerHandle RegenStartTimer;
+    FTimerHandle RegenTickTimer;
+
     virtual float TakeDamage(
         float DamageAmount,
         struct FDamageEvent const& DamageEvent,
         AController* EventInstigator,
         AActor* DamageCauser) override;
+
+    UFUNCTION()
+    void StartHealthRegen();
+
+    UFUNCTION()
+    void RegenHealth();
 
     // --- UI --- //
 

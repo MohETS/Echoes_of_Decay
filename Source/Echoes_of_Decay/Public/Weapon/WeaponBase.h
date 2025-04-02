@@ -26,7 +26,10 @@ public:
     EWeaponType WeaponType;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-    int32 Level;
+    int32 WeaponLevel = 1;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+    int32 MaxWeaponLevel = 5;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
     int32 XP;
@@ -63,4 +66,10 @@ public:
     void GainXP(int32 Amount);
 
     void ResetAttackCooldown();
+
+    UFUNCTION(BlueprintCallable, Category = "Weapon")
+    virtual void LevelUp();
+
+    UFUNCTION(BlueprintCallable, Category = "Weapon")
+    virtual void ApplyWeaponLevelEffects();
 };

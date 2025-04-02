@@ -11,6 +11,7 @@
 #include "Perception/AISense.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "TimerManager.h"
+#include "MyCharacter.h"
 
 // Sets default values
 AEnemyBase::AEnemyBase()
@@ -108,6 +109,7 @@ void AEnemyBase::OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
     else
     {
         UE_LOG(LogTemp, Warning, TEXT("Player lost!"));
+        AIController->ClearFocus(EAIFocusPriority::Gameplay);
         float DistanceToPatrolCenter = FVector::Dist(GetActorLocation(), PatrolCenter);
 
         // If the player is too far from the patrol zone, return to the patrol zone
@@ -149,6 +151,7 @@ void AEnemyBase::Patrol()
 void AEnemyBase::ChasePlayer()
 {
     if (!PlayerPawn) return;
+    AIController->SetFocus(PlayerPawn);
     GetCharacterMovement()->MaxWalkSpeed = ChaseSpeed;
     EnemyState = EEnemyState::Chasing;
     // Check if the player is within the sight radius
@@ -198,6 +201,7 @@ void AEnemyBase::Die(AActor* Killer)
 {
     UE_LOG(LogTemp, Warning, TEXT("Enemy has died!"));
     EnemyState = EEnemyState::Dying;
+    Cast<AMyCharacter>(Killer)->GainWeaponXP(XpAtDeath);
 }
 
 void AEnemyBase::ResetAttackCooldown()

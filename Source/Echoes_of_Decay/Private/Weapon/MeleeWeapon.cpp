@@ -34,3 +34,8 @@ void AMeleeWeapon::Attack()
     if (!WeaponEffect) return;
     WeaponEffect->ApplyEffect(HitActor, Owner);  
 }
+
+void AMeleeWeapon::ApplyWeaponLevelEffects()
+{
+    AttackDamage = AttackDamage * 1.1;
+}

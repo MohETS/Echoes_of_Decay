@@ -10,7 +10,7 @@ ACollectibleItem::ACollectibleItem()
 	PrimaryActorTick.bCanEverTick = true;
 
 	// Create a sphere component to handle the collision
-    USphereComponent* CollisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("Collision"));
+    CollisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("Collision"));
     CollisionComponent->SetSphereRadius(50.f);
     RootComponent = CollisionComponent;
 

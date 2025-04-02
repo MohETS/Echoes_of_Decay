@@ -20,5 +20,5 @@ public:
 	float ProjectileDamage;
 
 	virtual void Attack() override;
-	virtual void BeginPlay() override;
+	virtual void ApplyWeaponLevelEffects() override;
 };

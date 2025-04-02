@@ -4,7 +4,6 @@
 AWeaponBase::AWeaponBase()
 {
 	PrimaryActorTick.bCanEverTick = false;
-	Level = 1;
 	XP = 0;
 	XPToNextLevel = 100;
 }
@@ -26,11 +25,8 @@ void AWeaponBase::GainXP(int32 Amount)
 
 	if (XP >= XPToNextLevel)
 	{
-		XP -= XPToNextLevel;
-		Level++;
-		XPToNextLevel *= 1.5f;
-
-		UE_LOG(LogTemp, Warning, TEXT("Weapon %s leveled up! Level: %d"), *WeaponName.ToString(), Level);
+		LevelUp();
+		UE_LOG(LogTemp, Warning, TEXT("Weapon %s leveled up! Level: %d"), *WeaponName.ToString(), WeaponLevel);
 	}
 }
 
@@ -38,4 +34,19 @@ void AWeaponBase::ResetAttackCooldown()
 {
 	bCanAttack = true;
 	UE_LOG(LogTemp, Warning, TEXT("Attack cooldown reset!"));
+}
+
+void AWeaponBase::LevelUp()
+{
+	if (WeaponLevel < MaxWeaponLevel)
+	{
+		WeaponLevel++;
+		XPToNextLevel *= 1.5f;
+		ApplyWeaponLevelEffects();
+		UE_LOG(LogTemp, Log, TEXT("Weapon leveled up to %d!"), WeaponLevel);
+	}
+}
+
+void AWeaponBase::ApplyWeaponLevelEffects()
+{
 }

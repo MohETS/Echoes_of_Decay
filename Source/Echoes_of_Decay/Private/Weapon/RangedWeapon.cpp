@@ -5,22 +5,11 @@ ARangedWeapon::ARangedWeapon()
 {
     WeaponType = EWeaponType::Ranged;
 	WeaponName = "Bow";
-    
 }
 
-void ARangedWeapon::BeginPlay()
+void ARangedWeapon::ApplyWeaponLevelEffects()
 {
-    Super::BeginPlay();
-
-    if (ProjectileClass)
-    {
-        AProjectile* DefaultProjectile = ProjectileClass->GetDefaultObject<AProjectile>();
-
-        if (DefaultProjectile)
-        {
-            ProjectileDamage = DefaultProjectile->Damage;
-        }
-    }
+    ProjectileDamage *= 1.1;
 }
 
 void ARangedWeapon::Attack()

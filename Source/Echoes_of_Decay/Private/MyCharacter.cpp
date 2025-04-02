@@ -3,6 +3,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "Engine/World.h"
 #include "Components/ArrowComponent.h"
+#include "EnemyBase.h"
+#include "Engine/OverlapResult.h"  
 
 AMyCharacter::AMyCharacter()
 {
@@ -24,6 +26,7 @@ void AMyCharacter::BeginPlay()
 {
     Super::BeginPlay();
 
+    Health = MaxHealth;
     FRotator CurrentRotation = MyArrowComponent->GetComponentRotation();
     // CurrentRotation.Yaw = 0.0f; // Bloque la rotation autour de l'axe Yaw (Z)
     // MyArrowComponent->SetWorldRotation(CurrentRotation); // Applique cette rotation bloquée
@@ -72,6 +75,12 @@ void AMyCharacter::BeginPlay()
     RefreshEquippedWeapons();
 }
 
+void AMyCharacter::Tick(float DeltaTime)
+{
+    Super::Tick(DeltaTime);
+    CheckForNearbyEnemies();
+}
+
 void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
     Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -102,6 +111,11 @@ float AMyCharacter::TakeDamage(
     // Réduction de la santé du joueur
     Health -= DamageAmount;
     UE_LOG(LogTemp, Warning, TEXT("Player took damage! Current Health: %f"), Health);
+
+    GetWorldTimerManager().ClearTimer(RegenTickTimer);
+    GetWorldTimerManager().ClearTimer(RegenStartTimer);
+
+    GetWorldTimerManager().SetTimer(RegenStartTimer, this, &AMyCharacter::StartHealthRegen, TimeBeforeRegenStarts, false);
 
     // Vérification si la santé est à zéro
     if (Health <= 0.0f)
@@ -179,10 +193,70 @@ void AMyCharacter::RefreshEquippedWeapons()
     HUDWidgetInstance->BindWeaponToHUD(this);
 }
 
+void AMyCharacter::GainWeaponXP(int32 Xp)
+{
+    if (CurrentWeapon)
+    {
+        CurrentWeapon->GainXP(Xp);
+    }
+}
+
 void AMyCharacter::UseWeapon()
 {
 	if (CurrentWeapon)
 	{
 		CurrentWeapon->Attack();
 	}
+}
+
+void AMyCharacter::StartHealthRegen()
+{
+    if (Health >= MaxHealth || bIsEnemyNearby) return;
+
+    GetWorldTimerManager().SetTimer(RegenTickTimer, this, &AMyCharacter::RegenHealth, RegenInterval, true);
+}
+
+void AMyCharacter::RegenHealth()
+{
+    Health = FMath::Clamp(Health + RegenAmount, 0.0f, MaxHealth);
+    HUDWidgetInstance->BindHpToHUD(this);
+
+    if (Health >= MaxHealth)
+    {
+        GetWorldTimerManager().ClearTimer(RegenTickTimer);
+    }
+}
+
+void AMyCharacter::CheckForNearbyEnemies()
+{
+    bIsEnemyNearby = false;
+
+    FVector PlayerLocation = GetActorLocation();
+    TArray<FOverlapResult> Overlaps;
+
+    FCollisionShape Sphere = FCollisionShape::MakeSphere(EnemyProximityRadius);
+
+    bool bHit = GetWorld()->OverlapMultiByObjectType(
+        Overlaps,
+        PlayerLocation,
+        FQuat::Identity,
+        FCollisionObjectQueryParams(ECollisionChannel::ECC_Pawn),
+        Sphere
+    );
+
+    if (bHit)
+    {
+        for (auto& Result : Overlaps)
+        {
+            AActor* OtherActor = Result.GetActor();
+            if (OtherActor && OtherActor != this && OtherActor->IsA<AEnemyBase>())
+            {
+                bIsEnemyNearby = true;
+                GetWorldTimerManager().ClearTimer(RegenTickTimer);
+                GetWorldTimerManager().ClearTimer(RegenStartTimer);
+                GetWorldTimerManager().SetTimer(RegenStartTimer, this, &AMyCharacter::StartHealthRegen, TimeBeforeRegenStarts, false);
+                break;
+            }
+        }
+    }
 }
