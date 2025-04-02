@@ -26,7 +26,10 @@ public:
     EWeaponType WeaponType;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-    int32 Level;
+    int32 WeaponLevel = 1;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+    int32 MaxWeaponLevel = 5;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
     int32 XP;
@@ -36,6 +39,12 @@ public:
 
     UPROPERTY(EditAnywhere, Instanced, BlueprintReadWrite, Category = "Weapon")
     UWeaponEffect* WeaponEffect;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")
+    bool bCanAttack = true;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")
+    float AttackCooldown = 5.0f;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "InventoryUI")
     FName WeaponName;
@@ -48,9 +57,19 @@ public:
 
 	ACharacter* Owner;
 
+    FTimerHandle AttackTimer;
+
     UFUNCTION(BlueprintCallable, Category = "Weapon")
     virtual void Attack();
 
     UFUNCTION(BlueprintCallable, Category = "Weapon")
     void GainXP(int32 Amount);
+
+    void ResetAttackCooldown();
+
+    UFUNCTION(BlueprintCallable, Category = "Weapon")
+    virtual void LevelUp();
+
+    UFUNCTION(BlueprintCallable, Category = "Weapon")
+    virtual void ApplyWeaponLevelEffects();
 };

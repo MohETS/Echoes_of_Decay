@@ -5,22 +5,24 @@ ARangedWeapon::ARangedWeapon()
 {
     WeaponType = EWeaponType::Ranged;
 	WeaponName = "Bow";
-	ProjectileDamage = 15.0f;
+}
+
+void ARangedWeapon::ApplyWeaponLevelEffects()
+{
+    ProjectileDamage *= 1.1;
 }
 
 void ARangedWeapon::Attack()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Ranged Weapon %s used attack!"), *WeaponName.ToString());
-    if (ProjectileClass)
-    {
-        FVector MuzzleLocation = Owner->GetActorLocation() + Owner->GetActorForwardVector() * 100.0f;
-        FRotator MuzzleRotation = Owner->GetActorRotation();
+    if (!bCanAttack || !ProjectileClass || !Owner) return;
 
-        AProjectile* SpawnedProjectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, MuzzleLocation, MuzzleRotation);
-        if (SpawnedProjectile)
-        {
-			SpawnedProjectile->ProjectileOwner = this;
-            UE_LOG(LogTemp, Warning, TEXT("Projectile spawned successfully!"));
-        }
-    }
+
+    FVector MuzzleLocation = Owner->GetActorLocation() + Owner->GetActorForwardVector() * 100.0f;
+    FRotator MuzzleRotation = Owner->GetActorRotation();
+
+    AProjectile* SpawnedProjectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, MuzzleLocation, MuzzleRotation);
+    if (!SpawnedProjectile) return;
+
+	SpawnedProjectile->ProjectileOwner = this;
+    GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &ARangedWeapon::ResetAttackCooldown, AttackCooldown, false);
 }

@@ -18,5 +18,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Buff")
 	float BuffMultiplier;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "XP")
+	int32 XpGainAtUse = 2.0f;
+
 	virtual void Attack() override;
+
+	virtual void ApplyWeaponLevelEffects() override;
 };

@@ -1,22 +1,24 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "BUIUserWidget.h"
 #include "BUIUWWeaponAbilityContainer.h"
-#include <Components/ProgressBar.h>
+#include "Components/ProgressBar.h"
 #include "BUIUWCharacterHUD.generated.h"
 
-/**
- * 
- */
+class AMyCharacter;
+
 UCLASS()
 class UI_API UBUIUWCharacterHUD : public UBUIUserWidget
 {
 	GENERATED_BODY()
 	
 public:
+	UFUNCTION(BlueprintCallable)
+	void BindWeaponToHUD(AMyCharacter* Player);
+
+	UFUNCTION(BlueprintCallable)
+	void BindHpToHUD(AMyCharacter* Player);
 
 protected:
 

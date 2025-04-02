@@ -6,6 +6,8 @@
 #include "Inventory/InventoryItem.h"
 #include "CollectibleItem.generated.h"
 
+class USphereComponent;
+
 UCLASS(Blueprintable, BlueprintType)
 class ECHOES_OF_DECAY_API ACollectibleItem : public AActor
 {
@@ -31,6 +33,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
 	EItemType ItemType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
+	USphereComponent* CollisionComponent;
 
 	UFUNCTION()
 	void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);

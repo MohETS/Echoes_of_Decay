@@ -1,7 +1,6 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "BUIUWCharacterHUD.h"
+#include "Echoes_of_Decay/Public/MyCharacter.h"
+
 
 void UBUIUWCharacterHUD::NativeConstruct()
 {
@@ -39,4 +38,16 @@ void UBUIUWCharacterHUD::WeaponSelected(UBUIUWWeaponAbilityContainer* button)
 	else {
 		UE_LOG(LogTemp, Error, TEXT("The WeaponAbility has not been initialized"));
 	}
+}
+
+void UBUIUWCharacterHUD::BindWeaponToHUD(AMyCharacter* Player)
+{
+	WeaponAbilityContainer1->SetUIComponent(Player->EquippedWeapons[0]);
+	WeaponAbilityContainer2->SetUIComponent(Player->EquippedWeapons[1]);
+	WeaponAbilityContainer3->SetUIComponent(Player->EquippedWeapons[2]);
+}
+
+void UBUIUWCharacterHUD::BindHpToHUD(AMyCharacter* Player)
+{
+	PlayerHealth->SetPercent(Player->Health / Player->MaxHealth);
 }
