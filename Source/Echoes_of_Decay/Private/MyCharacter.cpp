@@ -46,10 +46,30 @@ void AMyCharacter::BeginPlay()
         Inventory->InventoryWidget->Weapon2->OnItemChanged.AddDynamic(this, &AMyCharacter::RefreshEquippedWeapons);
         Inventory->InventoryWidget->Weapon3->OnItemChanged.AddDynamic(this, &AMyCharacter::RefreshEquippedWeapons);
     }
-    else
+
+    if (HUDWidgetClass)
     {
-        UE_LOG(LogTemp, Error, TEXT("Widget or slots are not ready in BeginPlay"));
+        HUDWidgetInstance = CreateWidget<UBUIUWCharacterHUD>(GetWorld(), HUDWidgetClass);
+        if (HUDWidgetInstance)
+        {
+            HUDWidgetInstance->AddToViewport();
+
+            HUDWidgetInstance->BindWeaponToHUD(this);
+            HUDWidgetInstance->BindHpToHUD(this);
+        }
     }
+
+    if (EquippedWeapons[0])
+    {
+        SwitchToWeapon1();
+        UInventoryItem* NewItem = NewObject<UInventoryItem>(Inventory->InventoryWidget);
+        NewItem->SetWeaponClass(EquippedWeapons[0]);
+        NewItem->ItemWidget = CreateWidget<UInventoryItemWidget>(Inventory->InventoryWidget, Inventory->InventoryItemWidgetClass);
+        NewItem->ItemWidget->SetItemData(NewItem, Inventory->InventoryWidget);
+        Inventory->InventoryWidget->Weapon1->SetItem(NewItem->ItemWidget);
+    }
+
+    RefreshEquippedWeapons();
 }
 
 void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -90,6 +110,8 @@ float AMyCharacter::TakeDamage(
         // Ici, tu peux déclencher une animation de mort, un respawn, etc.
         Destroy(); // Supprime le personnage de la scène
     }
+
+    HUDWidgetInstance->BindHpToHUD(this);
 
     return DamageAmount;
 }
@@ -154,6 +176,7 @@ void AMyCharacter::RefreshEquippedWeapons()
             UE_LOG(LogTemp, Warning, TEXT("Slot %d is empty"), i + 1);
         }
     }
+    HUDWidgetInstance->BindWeaponToHUD(this);
 }
 
 void AMyCharacter::UseWeapon()

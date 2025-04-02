@@ -13,11 +13,12 @@ class ECHOES_OF_DECAY_API ARangedWeapon : public AWeaponBase
 public:
 	ARangedWeapon();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ranged")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	TSubclassOf<AProjectile> ProjectileClass;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ranged")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	float ProjectileDamage;
 
 	virtual void Attack() override;
+	virtual void BeginPlay() override;
 };

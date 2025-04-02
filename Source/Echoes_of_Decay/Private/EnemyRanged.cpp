@@ -9,11 +9,10 @@ void AEnemyRanged::AttackPlayer()
 {
     UE_LOG(LogTemp, Warning, TEXT("Ranged Enemy Shooting!"));
 
-    if (ProjectileClass && PlayerPawn)
-    {
-        FVector SpawnLocation = GetActorLocation() + GetActorForwardVector() * 100.0f;
-        FRotator SpawnRotation = (PlayerPawn->GetActorLocation() - GetActorLocation()).Rotation();
-
-        GetWorld()->SpawnActor<AProjectile>(ProjectileClass, SpawnLocation, SpawnRotation);
-    }
+    if (!ProjectileClass || !PlayerPawn) return;
+    
+    EnemyState = EEnemyState::Attacking;
+    FVector SpawnLocation = GetActorLocation() + GetActorForwardVector() * 100.0f;
+    FRotator SpawnRotation = (PlayerPawn->GetActorLocation() - GetActorLocation()).Rotation();
+    GetWorld()->SpawnActor<AProjectile>(ProjectileClass, SpawnLocation, SpawnRotation);
 }

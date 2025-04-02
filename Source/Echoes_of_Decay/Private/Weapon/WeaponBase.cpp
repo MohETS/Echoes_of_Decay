@@ -33,3 +33,9 @@ void AWeaponBase::GainXP(int32 Amount)
 		UE_LOG(LogTemp, Warning, TEXT("Weapon %s leveled up! Level: %d"), *WeaponName.ToString(), Level);
 	}
 }
+
+void AWeaponBase::ResetAttackCooldown()
+{
+	bCanAttack = true;
+	UE_LOG(LogTemp, Warning, TEXT("Attack cooldown reset!"));
+}

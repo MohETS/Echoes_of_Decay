@@ -37,6 +37,12 @@ public:
     UPROPERTY(EditAnywhere, Instanced, BlueprintReadWrite, Category = "Weapon")
     UWeaponEffect* WeaponEffect;
 
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")
+    bool bCanAttack = true;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")
+    float AttackCooldown = 5.0f;
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "InventoryUI")
     FName WeaponName;
 
@@ -48,9 +54,13 @@ public:
 
 	ACharacter* Owner;
 
+    FTimerHandle AttackTimer;
+
     UFUNCTION(BlueprintCallable, Category = "Weapon")
     virtual void Attack();
 
     UFUNCTION(BlueprintCallable, Category = "Weapon")
     void GainXP(int32 Amount);
+
+    void ResetAttackCooldown();
 };
