@@ -11,7 +11,7 @@ AMeleeWeapon::AMeleeWeapon()
    AttackRange = 200.0f;  
    AttackDamage = 20.0f;  
 }  
-void UWeaponEffect::ApplyEffect_Implementation(AActor* Target, AActor* Instigator) {} 
+
 void AMeleeWeapon::Attack()  
 {  
     if (!bCanAttack) return;
