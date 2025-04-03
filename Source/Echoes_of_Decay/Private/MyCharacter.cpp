@@ -3,6 +3,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "Engine/World.h"
 #include "Components/ArrowComponent.h"
+#include "EnemyBase.h"
+#include "Engine/OverlapResult.h"  
 
 #include "AkGameplayStatics.h"
 #include "../Plugins/WwiseSoundEngine/ThirdParty/include/AK/SoundEngine/Common/AkSoundEngine.h"
@@ -30,6 +32,7 @@ void AMyCharacter::BeginPlay()
 {
     Super::BeginPlay();
 
+    Health = MaxHealth;
     FRotator CurrentRotation = MyArrowComponent->GetComponentRotation();
     // CurrentRotation.Yaw = 0.0f; // Bloque la rotation autour de l'axe Yaw (Z)
     // MyArrowComponent->SetWorldRotation(CurrentRotation); // Applique cette rotation bloquée
@@ -52,10 +55,36 @@ void AMyCharacter::BeginPlay()
         Inventory->InventoryWidget->Weapon2->OnItemChanged.AddDynamic(this, &AMyCharacter::RefreshEquippedWeapons);
         Inventory->InventoryWidget->Weapon3->OnItemChanged.AddDynamic(this, &AMyCharacter::RefreshEquippedWeapons);
     }
-    else
+
+    if (HUDWidgetClass)
     {
-        UE_LOG(LogTemp, Error, TEXT("Widget or slots are not ready in BeginPlay"));
+        HUDWidgetInstance = CreateWidget<UBUIUWCharacterHUD>(GetWorld(), HUDWidgetClass);
+        if (HUDWidgetInstance)
+        {
+            HUDWidgetInstance->AddToViewport();
+
+            HUDWidgetInstance->BindWeaponToHUD(this);
+            HUDWidgetInstance->BindHpToHUD(this);
+        }
     }
+
+    if (EquippedWeapons[0])
+    {
+        SwitchToWeapon1();
+        UInventoryItem* NewItem = NewObject<UInventoryItem>(Inventory->InventoryWidget);
+        NewItem->SetWeaponClass(EquippedWeapons[0]);
+        NewItem->ItemWidget = CreateWidget<UInventoryItemWidget>(Inventory->InventoryWidget, Inventory->InventoryItemWidgetClass);
+        NewItem->ItemWidget->SetItemData(NewItem, Inventory->InventoryWidget);
+        Inventory->InventoryWidget->Weapon1->SetItem(NewItem->ItemWidget);
+    }
+
+    RefreshEquippedWeapons();
+}
+
+void AMyCharacter::Tick(float DeltaTime)
+{
+    Super::Tick(DeltaTime);
+    CheckForNearbyEnemies();
 }
 
 void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -90,6 +119,11 @@ float AMyCharacter::TakeDamage(
     Health -= DamageAmount;
     UE_LOG(LogTemp, Warning, TEXT("Player took damage! Current Health: %f"), Health);
 
+    GetWorldTimerManager().ClearTimer(RegenTickTimer);
+    GetWorldTimerManager().ClearTimer(RegenStartTimer);
+
+    GetWorldTimerManager().SetTimer(RegenStartTimer, this, &AMyCharacter::StartHealthRegen, TimeBeforeRegenStarts, false);
+
     // Vérification si la santé est à zéro
     if (Health <= 0.0f)
     {
@@ -105,6 +139,8 @@ float AMyCharacter::TakeDamage(
         }
         Destroy(); // Supprime le personnage de la scène
     }
+
+    HUDWidgetInstance->BindHpToHUD(this);
 
     return DamageAmount;
 }
@@ -169,6 +205,15 @@ void AMyCharacter::RefreshEquippedWeapons()
             UE_LOG(LogTemp, Warning, TEXT("Slot %d is empty"), i + 1);
         }
     }
+    HUDWidgetInstance->BindWeaponToHUD(this);
+}
+
+void AMyCharacter::GainWeaponXP(int32 Xp)
+{
+    if (CurrentWeapon)
+    {
+        CurrentWeapon->GainXP(Xp);
+    }
 }
 
 void AMyCharacter::UseWeapon()
@@ -177,4 +222,56 @@ void AMyCharacter::UseWeapon()
 	{
 		CurrentWeapon->Attack();
 	}
+}
+
+void AMyCharacter::StartHealthRegen()
+{
+    if (Health >= MaxHealth || bIsEnemyNearby) return;
+
+    GetWorldTimerManager().SetTimer(RegenTickTimer, this, &AMyCharacter::RegenHealth, RegenInterval, true);
+}
+
+void AMyCharacter::RegenHealth()
+{
+    Health = FMath::Clamp(Health + RegenAmount, 0.0f, MaxHealth);
+    HUDWidgetInstance->BindHpToHUD(this);
+
+    if (Health >= MaxHealth)
+    {
+        GetWorldTimerManager().ClearTimer(RegenTickTimer);
+    }
+}
+
+void AMyCharacter::CheckForNearbyEnemies()
+{
+    bIsEnemyNearby = false;
+
+    FVector PlayerLocation = GetActorLocation();
+    TArray<FOverlapResult> Overlaps;
+
+    FCollisionShape Sphere = FCollisionShape::MakeSphere(EnemyProximityRadius);
+
+    bool bHit = GetWorld()->OverlapMultiByObjectType(
+        Overlaps,
+        PlayerLocation,
+        FQuat::Identity,
+        FCollisionObjectQueryParams(ECollisionChannel::ECC_Pawn),
+        Sphere
+    );
+
+    if (bHit)
+    {
+        for (auto& Result : Overlaps)
+        {
+            AActor* OtherActor = Result.GetActor();
+            if (OtherActor && OtherActor != this && OtherActor->IsA<AEnemyBase>())
+            {
+                bIsEnemyNearby = true;
+                GetWorldTimerManager().ClearTimer(RegenTickTimer);
+                GetWorldTimerManager().ClearTimer(RegenStartTimer);
+                GetWorldTimerManager().SetTimer(RegenStartTimer, this, &AMyCharacter::StartHealthRegen, TimeBeforeRegenStarts, false);
+                break;
+            }
+        }
+    }
 }

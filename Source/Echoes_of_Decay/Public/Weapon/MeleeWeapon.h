@@ -19,4 +19,6 @@ public:
 	float AttackDamage;
 
 	virtual void Attack() override;
+
+	virtual void ApplyWeaponLevelEffects() override;
 };

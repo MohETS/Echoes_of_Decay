@@ -9,31 +9,33 @@ AMeleeWeapon::AMeleeWeapon()
    WeaponType = EWeaponType::Melee;  
    WeaponName = "Sword";  
    AttackRange = 200.0f;  
-   AttackDamage = 0.0f;  
+   AttackDamage = 20.0f;  
 }  
 
 void AMeleeWeapon::Attack()  
 {  
-   UE_LOG(LogTemp, Warning, TEXT("Melee Weapon %s used attack!"), *WeaponName.ToString());  
-   FVector Start = Owner->GetActorLocation();  
-   FVector End = Start + Owner->GetActorForwardVector() * AttackRange;  
+    if (!bCanAttack) return;
 
-   FHitResult HitResult;  
-   FCollisionQueryParams Params;  
-   Params.AddIgnoredActor(Owner);  
+    FVector Start = Owner->GetActorLocation();  
+    FVector End = Start + Owner->GetActorForwardVector() * AttackRange;  
 
-   if (GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Pawn, Params))  
-   {  
-       AActor* HitActor = HitResult.GetActor();  
-       if (HitActor)  
-       {  
-           UE_LOG(LogTemp, Warning, TEXT("Hit %s!"), *HitActor->GetName());  
-           UGameplayStatics::ApplyDamage(HitActor, AttackDamage, Owner->GetInstigatorController(), this, nullptr);  
+    FHitResult HitResult;  
+    FCollisionQueryParams Params;  
+    Params.AddIgnoredActor(Owner);  
 
-           if (WeaponEffect)  
-           {  
-               WeaponEffect->ApplyEffect(HitActor, Owner);  
-           }  
-       }  
-   }  
+    if (!GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Pawn, Params))  return;
+
+    AActor* HitActor = HitResult.GetActor();  
+    if (!HitActor) return;
+
+    UGameplayStatics::ApplyDamage(HitActor, AttackDamage, Owner->GetInstigatorController(), Owner, nullptr);  
+    GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AMeleeWeapon::ResetAttackCooldown, AttackCooldown, false);
+
+    if (!WeaponEffect) return;
+    WeaponEffect->ApplyEffect(HitActor, Owner);  
+}
+
+void AMeleeWeapon::ApplyWeaponLevelEffects()
+{
+    AttackDamage = AttackDamage * 1.1;
 }
