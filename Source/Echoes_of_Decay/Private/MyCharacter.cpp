@@ -11,15 +11,12 @@ AMyCharacter::AMyCharacter()
     MyArrowComponent = CreateDefaultSubobject<UArrowComponent>(TEXT("TIRE"));
     MyArrowComponent->SetupAttachment(GetMesh());
     MyArrowComponent->SetHiddenInGame(false);
-    MyArrowComponent->SetVisibility(true, true);
+    MyArrowComponent->SetVisibility(false, false);
    // MyArrowComponent->SetAbsolute(false, true, false);
 
     Inventory = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
 
     EquippedWeapons.Init(nullptr, 3);
-
-    // Assigner les classes d'arme
-
 
     CurrentWeapon = nullptr;
 
@@ -33,7 +30,6 @@ AMyCharacter::AMyCharacter()
         // Attache l'arme au Skeletal Mesh du personnage
         WeaponChildActor->SetupAttachment(GetMesh(), TEXT("items"));
     }
-
 }
 
 void AMyCharacter::BeginPlay()
@@ -44,7 +40,6 @@ void AMyCharacter::BeginPlay()
     FRotator CurrentRotation = MyArrowComponent->GetComponentRotation();
     // CurrentRotation.Yaw = 0.0f; // Bloque la rotation autour de l'axe Yaw (Z)
     // MyArrowComponent->SetWorldRotation(CurrentRotation); // Applique cette rotation bloqu�e
-
 
     // Add the default mapping context to the player's input subsystem
     if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
@@ -70,7 +65,6 @@ void AMyCharacter::BeginPlay()
         if (HUDWidgetInstance)
         {
             HUDWidgetInstance->AddToViewport();
-
             HUDWidgetInstance->BindWeaponToHUD(this);
             HUDWidgetInstance->BindHpToHUD(this);
         }
@@ -104,8 +98,6 @@ void AMyCharacter::Tick(float DeltaTime)
 void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
     Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-    PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AMyCharacter::FireProjectile);
 
     UEnhancedInputComponent* EnhancedInput = Cast<UEnhancedInputComponent>(PlayerInputComponent);
     if (EnhancedInput)
@@ -177,8 +169,6 @@ void AMyCharacter::SwitchWeapon(int32 SlotIndex)
 void AMyCharacter::SwitchToWeapon1()
 {
     SwitchWeapon(0);
-    UE_LOG(LogTemp, Warning, TEXT("Devendra oh yeah"));
-    
 }
 
 void AMyCharacter::SwitchToWeapon2()
@@ -217,10 +207,6 @@ void AMyCharacter::RefreshEquippedWeapons()
 
                 UE_LOG(LogTemp, Warning, TEXT("Slot %d -> %s"), i + 1, *WeaponInstance->WeaponName.ToString());
             }
-        }
-        else
-        {
-            UE_LOG(LogTemp, Warning, TEXT("Slot %d is empty"), i + 1);
         }
     }
 

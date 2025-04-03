@@ -6,7 +6,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "TimerManager.h"
-#include "InventoryComponent.h"
+#include "Inventory/InventoryComponent.h"
 #include "Weapon/WeaponBase.h"
 #include "UI/Public/BUIUWCharacterHUD.h"
 #include "Components/ChildActorComponent.h"
@@ -32,9 +32,6 @@ public:
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	// --- COMBAT --- //
-
-	UFUNCTION()
-    void FireProjectile();
 
 	// Projectile class to spawn
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
@@ -76,15 +73,11 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
     UChildActorComponent* WeaponChildActor;
 
-
     UPROPERTY(VisibleAnywhere, Category = "Inventory")
     UInventoryComponent* Inventory;
 
     UFUNCTION()
     void ToggleInventory();
-
-
-   
 
 	// --- WEAPON --- //
 
@@ -96,13 +89,6 @@ public:
 
     UPROPERTY(EditAnywhere, Instanced, BlueprintReadWrite, Category = "Weapon")
     AWeaponBase* CurrentWeapon;
-
-    //ajout de dev 
-
-
-
-
-
 
     UFUNCTION(BlueprintCallable, Category = "Weapon")
     void SwitchWeapon(int32 SlotIndex);
