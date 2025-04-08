@@ -1,4 +1,4 @@
-#include "EnemyRanged.h"
+#include "Enemies/EnemyRanged.h"
 #include "Kismet/GameplayStatics.h"
 #include "AIController.h"
 

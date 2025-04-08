@@ -63,6 +63,15 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
 	float Health = 100.0f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
+	float MaxHealth = 100.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
+	float EnemyProximityRadius = 1000.0f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
+	bool bIsPlayerNearby = false;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	float Damage = 20.0f;
 
@@ -78,11 +87,29 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Level")
 	int32 XpAtDeath = 10;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	TSubclassOf<class UUserWidget> HealthBarWidgetClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	class UWidgetComponent* HealthBarWidget;
+
 	// Timer pour la patrouille et l'attaque
 	FTimerHandle PatrolTimer;
 	FTimerHandle AttackTimerHandle;
 
 	AAIController* AIController;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Regen")
+	float TimeBeforeRegenStarts = 10.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Regen")
+	float RegenAmount = 5.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Regen")
+	float RegenInterval = 0.5f;
+
+	FTimerHandle RegenStartTimer;
+	FTimerHandle RegenTickTimer;
 
 	// Joueur
 	APawn* PlayerPawn;
@@ -109,4 +136,16 @@ protected:
 		AController* EventInstigator,
 		AActor* DamageCauser
 	) override;
+
+	UFUNCTION()
+	void StartHealthRegen();
+
+	UFUNCTION()
+	void RegenHealth();
+	
+	UFUNCTION(BlueprintCallable)
+	void UpdateHealthBar();
+
+	UFUNCTION()
+	void CheckForNearbyPlayer();
 };

@@ -1,6 +1,4 @@
-// EnemyBase.cpp
-
-#include "EnemyBase.h"
+#include "Enemies/EnemyBase.h"
 #include "AIController.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -11,7 +9,11 @@
 #include "Perception/AISense.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "TimerManager.h"
+#include "Components/WidgetComponent.h"
+#include "Components/ProgressBar.h"
+#include "Enemies/EnemyHealthBar.h"
 #include "MyCharacter.h"
+#include "Engine/OverlapResult.h"
 
 // Sets default values
 AEnemyBase::AEnemyBase()
@@ -55,6 +57,12 @@ AEnemyBase::AEnemyBase()
     GetCharacterMovement()->bUseControllerDesiredRotation = true;
     GetCharacterMovement()->bOrientRotationToMovement = true;
 
+    HealthBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HealthBarWidget"));
+    HealthBarWidget->SetupAttachment(RootComponent);
+    HealthBarWidget->SetWidgetSpace(EWidgetSpace::Screen);
+    HealthBarWidget->SetDrawSize(FVector2D(150.f, 20.f));
+    HealthBarWidget->SetWidgetClass(HealthBarWidgetClass);
+
     // Set up the AI controller
     AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 }
@@ -94,6 +102,8 @@ void AEnemyBase::Tick(float DeltaTime)
     {
         AttackPlayer();
     }
+
+    CheckForNearbyPlayer();
 }
 
 void AEnemyBase::OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
@@ -193,8 +203,77 @@ float AEnemyBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
     float ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
     Health -= ActualDamage;
     UE_LOG(LogTemp, Warning, TEXT("Enemy received %f damage. Health remaining: %f"), ActualDamage, Health);
+    GetWorldTimerManager().ClearTimer(RegenTickTimer);
+    GetWorldTimerManager().ClearTimer(RegenStartTimer);
+
+    GetWorldTimerManager().SetTimer(RegenStartTimer, this, &AEnemyBase::StartHealthRegen, TimeBeforeRegenStarts, false);
+    UpdateHealthBar();
     if (Health <= 0.0f) Die(DamageCauser);
     return ActualDamage;
+}
+
+void AEnemyBase::StartHealthRegen()
+{
+    if (Health >= MaxHealth || bIsPlayerNearby) return;
+
+    GetWorldTimerManager().SetTimer(RegenTickTimer, this, &AEnemyBase::RegenHealth, RegenInterval, true);
+}
+
+void AEnemyBase::RegenHealth()
+{
+    Health = FMath::Clamp(Health + RegenAmount, 0.0f, MaxHealth);
+    UpdateHealthBar();
+
+    if (Health >= MaxHealth)
+    {
+        GetWorldTimerManager().ClearTimer(RegenTickTimer);
+    }
+}
+
+void AEnemyBase::UpdateHealthBar()
+{
+    if (HealthBarWidget)
+    {
+        UEnemyHealthBar* HealthBar = Cast<UEnemyHealthBar>(HealthBarWidget->GetUserWidgetObject());
+        if (HealthBar)
+        {
+            HealthBar->UpdateHealthBar(Health, MaxHealth);
+        }
+    }
+}
+
+void AEnemyBase::CheckForNearbyPlayer()
+{
+    bIsPlayerNearby = false;
+
+    FVector PlayerLocation = GetActorLocation();
+    TArray<FOverlapResult> Overlaps;
+
+    FCollisionShape Sphere = FCollisionShape::MakeSphere(EnemyProximityRadius);
+
+    bool bHit = GetWorld()->OverlapMultiByObjectType(
+        Overlaps,
+        PlayerLocation,
+        FQuat::Identity,
+        FCollisionObjectQueryParams(ECollisionChannel::ECC_Pawn),
+        Sphere
+    );
+
+    if (bHit)
+    {
+        for (auto& Result : Overlaps)
+        {
+            AActor* OtherActor = Result.GetActor();
+            if (OtherActor && OtherActor != this && OtherActor->IsA<AMyCharacter>())
+            {
+                bIsPlayerNearby = true;
+                GetWorldTimerManager().ClearTimer(RegenTickTimer);
+                GetWorldTimerManager().ClearTimer(RegenStartTimer);
+                GetWorldTimerManager().SetTimer(RegenStartTimer, this, &AEnemyBase::StartHealthRegen, TimeBeforeRegenStarts, false);
+                break;
+            }
+        }
+    }
 }
 
 void AEnemyBase::Die(AActor* Killer)

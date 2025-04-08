@@ -3,7 +3,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Engine/World.h"
 #include "Components/ArrowComponent.h"
-#include "EnemyBase.h"
+#include "Enemies/EnemyBase.h"
 #include "Engine/OverlapResult.h"  
 
 AMyCharacter::AMyCharacter()
