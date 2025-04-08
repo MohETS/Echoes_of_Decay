@@ -79,7 +79,10 @@ public:
 	// --- WEAPON --- //
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-    TArray<TSubclassOf<AWeaponBase>> EquippedWeapons;
+    TArray<AWeaponBase*> EquippedWeapons;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+    TSubclassOf<AWeaponBase> StartingWeapon;
 
     UPROPERTY(EditAnywhere, Instanced, BlueprintReadWrite, Category = "Weapon")
     AWeaponBase* CurrentWeapon;

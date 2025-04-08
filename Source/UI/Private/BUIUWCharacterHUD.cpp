@@ -42,9 +42,9 @@ void UBUIUWCharacterHUD::WeaponSelected(UBUIUWWeaponAbilityContainer* button)
 
 void UBUIUWCharacterHUD::BindWeaponToHUD(AMyCharacter* Player)
 {
-	WeaponAbilityContainer1->SetUIComponent(Player->EquippedWeapons[0]);
-	WeaponAbilityContainer2->SetUIComponent(Player->EquippedWeapons[1]);
-	WeaponAbilityContainer3->SetUIComponent(Player->EquippedWeapons[2]);
+	!Player->EquippedWeapons[0] ? WeaponAbilityContainer1->SetUIComponent(nullptr) : WeaponAbilityContainer1->SetUIComponent(Player->EquippedWeapons[0]->GetClass());
+	!Player->EquippedWeapons[1] ? WeaponAbilityContainer2->SetUIComponent(nullptr) : WeaponAbilityContainer2->SetUIComponent(Player->EquippedWeapons[1]->GetClass());
+	!Player->EquippedWeapons[2] ? WeaponAbilityContainer3->SetUIComponent(nullptr) : WeaponAbilityContainer3->SetUIComponent(Player->EquippedWeapons[2]->GetClass());
 }
 
 void UBUIUWCharacterHUD::BindHpToHUD(AMyCharacter* Player)

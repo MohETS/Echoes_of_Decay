@@ -62,15 +62,21 @@ void AMyCharacter::BeginPlay()
         }
     }
 
-    if (EquippedWeapons[0])
-    {
-        SwitchToWeapon1();
-        UInventoryItem* NewItem = NewObject<UInventoryItem>(Inventory->InventoryWidget);
-        NewItem->SetWeaponClass(EquippedWeapons[0]);
-        NewItem->ItemWidget = CreateWidget<UInventoryItemWidget>(Inventory->InventoryWidget, Inventory->InventoryItemWidgetClass);
-        NewItem->ItemWidget->SetItemData(NewItem, Inventory->InventoryWidget);
-        Inventory->InventoryWidget->Weapon1->SetItem(NewItem->ItemWidget);
-    }
+	if (StartingWeapon)
+	{
+		CurrentWeapon = GetWorld()->SpawnActor<AWeaponBase>(StartingWeapon);
+		if (CurrentWeapon)
+		{
+            EquippedWeapons[0] = CurrentWeapon;
+			CurrentWeapon->Owner = this;
+            SwitchToWeapon1();
+            UInventoryItem* NewItem = NewObject<UInventoryItem>(Inventory->InventoryWidget);
+            NewItem->SetWeaponClass(EquippedWeapons[0]->GetClass());
+            NewItem->ItemWidget = CreateWidget<UInventoryItemWidget>(Inventory->InventoryWidget, Inventory->InventoryItemWidgetClass);
+            NewItem->ItemWidget->SetItemData(NewItem, Inventory->InventoryWidget);
+            Inventory->InventoryWidget->Weapon1->SetItem(NewItem->ItemWidget);
+		}
+	}
 
     RefreshEquippedWeapons();
 }
@@ -96,7 +102,6 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
     }
 }
 
-// Implémentation de la réception de dégâts
 float AMyCharacter::TakeDamage(
     float DamageAmount,
     struct FDamageEvent const& DamageEvent,
@@ -108,7 +113,6 @@ float AMyCharacter::TakeDamage(
         return 0.0f;
     }
 
-    // Réduction de la santé du joueur
     Health -= DamageAmount;
     UE_LOG(LogTemp, Warning, TEXT("Player took damage! Current Health: %f"), Health);
 
@@ -117,12 +121,10 @@ float AMyCharacter::TakeDamage(
 
     GetWorldTimerManager().SetTimer(RegenStartTimer, this, &AMyCharacter::StartHealthRegen, TimeBeforeRegenStarts, false);
 
-    // Vérification si la santé est à zéro
     if (Health <= 0.0f)
     {
         UE_LOG(LogTemp, Warning, TEXT("Player Died!"));
-        // Ici, tu peux déclencher une animation de mort, un respawn, etc.
-        Destroy(); // Supprime le personnage de la scène
+        Destroy();
     }
 
     HUDWidgetInstance->BindHpToHUD(this);
@@ -137,10 +139,17 @@ void AMyCharacter::ToggleInventory()
 
 void AMyCharacter::SwitchWeapon(int32 SlotIndex)
 {
+    if (CurrentWeapon)
+    {
+        CurrentWeapon->SetActorHiddenInGame(true);
+        CurrentWeapon->SetActorEnableCollision(false);
+    }
+
     if (EquippedWeapons.IsValidIndex(SlotIndex) && EquippedWeapons[SlotIndex])
     {
-        CurrentWeapon = GetWorld()->SpawnActor<AWeaponBase>(EquippedWeapons[SlotIndex]);
-		CurrentWeapon->Owner = this;
+        CurrentWeapon = EquippedWeapons[SlotIndex];
+        CurrentWeapon->SetActorHiddenInGame(false);
+        CurrentWeapon->SetActorEnableCollision(true);
         UE_LOG(LogTemp, Warning, TEXT("Switched to weapon: %s"), *CurrentWeapon->WeaponName.ToString());
     }
     else
@@ -182,14 +191,21 @@ void AMyCharacter::RefreshEquippedWeapons()
 
         if (Slot && Slot->ItemWidget && Slot->ItemWidget->ItemData && Slot->ItemWidget->ItemData->WeaponClass)
         {
-            EquippedWeapons[i] = Slot->ItemWidget->ItemData->WeaponClass;
-            UE_LOG(LogTemp, Warning, TEXT("Slot %d -> %s"), i + 1, *EquippedWeapons[i]->GetName());
+            AWeaponBase* WeaponInstance = GetWorld()->SpawnActor<AWeaponBase>(Slot->ItemWidget->ItemData->WeaponClass);
+            if (WeaponInstance)
+            {
+                WeaponInstance->Owner = this;
+                EquippedWeapons[i] = WeaponInstance;
+
+                UE_LOG(LogTemp, Warning, TEXT("Slot %d -> %s"), i + 1, *WeaponInstance->WeaponName.ToString());
+            }
         }
         else
         {
             UE_LOG(LogTemp, Warning, TEXT("Slot %d is empty"), i + 1);
         }
     }
+
     HUDWidgetInstance->BindWeaponToHUD(this);
 }
 
