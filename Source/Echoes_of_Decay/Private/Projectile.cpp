@@ -2,8 +2,8 @@
 #include "Components/StaticMeshComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "EnemyBase.h"
-#include "EnemyRanged.h"
+#include "Enemies/EnemyBase.h"
+#include "Enemies/EnemyRanged.h"
 #include "Weapon/RangedWeapon.h"
 #include "GameFramework/DamageType.h"
 

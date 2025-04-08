@@ -13,6 +13,9 @@ public:
 	// Constructor
 	UWeaponEffect();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effect")
+	FName EffectName;
+
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Weapon Effect")
 	void ApplyEffect(AActor* Target, AActor* Instigator);
 };

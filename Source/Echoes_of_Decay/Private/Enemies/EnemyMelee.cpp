@@ -1,4 +1,4 @@
-#include "EnemyMelee.h"
+#include "Enemies/EnemyMelee.h"
 #include "Kismet/GameplayStatics.h"
 
 void AEnemyMelee::AttackPlayer()

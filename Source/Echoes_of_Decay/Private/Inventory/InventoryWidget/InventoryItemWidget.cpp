@@ -1,5 +1,6 @@
 #include "Inventory/InventoryWidget/InventoryItemWidget.h"
 #include "Inventory/InventoryWidget/InventorySlotWidget.h"
+#include "Inventory/InventoryWidget/WeaponTooltipWidget.h"
 #include "Inventory/InventoryDragDropOperation.h"
 #include "Blueprint/WidgetBlueprintLibrary.h"
 
@@ -58,6 +59,30 @@ void UInventoryItemWidget::NativeOnDragDetected(const FGeometry& InGeometry, con
     DragOperation->TargetWidget = nullptr;
 
     OutOperation = DragOperation;
+}
+
+void UInventoryItemWidget::NativeOnMouseEnter(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
+{
+    Super::NativeOnMouseEnter(InGeometry, InMouseEvent);
+
+    if (TooltipWidgetClass && ItemData && ItemData->WeaponClass)
+    {
+        TooltipInstance = CreateWidget<UWeaponTooltipWidget>(GetWorld(), TooltipWidgetClass);
+        TooltipInstance->SetWeaponInfo(ItemData);
+        TooltipInstance->AddToViewport();
+        TooltipInstance->ShowAtMousePosition();
+    }
+}
+
+void UInventoryItemWidget::NativeOnMouseLeave(const FPointerEvent& InMouseEvent)
+{
+    Super::NativeOnMouseLeave(InMouseEvent);
+
+    if (TooltipInstance && !TooltipInstance->bJustAppeared)
+    {
+        TooltipInstance->RemoveFromParent();
+        TooltipInstance = nullptr;
+    }
 }
 
 void UInventoryItemWidget::NativeOnDragCancelled(const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation)

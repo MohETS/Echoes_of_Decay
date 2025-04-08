@@ -10,6 +10,7 @@
 
 class UInventorySlotWidget;
 class UInventoryWidget;
+class UWeaponTooltipWidget;
 
 UCLASS()
 class ECHOES_OF_DECAY_API UInventoryItemWidget : public UUserWidget
@@ -35,6 +36,11 @@ public:
     UPROPERTY(BlueprintReadOnly, Category = "Inventory")
     UInventoryWidget* OwningInventoryWidget = nullptr;
 
+    UPROPERTY(EditDefaultsOnly, Category = "UI")
+    TSubclassOf<UWeaponTooltipWidget> TooltipWidgetClass;
+
+    UWeaponTooltipWidget* TooltipInstance;
+
     UFUNCTION(BlueprintCallable, Category = "Item")
     void SetItemData(UInventoryItem* Item, UInventoryWidget* InInventory);
 
@@ -55,4 +61,6 @@ protected:
     virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
     virtual void NativeOnDragCancelled(const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation) override;
     virtual void NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UDragDropOperation*& OutOperation) override;
+    virtual void NativeOnMouseEnter(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
+    virtual void NativeOnMouseLeave(const FPointerEvent& InMouseEvent) override;
 };
