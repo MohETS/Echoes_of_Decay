@@ -75,7 +75,6 @@ bool UInventorySlotWidget::NativeOnDrop(const FGeometry& InGeometry, const FDrag
 
     if (bIsWeaponSlotOnly && SourceSlot->SlotType == EInventorySlotType::Result && OwningInventoryWidget)
     {
-		UE_LOG(LogTemp, Warning, TEXT("Crafting !"));
         OwningInventoryWidget->ClearCraftingSlotsAfterCraft();
     }
 

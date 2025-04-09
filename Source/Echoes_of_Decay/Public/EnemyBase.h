@@ -7,6 +7,16 @@
 #include "Perception/AISenseConfig_Sight.h"
 #include "EnemyBase.generated.h"
 
+UENUM(BlueprintType)
+enum class EEnemyState : uint8
+{
+	Patrolling,
+	Chasing,
+	Attacking,
+	Dying,
+	Idle
+};
+
 UCLASS()
 class ECHOES_OF_DECAY_API AEnemyBase : public ACharacter
 {
@@ -15,6 +25,8 @@ class ECHOES_OF_DECAY_API AEnemyBase : public ACharacter
 public:
 	AEnemyBase();
 	void Die(AActor* Killer);
+
+	float GetDamage() const { return Damage; }
 
 protected:
 	// Variables liées à la détection de l'IA
@@ -28,10 +40,16 @@ protected:
 	float PatrolRadius = 500.0f;
 
 	UPROPERTY(EditAnywhere, Category = "AI")
-	float MoveSpeed = 300.0f;
+	float PatrolSpeed = 100.0f;
+
+	UPROPERTY(EditAnywhere, Category = "AI")
+	float ChaseSpeed = 300.0f;
 
 	UPROPERTY(EditAnywhere, Category = "AI")
 	float PatrolMaxDistance = 1000.0f;
+
+	UPROPERTY(EditAnywhere, Category = "AI")
+	float PatrolingTime = 10.0f;
 
 	UPROPERTY(EditAnywhere, Category = "AI")
 	FVector PatrolCenter;
@@ -42,13 +60,29 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "AI")
 	UAISenseConfig_Sight* SightConfig;
 
-	// Variables pour la santé et les dégâts
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
-	float Health = 2.0f;  // Santé de l'ennemi
+	float Health = 100.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
+	float Damage = 20.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
+	float AttackCooldown = 3.0f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Attack")
+	bool bCanAttack = true;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Attack")
+	EEnemyState EnemyState = EEnemyState::Idle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Level")
+	int32 XpAtDeath = 10;
 
 	// Timer pour la patrouille et l'attaque
 	FTimerHandle PatrolTimer;
 	FTimerHandle AttackTimerHandle;
+
+	AAIController* AIController;
 
 	// Joueur
 	APawn* PlayerPawn;
@@ -62,11 +96,11 @@ protected:
 	void OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus);
 
 	// Fonction de comportement
-	void StartAttack();
-	void StopAttack();
 	void Patrol();
 	void ChasePlayer();
 	virtual void AttackPlayer();
+
+	void ResetAttackCooldown();
 
 	// Fonction de réception des dégâts
 	virtual float TakeDamage(

@@ -67,7 +67,7 @@
 					<ChildrenList>
 						<MusicSegment Name="Background_Music_Loop" ID="{45AA1796-82BB-4A72-84AE-5600CB58C3BC}" ShortID="355101201">
 							<PropertyList>
-								<Property Name="EndPosition" Type="Real64" Value="14117.6470588235"/>
+								<Property Name="EndPosition" Type="Real64" Value="24982.0463637244"/>
 								<Property Name="Tempo" Type="Real64" Value="136"/>
 							</PropertyList>
 							<ReferenceList>
@@ -96,11 +96,11 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="MainMenuMusic" ID="{68151C5E-7435-4307-9673-0DA108CBCBD2}">
+										<AudioFileSource Name="MainGameBackgroundMusic" ID="{B0D44EB1-9841-41CA-A4EC-A6EF0A7C4679}">
 											<Language>SFX</Language>
-											<AudioFile>UI\MainMenuMusic.wav</AudioFile>
+											<AudioFile>MainGameBackgroundMusic.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="697595859"/>
+												<MediaID ID="400348503"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
@@ -113,29 +113,29 @@
 															<ObjectList Name="Clips">
 																<Reference>
 																	<Local>
-																		<MusicClip Name="MainMenuMusic" ID="{F1AF898C-3851-4C10-A276-EAD421419DA4}">
+																		<MusicClip Name="MainGameBackgroundMusic" ID="{278B60CE-8A45-4B64-A30E-16ECAA5F5A5A}">
 																			<PropertyList>
-																				<Property Name="BeginTrimOffset" Type="Real64" Value="7058.82352941176"/>
-																				<Property Name="EndTrimOffset" Type="Real64" Value="21176.462585034"/>
+																				<Property Name="BeginTrimOffset" Type="Real64" Value="34094.8697360488"/>
+																				<Property Name="EndTrimOffset" Type="Real64" Value="59076.9160997732"/>
 																				<Property Name="FadeInMode" Type="int16" Value="0"/>
 																				<Property Name="FadeOutMode" Type="int16" Value="0"/>
-																				<Property Name="PlayAt" Type="Real64" Value="-7058.82352941176"/>
+																				<Property Name="PlayAt" Type="Real64" Value="-34094.8697360488"/>
 																			</PropertyList>
-																			<AudioSourceRef Name="MainMenuMusic" ID="{68151C5E-7435-4307-9673-0DA108CBCBD2}"/>
+																			<AudioSourceRef Name="MainGameBackgroundMusic" ID="{B0D44EB1-9841-41CA-A4EC-A6EF0A7C4679}"/>
 																			<PropertyCurveList>
 																				<PropertyCurve PropertyName="Highpass">
-																					<Curve Name="" ID="{797A1A0D-5A39-45E7-8355-C649D98F90D2}">
+																					<Curve Name="" ID="{0CFC3701-0557-4911-A6D1-76B118F7AEB8}">
 																						<PropertyList>
 																							<Property Name="Flags" Type="int32" Value="1"/>
 																						</PropertyList>
 																						<PointList>
 																							<Point>
-																								<XPos>7.05882</XPos>
+																								<XPos>34.09487</XPos>
 																								<YPos>0</YPos>
 																								<Flags>5</Flags>
 																							</Point>
 																							<Point>
-																								<XPos>21.176462585034</XPos>
+																								<XPos>59.0769160997732</XPos>
 																								<YPos>0</YPos>
 																								<Flags>37</Flags>
 																							</Point>
@@ -143,18 +143,18 @@
 																					</Curve>
 																				</PropertyCurve>
 																				<PropertyCurve PropertyName="Lowpass">
-																					<Curve Name="" ID="{A29DA14F-A130-4152-8BB6-4BB26E6942C3}">
+																					<Curve Name="" ID="{8B689763-C859-44C2-916D-40D7C5C79FCB}">
 																						<PropertyList>
 																							<Property Name="Flags" Type="int32" Value="1"/>
 																						</PropertyList>
 																						<PointList>
 																							<Point>
-																								<XPos>7.05882</XPos>
+																								<XPos>34.09487</XPos>
 																								<YPos>0</YPos>
 																								<Flags>5</Flags>
 																							</Point>
 																							<Point>
-																								<XPos>21.176462585034</XPos>
+																								<XPos>59.0769160997732</XPos>
 																								<YPos>0</YPos>
 																								<Flags>37</Flags>
 																							</Point>
@@ -162,18 +162,18 @@
 																					</Curve>
 																				</PropertyCurve>
 																				<PropertyCurve PropertyName="Volume">
-																					<Curve Name="" ID="{6E087AC0-6F2A-49B2-A18E-D65DF8C43F25}">
+																					<Curve Name="" ID="{95FAA9E9-158F-4F7F-9FBF-78BB24C90B0A}">
 																						<PropertyList>
 																							<Property Name="Flags" Type="int32" Value="3"/>
 																						</PropertyList>
 																						<PointList>
 																							<Point>
-																								<XPos>7.05882</XPos>
+																								<XPos>34.09487</XPos>
 																								<YPos>0</YPos>
 																								<Flags>5</Flags>
 																							</Point>
 																							<Point>
-																								<XPos>21.176462585034</XPos>
+																								<XPos>59.0769160997732</XPos>
 																								<YPos>0</YPos>
 																								<Flags>37</Flags>
 																							</Point>
@@ -205,7 +205,7 @@
 											<MusicCue Name="Exit Cue" ID="{37706CB5-1C54-47B1-BF8D-1F938EEE1AFF}">
 												<PropertyList>
 													<Property Name="CueType" Type="int16" Value="1"/>
-													<Property Name="TimeMs" Type="Real64" Value="14117.6470588235"/>
+													<Property Name="TimeMs" Type="Real64" Value="24982.0463637244"/>
 												</PropertyList>
 											</MusicCue>
 										</Local>
@@ -215,7 +215,7 @@
 						</MusicSegment>
 						<MusicSegment Name="Background_Music" ID="{A022E96D-7378-48CF-85B0-E0E6F120C097}" ShortID="369191748">
 							<PropertyList>
-								<Property Name="EndPosition" Type="Real64" Value="21176.4705882353"/>
+								<Property Name="EndPosition" Type="Real64" Value="59076.9160997732"/>
 								<Property Name="Tempo" Type="Real64" Value="136"/>
 							</PropertyList>
 							<ReferenceList>
@@ -244,11 +244,11 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="MainMenuMusic" ID="{40270A51-C09C-4749-8CC9-C119B8188E26}">
+										<AudioFileSource Name="MainGameBackgroundMusic" ID="{A2402704-1167-4852-9A43-66415F777CB9}">
 											<Language>SFX</Language>
-											<AudioFile>UI\MainMenuMusic.wav</AudioFile>
+											<AudioFile>MainGameBackgroundMusic.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="697595859"/>
+												<MediaID ID="400348503"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
@@ -261,13 +261,13 @@
 															<ObjectList Name="Clips">
 																<Reference>
 																	<Local>
-																		<MusicClip Name="MainMenuMusic" ID="{FA3707A3-8D5F-45BA-B149-53EB7755EB56}">
+																		<MusicClip Name="MainGameBackgroundMusic" ID="{B98EF6A3-6714-49A4-8547-98471ABA1BFF}">
 																			<PropertyList>
-																				<Property Name="EndTrimOffset" Type="Real64" Value="21176.462585034"/>
+																				<Property Name="EndTrimOffset" Type="Real64" Value="59076.9160997732"/>
 																				<Property Name="FadeInMode" Type="int16" Value="0"/>
 																				<Property Name="FadeOutMode" Type="int16" Value="0"/>
 																			</PropertyList>
-																			<AudioSourceRef Name="MainMenuMusic" ID="{40270A51-C09C-4749-8CC9-C119B8188E26}"/>
+																			<AudioSourceRef Name="MainGameBackgroundMusic" ID="{A2402704-1167-4852-9A43-66415F777CB9}"/>
 																		</MusicClip>
 																	</Local>
 																</Reference>
@@ -284,11 +284,7 @@
 								<ObjectList Name="Cues">
 									<Reference>
 										<Local>
-											<MusicCue Name="Entry Cue" ID="{3A045893-B685-49B1-BCFC-4F93650D4546}">
-												<PropertyList>
-													<Property Name="TimeMs" Type="Real64" Value="7058.82352941176"/>
-												</PropertyList>
-											</MusicCue>
+											<MusicCue Name="Entry Cue" ID="{3A045893-B685-49B1-BCFC-4F93650D4546}"/>
 										</Local>
 									</Reference>
 									<Reference>
@@ -296,7 +292,7 @@
 											<MusicCue Name="Exit Cue" ID="{36B38D10-B2C0-4418-997B-29CFB19CA21D}">
 												<PropertyList>
 													<Property Name="CueType" Type="int16" Value="1"/>
-													<Property Name="TimeMs" Type="Real64" Value="21176.4705882353"/>
+													<Property Name="TimeMs" Type="Real64" Value="59076.9160997732"/>
 												</PropertyList>
 											</MusicCue>
 										</Local>

@@ -24,15 +24,11 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Mesh component for visual representation of the projectile
-	UPROPERTY(VisibleAnywhere, Category = "Components")
-	UStaticMeshComponent* MeshComponent;
-
 	// Movement component to handle projectile movement (speed, rotation, etc.)
-	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UPROPERTY(EditAnywhere, Category = "Components")
 	UProjectileMovementComponent* ProjectileMovement;
 
-	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UPROPERTY(EditAnywhere, Category = "Components")
 	USphereComponent* CollisionComponent;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Settings")

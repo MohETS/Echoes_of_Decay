@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -7,14 +5,13 @@
 #include "BUIButton.h"
 #include "BUILabel.h"
 #include "BUIImage.h"
+#include "Echoes_of_Decay/Public/Inventory/InventoryWidget/InventoryItemWidget.h"
 #include "BUIUWWeaponAbilityContainer.generated.h"
 
+class AWeaponBase;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FBUIOnPressedSignature, class UBUIUWWeaponAbilityContainer*, Button);
 
-/**
- *
- */
 UCLASS()
 class UI_API UBUIUWWeaponAbilityContainer : public UBUIUserWidget
 {
@@ -29,9 +26,13 @@ public:
 	UFUNCTION()
 	FText GetWeaponAbilityName();
 
+	UFUNCTION()
+	void SetUIComponent(TSubclassOf<AWeaponBase> WeaponClass);
+
 	/* UI Components */
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	TObjectPtr<UBUIButton> WeaponAbility;
+
 
 protected:
 
@@ -51,9 +52,6 @@ protected:
 	UPROPERTY(EditAnywhere)
 	FText WeaponAbilityNameLabelText;
 
-
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UBUIImage> WeaponAbilityImage;
-
-
 };

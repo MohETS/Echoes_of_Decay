@@ -3,6 +3,7 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "EnemyBase.h"
+#include "EnemyRanged.h"
 #include "Weapon/RangedWeapon.h"
 #include "GameFramework/DamageType.h"
 
@@ -12,18 +13,13 @@ AProjectile::AProjectile()
 
     // Collision Component (Root)
     CollisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("CollisionComponent"));
-    SetRootComponent(CollisionComponent);
-    CollisionComponent->InitSphereRadius(15.0f);
+    RootComponent = CollisionComponent;
+    CollisionComponent->InitSphereRadius(5.0f);
     CollisionComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
     CollisionComponent->SetCollisionObjectType(ECC_WorldDynamic);
-    CollisionComponent->SetCollisionResponseToAllChannels(ECR_Block);
+    CollisionComponent->SetCollisionResponseToAllChannels(ECR_Ignore);
     CollisionComponent->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
     CollisionComponent->SetGenerateOverlapEvents(true);
-
-    // Mesh (visual only)
-    MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
-    MeshComponent->SetupAttachment(CollisionComponent);
-    MeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
     // Movement
     ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovement"));
@@ -41,6 +37,13 @@ AProjectile::AProjectile()
 void AProjectile::BeginPlay()
 {
     Super::BeginPlay();
+
+    if (GetOwner())
+    {
+        AEnemyRanged* O = Cast<AEnemyRanged>(GetOwner());
+        if (!O) return;
+        Damage = O->GetDamage();
+    }
 } 
 
 // Called every frame
@@ -48,7 +51,6 @@ void AProjectile::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 }
-
 
 void AProjectile::DestroyProjectile()
 {
