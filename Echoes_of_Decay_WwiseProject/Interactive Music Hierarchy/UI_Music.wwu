@@ -8,7 +8,7 @@
 						<Property Name="Tempo" Type="Real64" Value="136"/>
 						<Property Name="Volume" Type="Real64">
 							<ValueList>
-								<Value>-15</Value>
+								<Value>-7</Value>
 							</ValueList>
 							<ModifierList>
 								<ModifierInfo>
@@ -62,7 +62,7 @@
 					<ChildrenList>
 						<MusicSegment Name="Background_Ambient_Music" ID="{09DFEB16-FE8D-4E86-B30A-2DFE3E9791F0}" ShortID="450763111">
 							<PropertyList>
-								<Property Name="EndPosition" Type="Real64" Value="23497.0068027211"/>
+								<Property Name="EndPosition" Type="Real64" Value="50526.3265306122"/>
 								<Property Name="Tempo" Type="Real64" Value="160"/>
 							</PropertyList>
 							<ReferenceList>
@@ -91,11 +91,11 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="MainGameBackgroundMusic" ID="{1189D97F-A63B-4373-8213-229478F5E16A}">
+										<AudioFileSource Name="MainMenuMusic" ID="{2D19C4AE-2C8F-4B88-B5FD-2ADBB8C38DAB}">
 											<Language>SFX</Language>
-											<AudioFile>Player\MainGameBackgroundMusic.wav</AudioFile>
+											<AudioFile>MainMenuMusic.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="1025744528"/>
+												<MediaID ID="593422419"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
@@ -108,13 +108,13 @@
 															<ObjectList Name="Clips">
 																<Reference>
 																	<Local>
-																		<MusicClip Name="MainGameBackgroundMusic" ID="{44C85FB8-6A79-4171-8480-F08BC45B4576}">
+																		<MusicClip Name="MainMenuMusic" ID="{47086C5C-6A7E-49C6-A547-DAEE48F1C986}">
 																			<PropertyList>
-																				<Property Name="EndTrimOffset" Type="Real64" Value="12000"/>
+																				<Property Name="EndTrimOffset" Type="Real64" Value="50526.3265306122"/>
 																				<Property Name="FadeInMode" Type="int16" Value="0"/>
 																				<Property Name="FadeOutMode" Type="int16" Value="0"/>
 																			</PropertyList>
-																			<AudioSourceRef Name="MainGameBackgroundMusic" ID="{1189D97F-A63B-4373-8213-229478F5E16A}"/>
+																			<AudioSourceRef Name="MainMenuMusic" ID="{2D19C4AE-2C8F-4B88-B5FD-2ADBB8C38DAB}"/>
 																		</MusicClip>
 																	</Local>
 																</Reference>
