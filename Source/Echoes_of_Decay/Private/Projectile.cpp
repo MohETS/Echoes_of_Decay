@@ -7,8 +7,10 @@
 #include "Weapon/RangedWeapon.h"
 #include "GameFramework/DamageType.h"
 
+// Sets default values
 AProjectile::AProjectile()
 {
+    // Enable ticking for this actor
     PrimaryActorTick.bCanEverTick = true;
 
     // Collision Component (Root)
@@ -23,14 +25,10 @@ AProjectile::AProjectile()
 
     // Movement
     ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovement"));
-    ProjectileMovement->UpdatedComponent = CollisionComponent;
-    ProjectileMovement->InitialSpeed = 2000.f;
-    ProjectileMovement->MaxSpeed = 2000.f;
-    ProjectileMovement->bRotationFollowsVelocity = true;
-    ProjectileMovement->bShouldBounce = false;
-
-    InitialLifeSpan = LifeSpan;
-    SetLifeSpan(LifeSpan);
+    ProjectileMovement->InitialSpeed = 1500.0f;
+    ProjectileMovement->MaxSpeed = 1500.0f;
+    ProjectileMovement->bRotationFollowsVelocity = true; // Makes the projectile rotate as it moves
+    ProjectileMovement->bShouldBounce = false; // Set to true if you want the projectile to bounce
 }
 
 // Called when the game starts or when spawned
@@ -46,7 +44,6 @@ void AProjectile::BeginPlay()
     }
 } 
 
-// Called every frame
 void AProjectile::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);

@@ -11,15 +11,25 @@ AMyCharacter::AMyCharacter()
     MyArrowComponent = CreateDefaultSubobject<UArrowComponent>(TEXT("TIRE"));
     MyArrowComponent->SetupAttachment(GetMesh());
     MyArrowComponent->SetHiddenInGame(false);
-    MyArrowComponent->SetVisibility(true, true);
+    MyArrowComponent->SetVisibility(false, false);
    // MyArrowComponent->SetAbsolute(false, true, false);
 
     Inventory = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
 
     EquippedWeapons.Init(nullptr, 3);
+
     CurrentWeapon = nullptr;
 
     Health = 100.0f;
+
+    if (GetMesh())
+    {
+        // Crï¿½e le ChildActorComponent pour l'arme
+        WeaponChildActor = CreateDefaultSubobject<UChildActorComponent>(TEXT("WeaponChildActor"));
+
+        // Attache l'arme au Skeletal Mesh du personnage
+        WeaponChildActor->SetupAttachment(GetMesh(), TEXT("items"));
+    }
 }
 
 void AMyCharacter::BeginPlay()
@@ -29,8 +39,7 @@ void AMyCharacter::BeginPlay()
     Health = MaxHealth;
     FRotator CurrentRotation = MyArrowComponent->GetComponentRotation();
     // CurrentRotation.Yaw = 0.0f; // Bloque la rotation autour de l'axe Yaw (Z)
-    // MyArrowComponent->SetWorldRotation(CurrentRotation); // Applique cette rotation bloquée
-
+    // MyArrowComponent->SetWorldRotation(CurrentRotation); // Applique cette rotation bloquï¿½e
 
     // Add the default mapping context to the player's input subsystem
     if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
@@ -56,7 +65,6 @@ void AMyCharacter::BeginPlay()
         if (HUDWidgetInstance)
         {
             HUDWidgetInstance->AddToViewport();
-
             HUDWidgetInstance->BindWeaponToHUD(this);
             HUDWidgetInstance->BindHpToHUD(this);
         }
@@ -151,12 +159,12 @@ void AMyCharacter::SwitchWeapon(int32 SlotIndex)
         CurrentWeapon->SetActorHiddenInGame(false);
         CurrentWeapon->SetActorEnableCollision(true);
         UE_LOG(LogTemp, Warning, TEXT("Switched to weapon: %s"), *CurrentWeapon->WeaponName.ToString());
-    }
-    else
-    {
-        UE_LOG(LogTemp, Warning, TEXT("No weapon in this slot!"));
+        if (!WeaponChildActor) return;
+        WeaponChildActor->SetChildActorClass(EquippedWeapons[SlotIndex]->GetClass());
+        WeaponChildActor->CreateChildActor();
     }
 }
+
 
 void AMyCharacter::SwitchToWeapon1()
 {
@@ -199,10 +207,6 @@ void AMyCharacter::RefreshEquippedWeapons()
 
                 UE_LOG(LogTemp, Warning, TEXT("Slot %d -> %s"), i + 1, *WeaponInstance->WeaponName.ToString());
             }
-        }
-        else
-        {
-            UE_LOG(LogTemp, Warning, TEXT("Slot %d is empty"), i + 1);
         }
     }
 

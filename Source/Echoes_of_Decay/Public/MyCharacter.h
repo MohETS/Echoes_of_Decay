@@ -9,6 +9,7 @@
 #include "Inventory/InventoryComponent.h"
 #include "Weapon/WeaponBase.h"
 #include "UI/Public/BUIUWCharacterHUD.h"
+#include "Components/ChildActorComponent.h"
 #include "MyCharacter.generated.h"
 
 class UInventoryWidget;
@@ -69,6 +70,8 @@ public:
     UInputAction* WeaponSlot3Action;
 
 	// --- INVENTORY --- //
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
+    UChildActorComponent* WeaponChildActor;
 
     UPROPERTY(VisibleAnywhere, Category = "Inventory")
     UInventoryComponent* Inventory;
