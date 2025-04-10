@@ -4,6 +4,7 @@
 #include "Engine/World.h"
 #include "Components/ArrowComponent.h"
 #include "Enemies/EnemyBase.h"
+#include "Animation/AnimMontage.h"
 #include "Engine/OverlapResult.h"  
 
 AMyCharacter::AMyCharacter()
@@ -115,13 +116,19 @@ float AMyCharacter::TakeDamage(
     struct FDamageEvent const& DamageEvent,
     AController* EventInstigator,
     AActor* DamageCauser)
+
+
 {
-    if (DamageAmount <= 0.0f)
+    float ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser); //  cette ligne est cruciale
+
+    if (ActualDamage <= 0.0f)
     {
         return 0.0f;
     }
 
     Health -= DamageAmount;
+    // R�duction de la sant� du joueur
+    Health -= ActualDamage;
     UE_LOG(LogTemp, Warning, TEXT("Player took damage! Current Health: %f"), Health);
 
     GetWorldTimerManager().ClearTimer(RegenTickTimer);
@@ -133,6 +140,11 @@ float AMyCharacter::TakeDamage(
     {
         UE_LOG(LogTemp, Warning, TEXT("Player Died!"));
         Destroy();
+        // Ici, tu peux d�clencher une animation de mort, un respawn, etc.
+        // 
+       // GetMesh()->GetAnimInstance()->Montage_Play(DeathMontage);
+        //GetCharacterMovement()->DisableMovement();
+       // Destroy(); // Supprime le personnage de la sc�ne
     }
 
     HUDWidgetInstance->BindHpToHUD(this);
