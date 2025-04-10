@@ -113,25 +113,21 @@ void AEnemyBase::OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
     // Check if the player was successfully sensed
     if (Stimulus.WasSuccessfullySensed())
     {
-        UE_LOG(LogTemp, Warning, TEXT("Player detected!"));
         ChasePlayer();
     }
     else
     {
-        UE_LOG(LogTemp, Warning, TEXT("Player lost!"));
         AIController->ClearFocus(EAIFocusPriority::Gameplay);
         float DistanceToPatrolCenter = FVector::Dist(GetActorLocation(), PatrolCenter);
 
         // If the player is too far from the patrol zone, return to the patrol zone
         if (DistanceToPatrolCenter > PatrolMaxDistance)
         {
-            UE_LOG(LogTemp, Warning, TEXT("Returning to patrol center"));
             if (!AIController) return;
             AIController->MoveToLocation(PatrolCenter);
         }
         else
         {
-            UE_LOG(LogTemp, Warning, TEXT("Resuming patrol..."));
             GetWorldTimerManager().SetTimer(PatrolTimer, this, &AEnemyBase::Patrol, 1.0f, true);
         }
     }
@@ -139,42 +135,33 @@ void AEnemyBase::OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
 
 void AEnemyBase::Patrol()
 {
-    UE_LOG(LogTemp, Warning, TEXT("Patrolling around patrol center"));
-
-    if (AIPerceptionComponent->HasActiveStimulus(*PlayerPawn, UAISense::GetSenseID<UAISense_Sight>()))
-    {
-        UE_LOG(LogTemp, Warning, TEXT("Patrol stopped: player detected"));
-        return;
-    }
+    EnemyState = EEnemyState::Patrolling;
+    if (AIPerceptionComponent->HasActiveStimulus(*PlayerPawn, UAISense::GetSenseID<UAISense_Sight>())) return;
 
     GetCharacterMovement()->MaxWalkSpeed = PatrolSpeed;
     FVector PatrolPoint = PatrolCenter + FMath::VRand() * PatrolMaxDistance / 2;
     PatrolPoint.Z = GetActorLocation().Z;
 
     if (!AIController) return;
-
-    EnemyState = EEnemyState::Patrolling;
-    UE_LOG(LogTemp, Warning, TEXT("Moving to patrol point: %s"), *PatrolPoint.ToString());
     AIController->MoveToLocation(PatrolPoint);
 }
 
 void AEnemyBase::ChasePlayer()
 {
     if (!PlayerPawn) return;
-    AIController->SetFocus(PlayerPawn);
     GetCharacterMovement()->MaxWalkSpeed = ChaseSpeed;
     EnemyState = EEnemyState::Chasing;
+
     // Check if the player is within the sight radius
     float DistanceToPlayer = FVector::Dist(GetActorLocation(), PlayerPawn->GetActorLocation());
     float DistanceToPatrolCenter = FVector::Dist(GetActorLocation(), PatrolCenter);
 
-    // If the player is too far from the patrol zone, return to the patrol zone
     if (!AIController) return;
+    AIController->SetFocus(PlayerPawn);
 
     // If the player is too far from the patrol zone, return to the patrol zone
     if (DistanceToPatrolCenter > PatrolMaxDistance)
     {
-        UE_LOG(LogTemp, Warning, TEXT("Player too far from patrol zone, returning to patrol"));
         AIController->MoveToLocation(PatrolCenter);
         return;
     }
@@ -182,12 +169,10 @@ void AEnemyBase::ChasePlayer()
     // If the player is within the attack range, stop moving
     if (DistanceToPlayer > AttackRange)
     {
-        UE_LOG(LogTemp, Warning, TEXT("Chasing player..."));
         AIController->MoveToActor(PlayerPawn, AttackRange - 100.0f);
     }
     else
     {
-        UE_LOG(LogTemp, Warning, TEXT("Stopping movement - player within attack range"));
         AIController->StopMovement();
     }
 }
@@ -205,7 +190,6 @@ float AEnemyBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
     UE_LOG(LogTemp, Warning, TEXT("Enemy received %f damage. Health remaining: %f"), ActualDamage, Health);
     GetWorldTimerManager().ClearTimer(RegenTickTimer);
     GetWorldTimerManager().ClearTimer(RegenStartTimer);
-
     GetWorldTimerManager().SetTimer(RegenStartTimer, this, &AEnemyBase::StartHealthRegen, TimeBeforeRegenStarts, false);
     UpdateHealthBar();
     if (Health <= 0.0f) Die(DamageCauser);
@@ -232,14 +216,10 @@ void AEnemyBase::RegenHealth()
 
 void AEnemyBase::UpdateHealthBar()
 {
-    if (HealthBarWidget)
-    {
-        UEnemyHealthBar* HealthBar = Cast<UEnemyHealthBar>(HealthBarWidget->GetUserWidgetObject());
-        if (HealthBar)
-        {
-            HealthBar->UpdateHealthBar(Health, MaxHealth);
-        }
-    }
+	if (!HealthBarWidget) return;
+    UEnemyHealthBar* HealthBar = Cast<UEnemyHealthBar>(HealthBarWidget->GetUserWidgetObject());
+    if (!HealthBar) return;
+    HealthBar->UpdateHealthBar(Health, MaxHealth);
 }
 
 void AEnemyBase::CheckForNearbyPlayer()

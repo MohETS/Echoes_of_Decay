@@ -139,12 +139,11 @@ float AMyCharacter::TakeDamage(
     if (Health <= 0.0f)
     {
         UE_LOG(LogTemp, Warning, TEXT("Player Died!"));
-        Destroy();
         // Ici, tu peux d�clencher une animation de mort, un respawn, etc.
         // 
-       // GetMesh()->GetAnimInstance()->Montage_Play(DeathMontage);
+        // GetMesh()->GetAnimInstance()->Montage_Play(DeathMontage);
         //GetCharacterMovement()->DisableMovement();
-       // Destroy(); // Supprime le personnage de la sc�ne
+        // Destroy(); // Supprime le personnage de la sc�ne
     }
 
     HUDWidgetInstance->BindHpToHUD(this);
