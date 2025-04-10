@@ -84,7 +84,6 @@ AkWwiseProjectData.asset
 IncrementalSoundBankData.xml
 
 #Sound effects and banks are ommited for now but will probably be added to LFS if they don't take too much space
-/Echoes_of_Decay_WwiseProject/Originals
 /Echoes_of_Decay_WwiseProject/GeneratedSoundBanks
 
 #Get rid of the plugin since it's too big and can be built by installing Wwise
