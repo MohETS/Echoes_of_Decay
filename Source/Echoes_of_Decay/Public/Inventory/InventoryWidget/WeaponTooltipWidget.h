@@ -19,8 +19,6 @@ public:
     UFUNCTION(BlueprintCallable, Category = "Tooltip")
     void ShowAtMousePosition();
 
-    bool bJustAppeared = false;
-
 protected:
     // UI Elements bound from the Widget Blueprint
     UPROPERTY(meta = (BindWidget))

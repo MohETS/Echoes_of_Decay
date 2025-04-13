@@ -80,14 +80,4 @@ void UWeaponTooltipWidget::DelayedShow()
     UWidgetLayoutLibrary::GetMousePositionScaledByDPI(UGameplayStatics::GetPlayerController(GetWorld(), 0), MousePos.X, MousePos.Y);
     SetPositionInViewport(MousePos, true);
     SetVisibility(ESlateVisibility::Visible);
-
-    bJustAppeared = true;
-
-    // Reset après une petite durée (protection anti-suppression)
-    FTimerHandle ResetHandle;
-    GetWorld()->GetTimerManager().SetTimer(
-        ResetHandle,
-        [this]() { bJustAppeared = false; },
-        1.0f, false
-    );
 }

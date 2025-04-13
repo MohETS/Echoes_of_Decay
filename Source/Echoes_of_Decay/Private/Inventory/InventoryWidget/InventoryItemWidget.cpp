@@ -70,7 +70,6 @@ void UInventoryItemWidget::NativeOnMouseEnter(const FGeometry& InGeometry, const
         TooltipInstance = CreateWidget<UWeaponTooltipWidget>(GetWorld(), TooltipWidgetClass);
         TooltipInstance->SetWeaponInfo(ItemData);
         TooltipInstance->AddToViewport();
-        TooltipInstance->ShowAtMousePosition();
     }
 }
 
@@ -78,7 +77,7 @@ void UInventoryItemWidget::NativeOnMouseLeave(const FPointerEvent& InMouseEvent)
 {
     Super::NativeOnMouseLeave(InMouseEvent);
 
-    if (TooltipInstance && !TooltipInstance->bJustAppeared)
+    if (TooltipInstance)
     {
         TooltipInstance->RemoveFromParent();
         TooltipInstance = nullptr;
