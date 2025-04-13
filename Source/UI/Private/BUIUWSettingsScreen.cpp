@@ -21,8 +21,6 @@ void UBUIUWSettingsScreen::SynchronizeProperties()
 //Closes the Settings menu and brinds the player back to the Main Menu
 void UBUIUWSettingsScreen::Back()
 {
-	UE_LOG(LogTemp, Display, TEXT("Backing from settings page"));
-
 	if (this->IsInViewport()) {
 		this->RemoveFromViewport();
 	}

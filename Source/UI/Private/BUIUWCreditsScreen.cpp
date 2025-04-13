@@ -21,8 +21,6 @@ void UBUIUWCreditsScreen::SynchronizeProperties()
 //Closes the Credits menu and gets the player back to the Main Menu
 void UBUIUWCreditsScreen::Back()
 {
-	UE_LOG(LogTemp, Display, TEXT("Backing from credits page"));
-
 	if (this->IsInViewport()) {
 		this->RemoveFromViewport();
 	}

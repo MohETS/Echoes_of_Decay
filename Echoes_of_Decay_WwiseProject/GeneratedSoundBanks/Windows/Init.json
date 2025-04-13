@@ -1,0 +1,83 @@
+{
+ "SoundBanksInfo": {
+  "Platform": "Windows",
+  "BasePlatform": "Windows",
+  "SchemaVersion": "16",
+  "SoundBankVersion": "154",
+  "SoundBanks": [
+   {
+    "Id": "1355168291",
+    "Type": "User",
+    "GUID": "{701ECBBD-9C7B-4030-8CDB-749EE5D1C7B9}",
+    "Language": "SFX",
+    "Hash": "{482DFE20-2E20-C38A-C03F-01DD40134D9C}",
+    "ObjectPath": "Init",
+    "ShortName": "Init",
+    "Path": "Init.bnk",
+    "Plugins": {
+     "AudioDevices": [
+      {
+       "Id": "2317455096",
+       "Name": "No_Output",
+       "ObjectPath": "\\Audio Devices\\Default Work Unit\\No_Output",
+       "GUID": "{B6D368C7-7901-4B19-84C3-D828C6069D07}",
+       "LibName": "No Output",
+       "LibId": "11862023"
+      },
+      {
+       "Id": "3859886410",
+       "Name": "System",
+       "ObjectPath": "\\Audio Devices\\Default Work Unit\\System",
+       "GUID": "{7F165DBE-BE40-4130-9730-123A23F7D248}",
+       "LibName": "System",
+       "LibId": "11403271"
+      }
+     ]
+    },
+    "Busses": [
+     {
+      "Id": "3803692087",
+      "Name": "Master Audio Bus",
+      "ObjectPath": "\\Master-Mixer Hierarchy\\Default Work Unit\\Master Audio Bus",
+      "GUID": "{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}"
+     }
+    ],
+    "StateGroups": [
+     {
+      "Id": "3441334105",
+      "Name": "Music_Player_Fighting_State",
+      "ObjectPath": "\\States\\Default Work Unit\\Music_Player_Fighting_State",
+      "GUID": "{1D22CE7E-8682-4A3E-B7C1-83BB0108464E}",
+      "States": [
+       {
+        "Id": "748895195",
+        "Name": "None",
+        "ObjectPath": "\\States\\Default Work Unit\\Music_Player_Fighting_State\\None",
+        "GUID": "{4DEDD55B-F61B-4DD4-9AB9-2ECD698628A9}"
+       },
+       {
+        "Id": "3193947170",
+        "Name": "Hurt",
+        "ObjectPath": "\\States\\Default Work Unit\\Music_Player_Fighting_State\\Hurt",
+        "GUID": "{86AEF89C-C6BB-4D8F-95C5-796A1B12097E}"
+       },
+       {
+        "Id": "3328495488",
+        "Name": "Dying",
+        "ObjectPath": "\\States\\Default Work Unit\\Music_Player_Fighting_State\\Dying",
+        "GUID": "{3EE8A098-7765-463A-8783-E54D0846B919}"
+       },
+       {
+        "Id": "3753286132",
+        "Name": "Calm",
+        "ObjectPath": "\\States\\Default Work Unit\\Music_Player_Fighting_State\\Calm",
+        "GUID": "{0EEE535C-DF9C-4AD6-9B89-681787C0EB7E}"
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "FileHash": "{78A93CEB-9AE3-98B6-F822-B1CAE94C922C}"
+ }
+}

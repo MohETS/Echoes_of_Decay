@@ -72,3 +72,21 @@ Plugins/**/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+
+# GITIGNORE template for Wwise Project
+.backup*
+.cache*
+*.akd
+*.prof
+*.validationcache
+*.wsettings
+AkWwiseProjectData.asset
+IncrementalSoundBankData.xml
+
+#Sound effects and banks are ommited for now but will probably be added to LFS if they don't take too much space
+/Echoes_of_Decay_WwiseProject/GeneratedSoundBanks
+
+#Get rid of the plugin since it's too big and can be built by installing Wwise
+/Plugins/Wwise
+/Plugins/WwiseNiagara
+/Plugins/WwiseSoundEngine
