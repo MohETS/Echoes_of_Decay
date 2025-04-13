@@ -17,7 +17,6 @@ AMyCharacter::AMyCharacter()
 	MyArrowComponent->SetupAttachment(GetMesh());
 	MyArrowComponent->SetHiddenInGame(false);
 	MyArrowComponent->SetVisibility(false, false);
-	// MyArrowComponent->SetAbsolute(false, true, false);
 
 	Inventory = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
 
@@ -29,10 +28,7 @@ AMyCharacter::AMyCharacter()
 
 	if (GetMesh())
 	{
-		// Cr�e le ChildActorComponent pour l'arme
 		WeaponChildActor = CreateDefaultSubobject<UChildActorComponent>(TEXT("WeaponChildActor"));
-
-		// Attache l'arme au Skeletal Mesh du personnage
 		WeaponChildActor->SetupAttachment(GetMesh(), TEXT("items"));
 	}
 	PlayerDeathSoundPlayingID = AK_INVALID_PLAYING_ID;
@@ -44,8 +40,6 @@ void AMyCharacter::BeginPlay()
 
 	Health = MaxHealth;
 	FRotator CurrentRotation = MyArrowComponent->GetComponentRotation();
-	// CurrentRotation.Yaw = 0.0f; // Bloque la rotation autour de l'axe Yaw (Z)
-	// MyArrowComponent->SetWorldRotation(CurrentRotation); // Applique cette rotation bloqu�e
 
 	// Add the default mapping context to the player's input subsystem
 	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
@@ -122,13 +116,14 @@ float AMyCharacter::TakeDamage(
 	AController* EventInstigator,
 	AActor* DamageCauser)
 {
-	if (DamageAmount <= 0.0f)
+	float ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	if (ActualDamage <= 0.0f)
 	{
 		return 0.0f;
 	}
 
-	Health -= DamageAmount;
-	UE_LOG(LogTemp, Warning, TEXT("Player took damage! Current Health: %f"), Health);
+	Health -= ActualDamage;
 
 	GetWorldTimerManager().ClearTimer(RegenTickTimer);
 	GetWorldTimerManager().ClearTimer(RegenStartTimer);
@@ -141,7 +136,8 @@ float AMyCharacter::TakeDamage(
             FOnAkPostEventCallback nullCallback;
             PlayerDeathSoundPlayingID = UAkGameplayStatics::PostEvent(PlayerDeathSound, this, int32(0), nullCallback, false);
         }
-        else {
+        else 
+		{
             UE_LOG(LogTemp, Error, TEXT("Wwise Player_Background_Music Event is invalid"));
         }
     }
@@ -155,21 +151,6 @@ float AMyCharacter::TakeDamage(
 	if (Health <= MaxHealth / 2 && backgroundMusicPlayerState != playerMusicState::DYING) {
 		backgroundMusicPlayerState = playerMusicState::DYING;
 		UAkGameplayStatics::SetState(DyingState);
-	}
-
-	if (Health <= 0.0f)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Player Died!"));
-		// Ici, tu peux d�clencher une animation de mort, un respawn, etc. 
-
-		if (PlayerDeathSound) {
-			FOnAkPostEventCallback nullCallback;
-			PlayerDeathSoundPlayingID = UAkGameplayStatics::PostEvent(PlayerDeathSound, this, int32(0), nullCallback, false);
-		}
-		else {
-			UE_LOG(LogTemp, Error, TEXT("Wwise Player_Background_Music Event is invalid"));
-		}
-		Destroy(); // Supprime le personnage de la sc�ne
 	}
 
 	HUDWidgetInstance->BindHpToHUD(this);
@@ -195,7 +176,6 @@ void AMyCharacter::SwitchWeapon(int32 SlotIndex)
 		CurrentWeapon = EquippedWeapons[SlotIndex];
 		CurrentWeapon->SetActorHiddenInGame(false);
 		CurrentWeapon->SetActorEnableCollision(true);
-		UE_LOG(LogTemp, Warning, TEXT("Switched to weapon: %s"), *CurrentWeapon->WeaponName.ToString());
 		if (!WeaponChildActor) return;
 		WeaponChildActor->SetChildActorClass(EquippedWeapons[SlotIndex]->GetClass());
 		WeaponChildActor->CreateChildActor();
@@ -233,18 +213,13 @@ void AMyCharacter::RefreshEquippedWeapons()
 	for (int32 i = 0; i < WeaponSlots.Num(); i++)
 	{
 		UInventorySlotWidget* Slot = WeaponSlots[i];
+		if (!Slot || !Slot->ItemWidget || !Slot->ItemWidget->ItemData || !Slot->ItemWidget->ItemData->WeaponClass) continue;
 
-		if (Slot && Slot->ItemWidget && Slot->ItemWidget->ItemData && Slot->ItemWidget->ItemData->WeaponClass)
-		{
-			AWeaponBase* WeaponInstance = GetWorld()->SpawnActor<AWeaponBase>(Slot->ItemWidget->ItemData->WeaponClass);
-			if (WeaponInstance)
-			{
-				WeaponInstance->Owner = this;
-				EquippedWeapons[i] = WeaponInstance;
+		AWeaponBase* WeaponInstance = GetWorld()->SpawnActor<AWeaponBase>(Slot->ItemWidget->ItemData->WeaponClass);
+		if (!WeaponInstance) continue;
 
-				UE_LOG(LogTemp, Warning, TEXT("Slot %d -> %s"), i + 1, *WeaponInstance->WeaponName.ToString());
-			}
-		}
+		WeaponInstance->Owner = this;
+		EquippedWeapons[i] = WeaponInstance;
 	}
 
 	HUDWidgetInstance->BindWeaponToHUD(this);
@@ -284,7 +259,6 @@ void AMyCharacter::RegenHealth()
 		UAkGameplayStatics::SetState(CalmState);
 	}
 
-
 	if (Health >= MaxHealth)
 	{
 		GetWorldTimerManager().ClearTimer(RegenTickTimer);
@@ -308,19 +282,15 @@ void AMyCharacter::CheckForNearbyEnemies()
 		Sphere
 	);
 
-	if (bHit)
+	if (!bHit) return;
+	for (auto& Result : Overlaps)
 	{
-		for (auto& Result : Overlaps)
-		{
-			AActor* OtherActor = Result.GetActor();
-			if (OtherActor && OtherActor != this && OtherActor->IsA<AEnemyBase>())
-			{
-				bIsEnemyNearby = true;
-				GetWorldTimerManager().ClearTimer(RegenTickTimer);
-				GetWorldTimerManager().ClearTimer(RegenStartTimer);
-				GetWorldTimerManager().SetTimer(RegenStartTimer, this, &AMyCharacter::StartHealthRegen, TimeBeforeRegenStarts, false);
-				break;
-			}
-		}
+		AActor* OtherActor = Result.GetActor();
+		if (!OtherActor || OtherActor == this || !OtherActor->IsA<AEnemyBase>()) continue;
+		bIsEnemyNearby = true;
+		GetWorldTimerManager().ClearTimer(RegenTickTimer);
+		GetWorldTimerManager().ClearTimer(RegenStartTimer);
+		GetWorldTimerManager().SetTimer(RegenStartTimer, this, &AMyCharacter::StartHealthRegen, TimeBeforeRegenStarts, false);
+		break;
 	}
 }
