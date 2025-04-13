@@ -24,6 +24,7 @@ void AMeleeWeapon::Attack()
     Params.AddIgnoredActor(Owner);  
 
     if (!GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Pawn, Params))  return;
+    UE_LOG(LogTemp, Warning, TEXT("GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Pawn, Params"));
 
     AActor* HitActor = HitResult.GetActor();  
     if (!HitActor) return;

@@ -9,6 +9,7 @@
 #include "Inventory/InventoryComponent.h"
 #include "Weapon/WeaponBase.h"
 #include "UI/Public/BUIUWCharacterHUD.h"
+#include "Animation/AnimMontage.h"
 #include "Components/ChildActorComponent.h"
 #include "MyCharacter.generated.h"
 
@@ -118,6 +119,9 @@ public:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
     float Health = 100.0f;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
+    UAnimMontage* DeathMontage;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Regen")
     float TimeBeforeRegenStarts = 10.0f;
