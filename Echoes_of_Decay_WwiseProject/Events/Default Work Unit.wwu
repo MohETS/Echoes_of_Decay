@@ -39,38 +39,6 @@
 						<Property Name="OverrideColor" Type="bool" Value="True"/>
 					</PropertyList>
 					<ChildrenList>
-						<Folder Name="Weapon" ID="{213344DB-4E03-49B3-BB42-20C2223EFD73}" ShortID="861347167">
-							<PropertyList>
-								<Property Name="Color" Type="int16" Value="10"/>
-								<Property Name="OverrideColor" Type="bool" Value="True"/>
-							</PropertyList>
-							<ChildrenList>
-								<Event Name="Sword" ID="{9A72FA9F-87E5-439F-BAD7-B954ED5033BE}">
-									<ChildrenList>
-										<Action Name="" ID="{8BCC77BC-2A4E-48C8-AB65-C27BCFA3847F}" ShortID="954987773"/>
-									</ChildrenList>
-								</Event>
-								<Event Name="Bow" ID="{026F2C5C-14DE-47D1-BC3F-D56DEAD7C01B}">
-									<ChildrenList>
-										<Action Name="" ID="{F84AD61F-2406-4E0D-AB3D-23DF14BB5CD9}" ShortID="761622769">
-											<PropertyList>
-												<Property Name="FadeTime" Type="Real64" Value="0.5"/>
-											</PropertyList>
-											<ReferenceList>
-												<Reference Name="Target">
-													<ObjectRef Name="Projectile" ID="{E8CC7F42-C2EC-4D84-A023-4A9851980892}" WorkUnitID="{E9F583B3-F7FA-40AF-A381-69469DF2E70D}"/>
-												</Reference>
-											</ReferenceList>
-										</Action>
-									</ChildrenList>
-								</Event>
-								<Event Name="Wand" ID="{0AD64B24-AE2F-4145-93F3-96FFCE27C5AE}">
-									<ChildrenList>
-										<Action Name="" ID="{440E5032-BDC3-475B-AAD4-89324F70C565}" ShortID="303025791"/>
-									</ChildrenList>
-								</Event>
-							</ChildrenList>
-						</Folder>
 						<Event Name="Death" ID="{7E636591-F492-4D4B-AC0C-25C04F9815CD}">
 							<ChildrenList>
 								<Action Name="" ID="{BC9B5D1D-46F4-4212-8702-618CD5AC696B}" ShortID="525141404">
@@ -87,7 +55,7 @@
 									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="Player_Background_Music" ID="{DC149DAA-B881-4177-A862-545B3AC521A1}" WorkUnitID="{DC778A57-9890-4759-AC78-5C269D9A64F6}"/>
+											<ObjectRef Name="Player_Music" ID="{C3D422DF-842B-45EE-BC12-6AF27F92BE98}" WorkUnitID="{DC778A57-9890-4759-AC78-5C269D9A64F6}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -106,7 +74,7 @@
 								<Action Name="" ID="{523976D4-D778-401F-BC58-EA41F5B9494A}" ShortID="858226676">
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="ItemPickedUp" ID="{29BB3B91-06CB-4331-BF2A-73845E63E255}" WorkUnitID="{E9F583B3-F7FA-40AF-A381-69469DF2E70D}"/>
+											<ObjectRef Name="ItemPickedUp" ID="{5F3EBB87-FA56-4B5D-BAFF-42E249708E5A}" WorkUnitID="{E9F583B3-F7FA-40AF-A381-69469DF2E70D}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -117,18 +85,12 @@
 								<Action Name="" ID="{DB8A3479-F94F-4F89-ADF2-7A6E47158C9B}" ShortID="928249315">
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="Player_Background_Music" ID="{DC149DAA-B881-4177-A862-545B3AC521A1}" WorkUnitID="{DC778A57-9890-4759-AC78-5C269D9A64F6}"/>
+											<ObjectRef Name="Player_Music" ID="{C3D422DF-842B-45EE-BC12-6AF27F92BE98}" WorkUnitID="{DC778A57-9890-4759-AC78-5C269D9A64F6}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
 							</ChildrenList>
 						</Event>
-						<Event Name="BossFight_Music" ID="{07DB6969-4D34-402A-A0E3-6BA807E95EFF}"/>
-					</ChildrenList>
-				</Folder>
-				<Folder Name="Ennemy" ID="{71AEB1B8-1E3E-4F9D-9111-39D91AE5A090}" ShortID="857791108">
-					<ChildrenList>
-						<Event Name="Growls" ID="{82A41270-213E-4DE8-A08D-8757044752F9}"/>
 					</ChildrenList>
 				</Folder>
 			</ChildrenList>

@@ -2,13 +2,12 @@
 
 
 #include "PlayerAudioManager.h"
-#include "AkGameplayStatics.h"
 #include "../Plugins/WwiseSoundEngine/ThirdParty/include/AK/SoundEngine/Common/AkSoundEngine.h"
 
 // Sets default values
 APlayerAudioManager::APlayerAudioManager()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	BackgroundMusicPlayingID = AK_INVALID_PLAYING_ID;
@@ -18,7 +17,8 @@ APlayerAudioManager::APlayerAudioManager()
 void APlayerAudioManager::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	UAkGameplayStatics::SetOcclusionRefreshInterval(0, this);
 	PlayBackgroundMusic();
 }
 
@@ -39,6 +39,7 @@ void APlayerAudioManager::SetupPlayerInputComponent(UInputComponent* PlayerInput
 void APlayerAudioManager::PlayBackgroundMusic() {
 	if (BackgroundMusic) {
 		FOnAkPostEventCallback nullCallback;
+		UAkGameplayStatics::SetState(CalmState);
 		BackgroundMusicPlayingID = UAkGameplayStatics::PostEvent(BackgroundMusic, this, int32(0), nullCallback, true);
 	}
 	else {

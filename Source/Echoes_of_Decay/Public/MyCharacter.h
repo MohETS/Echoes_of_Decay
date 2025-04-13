@@ -11,7 +11,7 @@
 #include "UI/Public/BUIUWCharacterHUD.h"
 #include "Animation/AnimMontage.h"
 #include "Components/ChildActorComponent.h"
-#include "AkAudioEvent.h"
+#include "AkGameplayStatics.h"
 #include "MyCharacter.generated.h"
 
 class UInventoryWidget;
@@ -159,4 +159,23 @@ public:
     TSubclassOf<UBUIUWCharacterHUD> HUDWidgetClass;
 
     UBUIUWCharacterHUD* HUDWidgetInstance;
+
+    // --- Music --- //
+
+    enum playerMusicState {
+        CALM = 1,
+        HURT = 2,
+        DYING = 3
+    };
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Music")
+    TObjectPtr<UAkStateValue> CalmState;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Music")
+    TObjectPtr<UAkStateValue> HurtState;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Music")
+    TObjectPtr<UAkStateValue> DyingState;
+
+    playerMusicState backgroundMusicPlayerState = playerMusicState::CALM;
 };

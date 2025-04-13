@@ -76,27 +76,7 @@
 						</Sound>
 					</ChildrenList>
 				</Folder>
-				<Folder Name="Weapon" ID="{1301178A-DEBF-4D9D-902E-BB4367A68A20}" ShortID="319352510"/>
-				<Sound Name="ItemPickedUp" ID="{29BB3B91-06CB-4331-BF2A-73845E63E255}" ShortID="246732497">
-					<PropertyList>
-						<Property Name="Pitch" Type="int32">
-							<ModifierList>
-								<ModifierInfo>
-									<Modifier Name="" ID="{73577C8B-7056-4762-94E2-606FCE153D5B}">
-										<PropertyList>
-											<Property Name="Enabled" Type="bool" Value="True"/>
-											<Property Name="Max" Type="Real64" Value="50"/>
-										</PropertyList>
-									</Modifier>
-								</ModifierInfo>
-							</ModifierList>
-						</Property>
-						<Property Name="Volume" Type="Real64">
-							<ValueList>
-								<Value>-6</Value>
-							</ValueList>
-						</Property>
-					</PropertyList>
+				<Sound Name="ItemPickedUp" ID="{5F3EBB87-FA56-4B5D-BAFF-42E249708E5A}" ShortID="232906242">
 					<ReferenceList>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{8FE859B4-BD58-4437-8A6D-7397A677CECC}"/>
@@ -106,16 +86,23 @@
 						</Reference>
 					</ReferenceList>
 					<ChildrenList>
-						<AudioFileSource Name="ItemPickUp" ID="{C92FD4A7-E748-414F-85FB-9C5EDE68A4C4}">
+						<AudioFileSource Name="ItemPickUp" ID="{0FE65804-B594-4877-9CD4-E2008E7016CC}">
+							<PropertyList>
+								<Property Name="VolumeOffset" Type="Real64">
+									<ValueList>
+										<Value>-15</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
 							<Language>SFX</Language>
-							<AudioFile>ItemPickUp.wav</AudioFile>
+							<AudioFile>Crafting\ItemPickUp.wav</AudioFile>
 							<MediaIDList>
-								<MediaID ID="594514367"/>
+								<MediaID ID="479974940"/>
 							</MediaIDList>
 						</AudioFileSource>
 					</ChildrenList>
 					<ActiveSourceList>
-						<ActiveSource Name="ItemPickUp" ID="{C92FD4A7-E748-414F-85FB-9C5EDE68A4C4}" Platform="Linked"/>
+						<ActiveSource Name="ItemPickUp" ID="{0FE65804-B594-4877-9CD4-E2008E7016CC}" Platform="Linked"/>
 					</ActiveSourceList>
 				</Sound>
 			</ChildrenList>

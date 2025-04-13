@@ -48,7 +48,7 @@ void ACollectibleItem::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActo
                 ItemPickUpSoundPlayingID = UAkGameplayStatics::PostEvent(ItemPickUpSound, nullptr, int32(0), nullCallback, false);
             }
             else {
-                UE_LOG(LogTemp, Error, TEXT("Wwise Player_Background_Music Event is invalid"));
+                UE_LOG(LogTemp, Error, TEXT("Wwise Item_Pickup_Sound Event is invalid"));
             }
             Destroy();
         }

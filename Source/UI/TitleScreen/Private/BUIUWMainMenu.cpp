@@ -29,7 +29,6 @@ void UBUIUWMainMenu::SynchronizeProperties()
 //This starts the game for the player and redirects him to the main level of the game
 void UBUIUWMainMenu::StartGame()
 {
-	UE_LOG(LogTemp, Display, TEXT("Starting the game"));
 	UGameplayStatics::OpenLevel(GetWorld(), MainLevel, false);
 }
 
@@ -37,8 +36,6 @@ void UBUIUWMainMenu::StartGame()
 //This directs the player to the Settings menu
 void UBUIUWMainMenu::Settings()
 {
-	UE_LOG(LogTemp, Display, TEXT("Going to settings"));
-
 	if (this->IsInViewport()) {
 		this->RemoveFromViewport();
 	}
@@ -57,8 +54,6 @@ void UBUIUWMainMenu::Settings()
 //This directs the player to the Credits menu
 void UBUIUWMainMenu::Credits()
 {
-	UE_LOG(LogTemp, Display, TEXT("Going to credits"));
-
 	if (this->IsInViewport()) {
 		this->RemoveFromViewport();
 	}
@@ -77,6 +72,5 @@ void UBUIUWMainMenu::Credits()
 //Makes the player quit the game
 void UBUIUWMainMenu::Quit()
 {
-	UE_LOG(LogTemp, Display, TEXT("Quitting"));
 	UKismetSystemLibrary::QuitGame(GetWorld(), 0, EQuitPreference::Quit, false);
 }

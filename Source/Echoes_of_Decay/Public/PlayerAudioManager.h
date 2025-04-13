@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "AkAudioEvent.h"
+#include "AkGameplayStatics.h"
 #include "PlayerAudioManager.generated.h"
 
 UCLASS()
@@ -18,6 +19,16 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Music")
 	TObjectPtr<UAkAudioEvent> BackgroundMusic;
+
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Music")
+	TObjectPtr<UAkStateValue> CalmState;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Music")
+	TObjectPtr<UAkStateValue> HurtState;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Music")
+	TObjectPtr<UAkStateValue> DyingState;
 
 protected:
 	// Called when the game starts or when spawned

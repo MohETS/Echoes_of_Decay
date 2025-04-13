@@ -29,5 +29,4 @@ void UBUIUWTitleScreenButton::PlayHoveredSound() {
 	else {
 		UE_LOG(LogTemp, Error, TEXT("Wwise Event is invalid"));
 	}
-	UE_LOG(LogTemp, Display, TEXT("Is Hovered"));
 }

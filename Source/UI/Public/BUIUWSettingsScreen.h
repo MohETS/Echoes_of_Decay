@@ -21,9 +21,6 @@ public:
 
 protected:
 
-	/* Variables */
-
-
 	/* UserWidgets functions */
 
 	virtual void NativeConstruct() override;

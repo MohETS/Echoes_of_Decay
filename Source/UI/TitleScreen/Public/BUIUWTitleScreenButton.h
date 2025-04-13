@@ -44,10 +44,4 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	FText ButtonLabelText;
-
-	/*UPROPERTY(EditAnywhere)
-	bool bIsToggleButton;
-
-	UPROPERTY(EditAnywhere)
-	bool bIsToggleOn;*/
 };

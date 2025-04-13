@@ -1,3 +1,12 @@
+State Group	ID	Name			Wwise Object Path	Notes
+	3441334105	Music_Player_Fighting_State			\Default Work Unit\Music_Player_Fighting_State	
+
+State	ID	Name	State Group			Notes
+	748895195	None	Music_Player_Fighting_State			
+	3193947170	Hurt	Music_Player_Fighting_State			
+	3328495488	Dying	Music_Player_Fighting_State			
+	3753286132	Calm	Music_Player_Fighting_State			
+
 Audio Bus	ID	Name			Wwise Object Path	Notes
 	3803692087	Master Audio Bus			\Default Work Unit\Master Audio Bus	
 
