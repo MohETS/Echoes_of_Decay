@@ -165,7 +165,8 @@ public:
     enum playerMusicState {
         CALM = 1,
         HURT = 2,
-        DYING = 3
+        DYING = 3,
+        DEAD = 4
     };
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Music")
