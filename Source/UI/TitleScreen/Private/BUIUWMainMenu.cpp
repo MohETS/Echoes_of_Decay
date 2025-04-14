@@ -37,7 +37,7 @@ void UBUIUWMainMenu::StartGame()
 void UBUIUWMainMenu::Settings()
 {
 	if (this->IsInViewport()) {
-		this->RemoveFromViewport();
+		this->RemoveFromParent();
 	}
 
 
@@ -55,7 +55,7 @@ void UBUIUWMainMenu::Settings()
 void UBUIUWMainMenu::Credits()
 {
 	if (this->IsInViewport()) {
-		this->RemoveFromViewport();
+		this->RemoveFromParent();
 	}
 	
 	

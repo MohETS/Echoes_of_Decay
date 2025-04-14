@@ -160,6 +160,10 @@ public:
 
     UBUIUWCharacterHUD* HUDWidgetInstance;
 
+
+    UPROPERTY(EditAnywhere, Category = "Game Over Screen")
+    TObjectPtr <UUserWidget> GameOverScreen;
+
     // --- Music --- //
 
     enum playerMusicState {

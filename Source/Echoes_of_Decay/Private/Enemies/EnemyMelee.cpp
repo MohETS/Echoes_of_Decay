@@ -3,8 +3,6 @@
 
 void AEnemyMelee::AttackPlayer()
 {
-    UE_LOG(LogTemp, Warning, TEXT("Melee Enemy Attacking!"));
-
     if (!bCanAttack || !PlayerPawn) return;
 
     ACharacter* PlayerCharacter = Cast<ACharacter>(PlayerPawn);

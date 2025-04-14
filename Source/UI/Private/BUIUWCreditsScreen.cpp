@@ -22,7 +22,7 @@ void UBUIUWCreditsScreen::SynchronizeProperties()
 void UBUIUWCreditsScreen::Back()
 {
 	if (this->IsInViewport()) {
-		this->RemoveFromViewport();
+		this->RemoveFromParent();
 	}
 
 

@@ -129,7 +129,7 @@ float AMyCharacter::TakeDamage(
 	GetWorldTimerManager().ClearTimer(RegenStartTimer);
 
 	GetWorldTimerManager().SetTimer(RegenStartTimer, this, &AMyCharacter::StartHealthRegen, TimeBeforeRegenStarts, false);
-	UE_LOG(LogTemp, Error, TEXT("%f"), Health);
+	
     if (Health <= 0.0f && backgroundMusicPlayerState != DEAD)
     {
 		backgroundMusicPlayerState = playerMusicState::DEAD;
@@ -141,6 +141,18 @@ float AMyCharacter::TakeDamage(
 		{
             UE_LOG(LogTemp, Error, TEXT("Wwise Player_Background_Music Event is invalid"));
         }
+
+		APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+		DisableInput(PlayerController);
+		PlayAnimMontage(DeathMontage);
+		if (GameOverScreen) {
+			GameOverScreen->AddToViewport();
+		}
+		PlayerController->bShowMouseCursor = true;
+		FInputModeUIOnly InputMode;
+		InputMode.SetWidgetToFocus(GameOverScreen->GetSlateWidgetFromName("Respawn button"));
+		InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+		PlayerController->SetInputMode(InputMode);
     }
 
 	//When the players loses health the background music changes to the "Hurt" section of the music
@@ -150,7 +162,7 @@ float AMyCharacter::TakeDamage(
 	}
 
 	//When the players loses half his health the background music changes to the "Dying" section of the music
-	if (Health >= 0.0f && Health <= MaxHealth / 2 && backgroundMusicPlayerState != playerMusicState::DYING) {
+	if (Health > 0.0f && Health <= MaxHealth / 2 && backgroundMusicPlayerState != playerMusicState::DYING) {
 		backgroundMusicPlayerState = playerMusicState::DYING;
 		UAkGameplayStatics::SetState(DyingState);
 	}

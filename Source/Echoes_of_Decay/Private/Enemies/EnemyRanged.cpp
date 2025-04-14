@@ -4,8 +4,6 @@
 
 void AEnemyRanged::AttackPlayer()
 {
-    UE_LOG(LogTemp, Warning, TEXT("Ranged Enemy Shooting!"));
-
     if (!bCanAttack || !ProjectileClass || !PlayerPawn) return;
     
     FVector ToPlayer = (PlayerPawn->GetActorLocation() - GetActorLocation()).GetSafeNormal();
